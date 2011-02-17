@@ -125,6 +125,9 @@
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.DataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            this.DataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.DataGridView1.AutoGenerateColumns = false;
             this.DataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -221,7 +224,7 @@
             // oBJECTIDToolStripLabel
             // 
             this.oBJECTIDToolStripLabel.Name = "oBJECTIDToolStripLabel";
-            this.oBJECTIDToolStripLabel.Size = new System.Drawing.Size(60, 22);
+            this.oBJECTIDToolStripLabel.Size = new System.Drawing.Size(59, 22);
             this.oBJECTIDToolStripLabel.Text = "OBJECTID:";
             // 
             // oBJECTIDToolStripTextBox
@@ -233,7 +236,7 @@
             // 
             this.fillByOBJECTIDToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.fillByOBJECTIDToolStripButton.Name = "fillByOBJECTIDToolStripButton";
-            this.fillByOBJECTIDToolStripButton.Size = new System.Drawing.Size(84, 22);
+            this.fillByOBJECTIDToolStripButton.Size = new System.Drawing.Size(93, 22);
             this.fillByOBJECTIDToolStripButton.Text = "FillByOBJECTID";
             this.fillByOBJECTIDToolStripButton.Click += new System.EventHandler(this.fillByOBJECTIDToolStripButton_Click);
             // 
@@ -274,7 +277,7 @@
             // 
             this.fillByINOBJECTIDToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.fillByINOBJECTIDToolStripButton.Name = "fillByINOBJECTIDToolStripButton";
-            this.fillByINOBJECTIDToolStripButton.Size = new System.Drawing.Size(95, 22);
+            this.fillByINOBJECTIDToolStripButton.Size = new System.Drawing.Size(105, 22);
             this.fillByINOBJECTIDToolStripButton.Text = "FillByINOBJECTID";
             this.fillByINOBJECTIDToolStripButton.Click += new System.EventHandler(this.fillByINOBJECTIDToolStripButton_Click);
             // 
@@ -311,21 +314,21 @@
             this.stationNameDataGridViewTextBoxColumn.Frozen = true;
             this.stationNameDataGridViewTextBoxColumn.HeaderText = "站点名称";
             this.stationNameDataGridViewTextBoxColumn.Name = "stationNameDataGridViewTextBoxColumn";
-            this.stationNameDataGridViewTextBoxColumn.Width = 96;
+            this.stationNameDataGridViewTextBoxColumn.Width = 78;
             // 
             // stationAliasDataGridViewTextBoxColumn
             // 
             this.stationAliasDataGridViewTextBoxColumn.DataPropertyName = "StationAlias";
             this.stationAliasDataGridViewTextBoxColumn.HeaderText = "副站名";
             this.stationAliasDataGridViewTextBoxColumn.Name = "stationAliasDataGridViewTextBoxColumn";
-            this.stationAliasDataGridViewTextBoxColumn.Width = 102;
+            this.stationAliasDataGridViewTextBoxColumn.Width = 66;
             // 
             // directDataGridViewTextBoxColumn
             // 
             this.directDataGridViewTextBoxColumn.DataPropertyName = "Direct";
             this.directDataGridViewTextBoxColumn.HeaderText = "行向";
             this.directDataGridViewTextBoxColumn.Name = "directDataGridViewTextBoxColumn";
-            this.directDataGridViewTextBoxColumn.Width = 66;
+            this.directDataGridViewTextBoxColumn.Width = 54;
             // 
             // mainSymbolDataGridViewTextBoxColumn
             // 
@@ -337,149 +340,149 @@
             // stationCharacterDataGridViewTextBoxColumn
             // 
             this.stationCharacterDataGridViewTextBoxColumn.DataPropertyName = "StationCharacter";
-            this.stationCharacterDataGridViewTextBoxColumn.HeaderText = "站点性质";
+            this.stationCharacterDataGridViewTextBoxColumn.HeaderText = "站点所在道路";
             this.stationCharacterDataGridViewTextBoxColumn.Name = "stationCharacterDataGridViewTextBoxColumn";
-            this.stationCharacterDataGridViewTextBoxColumn.Width = 126;
+            this.stationCharacterDataGridViewTextBoxColumn.Width = 72;
             // 
             // gPSLongtitudeDataGridViewTextBoxColumn
             // 
             this.gPSLongtitudeDataGridViewTextBoxColumn.DataPropertyName = "GPSLongtitude";
             this.gPSLongtitudeDataGridViewTextBoxColumn.HeaderText = "GPS经度";
             this.gPSLongtitudeDataGridViewTextBoxColumn.Name = "gPSLongtitudeDataGridViewTextBoxColumn";
-            this.gPSLongtitudeDataGridViewTextBoxColumn.Width = 108;
+            this.gPSLongtitudeDataGridViewTextBoxColumn.Width = 56;
             // 
             // gPSLatitudeDataGridViewTextBoxColumn
             // 
             this.gPSLatitudeDataGridViewTextBoxColumn.DataPropertyName = "GPSLatitude";
             this.gPSLatitudeDataGridViewTextBoxColumn.HeaderText = "GPS纬度";
             this.gPSLatitudeDataGridViewTextBoxColumn.Name = "gPSLatitudeDataGridViewTextBoxColumn";
-            this.gPSLatitudeDataGridViewTextBoxColumn.Width = 96;
+            this.gPSLatitudeDataGridViewTextBoxColumn.Width = 56;
             // 
             // gPSHighDataGridViewTextBoxColumn
             // 
             this.gPSHighDataGridViewTextBoxColumn.DataPropertyName = "GPSHigh";
             this.gPSHighDataGridViewTextBoxColumn.HeaderText = "GPS高度";
             this.gPSHighDataGridViewTextBoxColumn.Name = "gPSHighDataGridViewTextBoxColumn";
-            this.gPSHighDataGridViewTextBoxColumn.Width = 72;
+            this.gPSHighDataGridViewTextBoxColumn.Width = 56;
             // 
             // rodMaterialFirstDataGridViewTextBoxColumn
             // 
             this.rodMaterialFirstDataGridViewTextBoxColumn.DataPropertyName = "RodMaterialFirst";
             this.rodMaterialFirstDataGridViewTextBoxColumn.HeaderText = "站杆材质";
             this.rodMaterialFirstDataGridViewTextBoxColumn.Name = "rodMaterialFirstDataGridViewTextBoxColumn";
-            this.rodMaterialFirstDataGridViewTextBoxColumn.Width = 126;
+            this.rodMaterialFirstDataGridViewTextBoxColumn.Width = 61;
             // 
             // rodStyleFirstDataGridViewTextBoxColumn
             // 
             this.rodStyleFirstDataGridViewTextBoxColumn.DataPropertyName = "RodStyleFirst";
             this.rodStyleFirstDataGridViewTextBoxColumn.HeaderText = "站杆式样";
             this.rodStyleFirstDataGridViewTextBoxColumn.Name = "rodStyleFirstDataGridViewTextBoxColumn";
-            this.rodStyleFirstDataGridViewTextBoxColumn.Width = 108;
+            this.rodStyleFirstDataGridViewTextBoxColumn.Width = 61;
             // 
             // stationMaterialDataGridViewTextBoxColumn
             // 
             this.stationMaterialDataGridViewTextBoxColumn.DataPropertyName = "StationMaterial";
             this.stationMaterialDataGridViewTextBoxColumn.HeaderText = "站牌材质";
             this.stationMaterialDataGridViewTextBoxColumn.Name = "stationMaterialDataGridViewTextBoxColumn";
-            this.stationMaterialDataGridViewTextBoxColumn.Width = 120;
+            this.stationMaterialDataGridViewTextBoxColumn.Width = 61;
             // 
             // stationStyleDataGridViewTextBoxColumn
             // 
             this.stationStyleDataGridViewTextBoxColumn.DataPropertyName = "StationStyle";
             this.stationStyleDataGridViewTextBoxColumn.HeaderText = "站牌规格";
             this.stationStyleDataGridViewTextBoxColumn.Name = "stationStyleDataGridViewTextBoxColumn";
-            this.stationStyleDataGridViewTextBoxColumn.Width = 102;
+            this.stationStyleDataGridViewTextBoxColumn.Width = 61;
             // 
             // chairDataGridViewTextBoxColumn
             // 
             this.chairDataGridViewTextBoxColumn.DataPropertyName = "Chair";
             this.chairDataGridViewTextBoxColumn.HeaderText = "有无板凳";
             this.chairDataGridViewTextBoxColumn.Name = "chairDataGridViewTextBoxColumn";
-            this.chairDataGridViewTextBoxColumn.Width = 60;
+            this.chairDataGridViewTextBoxColumn.Width = 61;
             // 
             // stationTypeDataGridViewTextBoxColumn
             // 
             this.stationTypeDataGridViewTextBoxColumn.DataPropertyName = "StationType";
             this.stationTypeDataGridViewTextBoxColumn.HeaderText = "站点类型";
             this.stationTypeDataGridViewTextBoxColumn.Name = "stationTypeDataGridViewTextBoxColumn";
-            this.stationTypeDataGridViewTextBoxColumn.Width = 96;
+            this.stationTypeDataGridViewTextBoxColumn.Width = 61;
             // 
             // busShelterDataGridViewTextBoxColumn
             // 
             this.busShelterDataGridViewTextBoxColumn.DataPropertyName = "BusShelter";
             this.busShelterDataGridViewTextBoxColumn.HeaderText = "候车亭样式";
             this.busShelterDataGridViewTextBoxColumn.Name = "busShelterDataGridViewTextBoxColumn";
-            this.busShelterDataGridViewTextBoxColumn.Width = 90;
+            this.busShelterDataGridViewTextBoxColumn.Width = 72;
             // 
             // constructorDataGridViewTextBoxColumn
             // 
             this.constructorDataGridViewTextBoxColumn.DataPropertyName = "Constructor";
             this.constructorDataGridViewTextBoxColumn.HeaderText = "建设商";
             this.constructorDataGridViewTextBoxColumn.Name = "constructorDataGridViewTextBoxColumn";
-            this.constructorDataGridViewTextBoxColumn.Width = 96;
+            this.constructorDataGridViewTextBoxColumn.Width = 61;
             // 
             // constructionTimeDataGridViewTextBoxColumn
             // 
             this.constructionTimeDataGridViewTextBoxColumn.DataPropertyName = "ConstructionTime";
             this.constructionTimeDataGridViewTextBoxColumn.HeaderText = "建设时间";
             this.constructionTimeDataGridViewTextBoxColumn.Name = "constructionTimeDataGridViewTextBoxColumn";
-            this.constructionTimeDataGridViewTextBoxColumn.Width = 126;
+            this.constructionTimeDataGridViewTextBoxColumn.Width = 61;
             // 
             // stationLandDataGridViewTextBoxColumn
             // 
             this.stationLandDataGridViewTextBoxColumn.DataPropertyName = "StationLand";
             this.stationLandDataGridViewTextBoxColumn.HeaderText = "站点用地";
             this.stationLandDataGridViewTextBoxColumn.Name = "stationLandDataGridViewTextBoxColumn";
-            this.stationLandDataGridViewTextBoxColumn.Width = 96;
+            this.stationLandDataGridViewTextBoxColumn.Width = 61;
             // 
             // trafficVolumeDataGridViewTextBoxColumn
             // 
             this.trafficVolumeDataGridViewTextBoxColumn.DataPropertyName = "TrafficVolume";
             this.trafficVolumeDataGridViewTextBoxColumn.HeaderText = "集散量高峰";
             this.trafficVolumeDataGridViewTextBoxColumn.Name = "trafficVolumeDataGridViewTextBoxColumn";
-            this.trafficVolumeDataGridViewTextBoxColumn.Width = 108;
+            this.trafficVolumeDataGridViewTextBoxColumn.Width = 72;
             // 
             // pictureFirstDataGridViewTextBoxColumn
             // 
             this.pictureFirstDataGridViewTextBoxColumn.DataPropertyName = "PictureFirst";
             this.pictureFirstDataGridViewTextBoxColumn.HeaderText = "图片一";
             this.pictureFirstDataGridViewTextBoxColumn.Name = "pictureFirstDataGridViewTextBoxColumn";
-            this.pictureFirstDataGridViewTextBoxColumn.Width = 102;
+            this.pictureFirstDataGridViewTextBoxColumn.Width = 61;
             // 
             // pictureSecondDataGridViewTextBoxColumn
             // 
             this.pictureSecondDataGridViewTextBoxColumn.DataPropertyName = "PictureSecond";
             this.pictureSecondDataGridViewTextBoxColumn.HeaderText = "图片二";
             this.pictureSecondDataGridViewTextBoxColumn.Name = "pictureSecondDataGridViewTextBoxColumn";
-            this.pictureSecondDataGridViewTextBoxColumn.Width = 108;
+            this.pictureSecondDataGridViewTextBoxColumn.Width = 61;
             // 
             // pictureThirdDataGridViewTextBoxColumn
             // 
             this.pictureThirdDataGridViewTextBoxColumn.DataPropertyName = "PictureThird";
             this.pictureThirdDataGridViewTextBoxColumn.HeaderText = "图片三";
             this.pictureThirdDataGridViewTextBoxColumn.Name = "pictureThirdDataGridViewTextBoxColumn";
-            this.pictureThirdDataGridViewTextBoxColumn.Width = 102;
+            this.pictureThirdDataGridViewTextBoxColumn.Width = 61;
             // 
             // stationAreaDataGridViewTextBoxColumn
             // 
             this.stationAreaDataGridViewTextBoxColumn.DataPropertyName = "StationArea";
             this.stationAreaDataGridViewTextBoxColumn.HeaderText = "站点面积";
             this.stationAreaDataGridViewTextBoxColumn.Name = "stationAreaDataGridViewTextBoxColumn";
-            this.stationAreaDataGridViewTextBoxColumn.Width = 96;
+            this.stationAreaDataGridViewTextBoxColumn.Width = 61;
             // 
             // serviceAreaDataGridViewTextBoxColumn
             // 
             this.serviceAreaDataGridViewTextBoxColumn.DataPropertyName = "ServiceArea";
             this.serviceAreaDataGridViewTextBoxColumn.HeaderText = "站服务面积";
             this.serviceAreaDataGridViewTextBoxColumn.Name = "serviceAreaDataGridViewTextBoxColumn";
-            this.serviceAreaDataGridViewTextBoxColumn.Width = 96;
+            this.serviceAreaDataGridViewTextBoxColumn.Width = 72;
             // 
             // dayTrafficVolumeDataGridViewTextBoxColumn
             // 
             this.dayTrafficVolumeDataGridViewTextBoxColumn.DataPropertyName = "DayTrafficVolume";
             this.dayTrafficVolumeDataGridViewTextBoxColumn.HeaderText = "天集散量高峰";
             this.dayTrafficVolumeDataGridViewTextBoxColumn.Name = "dayTrafficVolumeDataGridViewTextBoxColumn";
-            this.dayTrafficVolumeDataGridViewTextBoxColumn.Width = 126;
+            this.dayTrafficVolumeDataGridViewTextBoxColumn.Width = 72;
             // 
             // passSumDataGridViewTextBoxColumn
             // 
@@ -493,21 +496,21 @@
             this.passRodeDataGridViewTextBoxColumn.DataPropertyName = "PassRode";
             this.passRodeDataGridViewTextBoxColumn.HeaderText = "通道条数";
             this.passRodeDataGridViewTextBoxColumn.Name = "passRodeDataGridViewTextBoxColumn";
-            this.passRodeDataGridViewTextBoxColumn.Width = 78;
+            this.passRodeDataGridViewTextBoxColumn.Width = 61;
             // 
             // hourMassDataGridViewTextBoxColumn
             // 
             this.hourMassDataGridViewTextBoxColumn.DataPropertyName = "HourMass";
             this.hourMassDataGridViewTextBoxColumn.HeaderText = "小时集结量";
             this.hourMassDataGridViewTextBoxColumn.Name = "hourMassDataGridViewTextBoxColumn";
-            this.hourMassDataGridViewTextBoxColumn.Width = 78;
+            this.hourMassDataGridViewTextBoxColumn.Width = 72;
             // 
             // hourEvacuateDataGridViewTextBoxColumn
             // 
             this.hourEvacuateDataGridViewTextBoxColumn.DataPropertyName = "HourEvacuate";
             this.hourEvacuateDataGridViewTextBoxColumn.HeaderText = "小时疏散量";
             this.hourEvacuateDataGridViewTextBoxColumn.Name = "hourEvacuateDataGridViewTextBoxColumn";
-            this.hourEvacuateDataGridViewTextBoxColumn.Width = 102;
+            this.hourEvacuateDataGridViewTextBoxColumn.Width = 72;
             // 
             // dayMassDataGridViewTextBoxColumn
             // 
@@ -521,140 +524,140 @@
             this.dayEvacuateDataGridViewTextBoxColumn.DataPropertyName = "DayEvacuate";
             this.dayEvacuateDataGridViewTextBoxColumn.HeaderText = "全天疏散量";
             this.dayEvacuateDataGridViewTextBoxColumn.Name = "dayEvacuateDataGridViewTextBoxColumn";
-            this.dayEvacuateDataGridViewTextBoxColumn.Width = 96;
+            this.dayEvacuateDataGridViewTextBoxColumn.Width = 72;
             // 
             // routeSumDataGridViewTextBoxColumn
             // 
             this.routeSumDataGridViewTextBoxColumn.DataPropertyName = "RouteSum";
             this.routeSumDataGridViewTextBoxColumn.HeaderText = "线路数";
             this.routeSumDataGridViewTextBoxColumn.Name = "routeSumDataGridViewTextBoxColumn";
-            this.routeSumDataGridViewTextBoxColumn.Width = 78;
+            this.routeSumDataGridViewTextBoxColumn.Width = 61;
             // 
             // moveTimeDataGridViewTextBoxColumn
             // 
             this.moveTimeDataGridViewTextBoxColumn.DataPropertyName = "MoveTime";
             this.moveTimeDataGridViewTextBoxColumn.HeaderText = "迁移安装时间";
             this.moveTimeDataGridViewTextBoxColumn.Name = "moveTimeDataGridViewTextBoxColumn";
-            this.moveTimeDataGridViewTextBoxColumn.Width = 78;
+            this.moveTimeDataGridViewTextBoxColumn.Width = 72;
             // 
             // rebuildTimeDataGridViewTextBoxColumn
             // 
             this.rebuildTimeDataGridViewTextBoxColumn.DataPropertyName = "RebuildTime";
             this.rebuildTimeDataGridViewTextBoxColumn.HeaderText = "改建时间";
             this.rebuildTimeDataGridViewTextBoxColumn.Name = "rebuildTimeDataGridViewTextBoxColumn";
-            this.rebuildTimeDataGridViewTextBoxColumn.Width = 96;
+            this.rebuildTimeDataGridViewTextBoxColumn.Width = 61;
             // 
             // removeTimeDataGridViewTextBoxColumn
             // 
             this.removeTimeDataGridViewTextBoxColumn.DataPropertyName = "RemoveTime";
             this.removeTimeDataGridViewTextBoxColumn.HeaderText = "拆除时间";
             this.removeTimeDataGridViewTextBoxColumn.Name = "removeTimeDataGridViewTextBoxColumn";
-            this.removeTimeDataGridViewTextBoxColumn.Width = 90;
+            this.removeTimeDataGridViewTextBoxColumn.Width = 61;
             // 
             // stationLongDataGridViewTextBoxColumn
             // 
             this.stationLongDataGridViewTextBoxColumn.DataPropertyName = "StationLong";
             this.stationLongDataGridViewTextBoxColumn.HeaderText = "候车亭长度";
             this.stationLongDataGridViewTextBoxColumn.Name = "stationLongDataGridViewTextBoxColumn";
-            this.stationLongDataGridViewTextBoxColumn.Width = 96;
+            this.stationLongDataGridViewTextBoxColumn.Width = 72;
             // 
             // rodMaterialSecondDataGridViewTextBoxColumn
             // 
             this.rodMaterialSecondDataGridViewTextBoxColumn.DataPropertyName = "RodMaterialSecond";
             this.rodMaterialSecondDataGridViewTextBoxColumn.HeaderText = "站杆材质2";
             this.rodMaterialSecondDataGridViewTextBoxColumn.Name = "rodMaterialSecondDataGridViewTextBoxColumn";
-            this.rodMaterialSecondDataGridViewTextBoxColumn.Width = 132;
+            this.rodMaterialSecondDataGridViewTextBoxColumn.Width = 61;
             // 
             // rodMaterialThirdDataGridViewTextBoxColumn
             // 
             this.rodMaterialThirdDataGridViewTextBoxColumn.DataPropertyName = "RodMaterialThird";
             this.rodMaterialThirdDataGridViewTextBoxColumn.HeaderText = "站杆材质3";
             this.rodMaterialThirdDataGridViewTextBoxColumn.Name = "rodMaterialThirdDataGridViewTextBoxColumn";
-            this.rodMaterialThirdDataGridViewTextBoxColumn.Width = 126;
+            this.rodMaterialThirdDataGridViewTextBoxColumn.Width = 61;
             // 
             // rodStyleSecondDataGridViewTextBoxColumn
             // 
             this.rodStyleSecondDataGridViewTextBoxColumn.DataPropertyName = "RodStyleSecond";
             this.rodStyleSecondDataGridViewTextBoxColumn.HeaderText = "站杆样式2";
             this.rodStyleSecondDataGridViewTextBoxColumn.Name = "rodStyleSecondDataGridViewTextBoxColumn";
-            this.rodStyleSecondDataGridViewTextBoxColumn.Width = 114;
+            this.rodStyleSecondDataGridViewTextBoxColumn.Width = 61;
             // 
             // rodStyleThirdDataGridViewTextBoxColumn
             // 
             this.rodStyleThirdDataGridViewTextBoxColumn.DataPropertyName = "RodStyleThird";
             this.rodStyleThirdDataGridViewTextBoxColumn.HeaderText = "站杆样式3";
             this.rodStyleThirdDataGridViewTextBoxColumn.Name = "rodStyleThirdDataGridViewTextBoxColumn";
-            this.rodStyleThirdDataGridViewTextBoxColumn.Width = 108;
+            this.rodStyleThirdDataGridViewTextBoxColumn.Width = 61;
             // 
             // dispatchCompanyFirstDataGridViewTextBoxColumn
             // 
             this.dispatchCompanyFirstDataGridViewTextBoxColumn.DataPropertyName = "DispatchCompanyFirst";
             this.dispatchCompanyFirstDataGridViewTextBoxColumn.HeaderText = "调度公司1";
             this.dispatchCompanyFirstDataGridViewTextBoxColumn.Name = "dispatchCompanyFirstDataGridViewTextBoxColumn";
-            this.dispatchCompanyFirstDataGridViewTextBoxColumn.Width = 150;
+            this.dispatchCompanyFirstDataGridViewTextBoxColumn.Width = 61;
             // 
             // dispatchRouteFirstDataGridViewTextBoxColumn
             // 
             this.dispatchRouteFirstDataGridViewTextBoxColumn.DataPropertyName = "DispatchRouteFirst";
             this.dispatchRouteFirstDataGridViewTextBoxColumn.HeaderText = "调度线路1";
             this.dispatchRouteFirstDataGridViewTextBoxColumn.Name = "dispatchRouteFirstDataGridViewTextBoxColumn";
-            this.dispatchRouteFirstDataGridViewTextBoxColumn.Width = 138;
+            this.dispatchRouteFirstDataGridViewTextBoxColumn.Width = 61;
             // 
             // dispatchStationFirstDataGridViewTextBoxColumn
             // 
             this.dispatchStationFirstDataGridViewTextBoxColumn.DataPropertyName = "DispatchStationFirst";
             this.dispatchStationFirstDataGridViewTextBoxColumn.HeaderText = "调度站道1";
             this.dispatchStationFirstDataGridViewTextBoxColumn.Name = "dispatchStationFirstDataGridViewTextBoxColumn";
-            this.dispatchStationFirstDataGridViewTextBoxColumn.Width = 150;
+            this.dispatchStationFirstDataGridViewTextBoxColumn.Width = 61;
             // 
             // dispatchCompanySecondDataGridViewTextBoxColumn
             // 
             this.dispatchCompanySecondDataGridViewTextBoxColumn.DataPropertyName = "DispatchCompanySecond";
             this.dispatchCompanySecondDataGridViewTextBoxColumn.HeaderText = "调度公司2";
             this.dispatchCompanySecondDataGridViewTextBoxColumn.Name = "dispatchCompanySecondDataGridViewTextBoxColumn";
-            this.dispatchCompanySecondDataGridViewTextBoxColumn.Width = 156;
+            this.dispatchCompanySecondDataGridViewTextBoxColumn.Width = 61;
             // 
             // dispatchRouteSecondDataGridViewTextBoxColumn
             // 
             this.dispatchRouteSecondDataGridViewTextBoxColumn.DataPropertyName = "DispatchRouteSecond";
             this.dispatchRouteSecondDataGridViewTextBoxColumn.HeaderText = "调度线路2";
             this.dispatchRouteSecondDataGridViewTextBoxColumn.Name = "dispatchRouteSecondDataGridViewTextBoxColumn";
-            this.dispatchRouteSecondDataGridViewTextBoxColumn.Width = 144;
+            this.dispatchRouteSecondDataGridViewTextBoxColumn.Width = 61;
             // 
             // dispatchStationSecondDataGridViewTextBoxColumn
             // 
             this.dispatchStationSecondDataGridViewTextBoxColumn.DataPropertyName = "DispatchStationSecond";
             this.dispatchStationSecondDataGridViewTextBoxColumn.HeaderText = "调度站道2";
             this.dispatchStationSecondDataGridViewTextBoxColumn.Name = "dispatchStationSecondDataGridViewTextBoxColumn";
-            this.dispatchStationSecondDataGridViewTextBoxColumn.Width = 156;
+            this.dispatchStationSecondDataGridViewTextBoxColumn.Width = 61;
             // 
             // dispatchCompanyThirdDataGridViewTextBoxColumn
             // 
             this.dispatchCompanyThirdDataGridViewTextBoxColumn.DataPropertyName = "DispatchCompanyThird";
             this.dispatchCompanyThirdDataGridViewTextBoxColumn.HeaderText = "调度公司3";
             this.dispatchCompanyThirdDataGridViewTextBoxColumn.Name = "dispatchCompanyThirdDataGridViewTextBoxColumn";
-            this.dispatchCompanyThirdDataGridViewTextBoxColumn.Width = 150;
+            this.dispatchCompanyThirdDataGridViewTextBoxColumn.Width = 61;
             // 
             // dispatchRouteThirdDataGridViewTextBoxColumn
             // 
             this.dispatchRouteThirdDataGridViewTextBoxColumn.DataPropertyName = "DispatchRouteThird";
             this.dispatchRouteThirdDataGridViewTextBoxColumn.HeaderText = "调度线路3";
             this.dispatchRouteThirdDataGridViewTextBoxColumn.Name = "dispatchRouteThirdDataGridViewTextBoxColumn";
-            this.dispatchRouteThirdDataGridViewTextBoxColumn.Width = 138;
+            this.dispatchRouteThirdDataGridViewTextBoxColumn.Width = 61;
             // 
             // dispatchStationThirdDataGridViewTextBoxColumn
             // 
             this.dispatchStationThirdDataGridViewTextBoxColumn.DataPropertyName = "DispatchStationThird";
             this.dispatchStationThirdDataGridViewTextBoxColumn.HeaderText = "调度站道3";
             this.dispatchStationThirdDataGridViewTextBoxColumn.Name = "dispatchStationThirdDataGridViewTextBoxColumn";
-            this.dispatchStationThirdDataGridViewTextBoxColumn.Width = 150;
+            this.dispatchStationThirdDataGridViewTextBoxColumn.Width = 61;
             // 
             // classifyDataGridViewTextBoxColumn
             // 
             this.classifyDataGridViewTextBoxColumn.DataPropertyName = "Classify";
             this.classifyDataGridViewTextBoxColumn.HeaderText = "站点类别";
             this.classifyDataGridViewTextBoxColumn.Name = "classifyDataGridViewTextBoxColumn";
-            this.classifyDataGridViewTextBoxColumn.Width = 78;
+            this.classifyDataGridViewTextBoxColumn.Width = 61;
             // 
             // frmStationAllInfo
             // 
@@ -666,7 +669,7 @@
             this.Controls.Add(this.Button1);
             this.Controls.Add(this.DataGridView1);
             this.Name = "frmStationAllInfo";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "站点信息";
             this.Load += new System.EventHandler(this.frmStationAllInfo_Load);
             ((System.ComponentModel.ISupportInitialize)(this.DataGridView1)).EndInit();

@@ -17,7 +17,7 @@ namespace Businfo.Globe
     {
 
         public static AxMapControl m_AxMapControl;
-        public static IFeatureLayer m_Layer_BusStation, m_Layer_BusRoad;
+        public static IFeatureLayer m_Layer_BusStation, m_Layer_BusRoad, m_Layer_BackRoad;
         
         //获取所有可查询子图层（featurelayer）
         public static List<IFeatureLayer> GetAllValidFeatureLayers(IMap pMap)
@@ -191,6 +191,13 @@ namespace Businfo.Globe
             return pFLayer;
         }
 
+        /// <summary>点击选择实体
+        /// </summary>
+        /// <param name="pGeometry">点对象</param>
+        /// <param name="iShiftDown">是否连续选择</param>
+        /// <param name="bSeclectOne">是否只选择一个</param>
+        /// <param name="nTorrent">缓冲区距离</param>
+        /// <returns>返回缓冲后的面状图形</returns>
         public static IGeometry ClickSel(IGeometry pGeometry, bool iShiftDown, bool bSeclectOne, int nTorrent)
         {
                 Double length;
@@ -230,8 +237,7 @@ namespace Businfo.Globe
             return pBuffer;
         }
 
-
-        /// 获得当前图层所选择的要素Feature
+        /// <summary>获得当前图层所选择的要素Feature
         /// </summary>
         /// <param name="FLayer">要获取要素的层</param>
         /// <param name="colFeatures">选中要素的集合</param>
@@ -253,6 +259,10 @@ namespace Businfo.Globe
                     colFeatures.Clear();
                 }
                 pFeatureSelection = (IFeatureSelection)FLayer;
+                if (pFeatureSelection == null)
+                {
+                    return false;
+                }
                 pSelected = pFeatureSelection.SelectionSet;
                 pSelected.Search(null, false, out pCursor);
                 if (pCursor != null)
@@ -277,8 +287,8 @@ namespace Businfo.Globe
             }
             return false;
         }
-        
-        /// 像素单位转换到图形单位
+
+        /// <summary>像素单位转换到图形单位
         /// </summary>
         /// <param name="pActiveView">视图</param>
         /// <param name="pixelUnits">像素单位</param>
@@ -306,7 +316,7 @@ namespace Businfo.Globe
             return 0;
         }
 
-        /// 根据图形范围获取查询要素集
+        /// <summary>根据图形范围获取查询要素集
         /// </summary>
         /// <param name="pFeatureLayer">要素图层</param>
         /// <param name="pGeometry">图形范围参数</param>
@@ -350,7 +360,7 @@ namespace Businfo.Globe
 	            }
 	        }
 
-        /// 根据条件查询语句获取查询要素集
+        /// <summary>根据条件查询语句获取查询要素集
         /// </summary>
         /// <param name="pFeatureLayer">要素图层</param>
         /// <param name="strQuery">条件查询语句</param>
@@ -380,7 +390,7 @@ namespace Businfo.Globe
             }
         }
 
-        /// 获取查询要素，只返回第一个
+        /// <summary>获取查询要素，只返回第一个
         /// </summary>
         /// <param name="pFeatureLayer">要素图层</param>
         /// <param name="strQuery">条件查询语句，一般为=号查询</param>
@@ -417,13 +427,13 @@ namespace Businfo.Globe
                 return null;
             }
         }
-        
-        /// 合并PL线
-        /// </summary>
-        /// <param name="pFeatureLayer">要素图层</param>
-        /// <param name="strQuery">条件查询语句，一般为=号查询</param>
-        /// <returns>第一个符合条件要素</returns>
-        /// <other>GetOneSeartchFeature可以替代根据属性遍历查找图层元素的操作</other>
+
+        /// <summary>合并PL线
+       /// 
+       /// </summary>
+        /// <param name="colFeatures">传入要合并的线类Feature组</param>
+        /// <param name="pPolyline">返回合并后的PL线 </param>
+        /// <returns>合并是否成功</returns>
         public static bool MergeLines(List<IFeature> colFeatures, ref IPolyline pPolyline)
         {
             try
@@ -474,6 +484,50 @@ namespace Businfo.Globe
 
         }
 
+        /// <summary>合并PL线
+        /// 
+        /// </summary>
+        /// <param name="colPolylines">传入要合并PL线组</param>
+        /// <param name="pPolyline">返回合并后的PL线</param>
+        /// <returns>合并是否成功</returns>
+        public static bool MergeLines(List<IPolyline> colPolylines, ref IPolyline pPolyline)
+        {
+            try
+            {
+                if (colPolylines.Count < 2)
+                {
+                    MessageBox.Show("合并要素少于2个！\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    pPolyline = null;
+                    return false;
+                }
+
+                ITopologicalOperator pTopOp;
+                IGeometryCollection pGeometryCollection;
+                pTopOp = colPolylines[0] as ITopologicalOperator;
+                for (int i = 1; i < colPolylines.Count; i++)
+                {
+                    pTopOp = pTopOp.Union(colPolylines[i]) as ITopologicalOperator;
+                }
+                pPolyline = pTopOp as IPolyline;
+
+                pGeometryCollection = (IGeometryCollection)pPolyline;
+                if (pGeometryCollection.GeometryCount > 1)
+                {
+                    pPolyline = null;
+                    return false;
+                }
+                return true;
+            }
+            catch (Exception Err)
+            {
+                MessageBox.Show(Err.Message, "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return false;
+            }
+        }
+
+        /// <summary>设置图层可见性
+        /// </summary>
+        /// <param name="colLayerNames">图成名集合</param>
         public static void SetLayerVisble(List<string> colLayerNames)
         {
             try
@@ -505,7 +559,7 @@ namespace Businfo.Globe
             }
         }
 
-        /// 延长线段
+        /// <summary>延长线段
         /// </summary>
         /// <param name="passLine">传入去的线</param>
         /// <param name="mode">模式，1为从FromPoint处延长，2为从ToPint处延长，3为两端延长</param>
@@ -543,7 +597,7 @@ namespace Businfo.Globe
             return pPointCol as IPolyline;
         }
 
-        /// 平头buffer
+        /// <summary>平头buffer
         /// </summary>
         /// <param name="myLine">用做buffer的线图形</param>
         /// <param name="bufferDis">buffer的距离</param>
@@ -574,53 +628,61 @@ namespace Businfo.Globe
             return myPolygon;
         }
 
+        /// <summary>添加面Element
+        /// </summary>
+        /// <param name="pGeometry">面图形类</param>
+        /// <returns></returns>
         public static IElement AddPolygonElement(IGeometry pGeometry)
         {
             IGraphicsContainer pGraphicsContainer;
             IFillShapeElement pPolygonElement;
             ISimpleFillSymbol Symbol;
-             IRgbColor pColor;
-             ISimpleLineSymbol pOutline;
-              IElement pElement;
-             if (null != pGeometry)
-             {
-                 pGraphicsContainer = (IGraphicsContainer)m_AxMapControl.ActiveView;
-                  //* ''*/Set the color properties
-                pColor = new RgbColor();
-                pColor.Red = 255;
-                pColor.Green = 0;
-                pColor.Blue = 0;
-                //Get the SimpleLineSymbol symbol interface
-                pOutline = new SimpleLineSymbol();
-                pOutline.Width = 1;
-                pOutline.Color = pColor;
-                  //Get the ISimpleFillSymbol interface,  'Set the fill symbol properties
-                Symbol = new SimpleFillSymbol();
-                Symbol.Outline = pOutline;
-                Symbol.Color = pColor;
-                Symbol.Style = esriSimpleFillStyle.esriSFSForwardDiagonal;
+            IRgbColor pColor;
+            ISimpleLineSymbol pOutline;
+            IElement pElement;
+         if (null != pGeometry)
+         {
+             pGraphicsContainer = (IGraphicsContainer)m_AxMapControl.ActiveView;
+              //* ''*/Set the color properties
+            pColor = new RgbColor();
+            pColor.Red = 255;
+            pColor.Green = 0;
+            pColor.Blue = 0;
+            //Get the SimpleLineSymbol symbol interface
+            pOutline = new SimpleLineSymbol();
+            pOutline.Width = 1;
+            pOutline.Color = pColor;
+              //Get the ISimpleFillSymbol interface,  'Set the fill symbol properties
+            Symbol = new SimpleFillSymbol();
+            Symbol.Outline = pOutline;
+            Symbol.Color = pColor;
+            Symbol.Style = esriSimpleFillStyle.esriSFSForwardDiagonal;
 
-                pPolygonElement = (IFillShapeElement)new CircleElement();
-                pPolygonElement.Symbol = Symbol;
-                pElement = (IElement)pPolygonElement;
-                //将元素的图形转换成地图要素
-                pElement.Geometry = pGeometry;
-                //向Map 中添加元素
-                pGraphicsContainer.AddElement(pElement, 0);
-                //刷新
-                m_AxMapControl.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewGraphics, null, null);
-                return pElement;
-             }
+            pPolygonElement = (IFillShapeElement)new CircleElement();
+            pPolygonElement.Symbol = Symbol;
+            pElement = (IElement)pPolygonElement;
+            //将元素的图形转换成地图要素
+            pElement.Geometry = pGeometry;
+            //向Map 中添加元素
+            pGraphicsContainer.AddElement(pElement, 0);
+            //刷新
+            m_AxMapControl.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewGraphics, null, null);
+            return pElement;
+         }
              return null;
         }
 
-        public static IMarkerElement AddPictureElement(IGeometry pGeometry)
+        /// <summary>添加图片Element
+        /// </summary>
+        /// <param name="pGeometry">图片范围Geometry</param>
+        /// <param name="strfilename">图片名文件地址</param>
+        /// <returns></returns>
+        public static IMarkerElement AddPictureElement(IGeometry pGeometry,string strfilename)
         {
             IMarkerElement pMarkerElement = new MarkerElementClass();
             IPictureMarkerSymbol pFillSymbol = new PictureMarkerSymbolClass();
             IRgbColor pColor = new RgbColorClass();
             IGraphicsContainer pGraphicsContainer;
-            pMarkerElement = null; 
             if (pGeometry != null)
             {
                 pGraphicsContainer = (IGraphicsContainer)m_AxMapControl.ActiveView;
@@ -631,42 +693,59 @@ namespace Businfo.Globe
                 pFillSymbol.BitmapTransparencyColor = pColor;
                 pFillSymbol.Size = 70;
                 pFillSymbol.YOffset = 20;
-                string filename = "E:\\23.bmp";
-                pFillSymbol.CreateMarkerSymbolFromFile(esriIPictureType.esriIPictureBitmap, filename);
+                //string filename = "E:\\23.bmp";
+                pFillSymbol.CreateMarkerSymbolFromFile(esriIPictureType.esriIPictureBitmap, strfilename);
                 //设置标记位置
                 pMarkerElement.Symbol = pFillSymbol;
                 ((IElement)pMarkerElement).Geometry = pGeometry;//IPoint
                 pGraphicsContainer.AddElement((IElement)pMarkerElement, 0);
             }
+            else
+            {
+                pMarkerElement = null;
+            }
             return pMarkerElement;
         }
 
-        public static ITextElement AddTextElement(IGeometry pGeometry)
+        /// <summary>添加文字Element
+        /// </summary>
+        /// <param name="pGeometry">文字位置Geometry</param>
+        /// <param name="strText">文字内容</param>
+        /// <returns></returns>
+        public static ITextElement AddTextElement(IGeometry pGeometry, string strText)
         {
             ITextElement pTextElement = new TextElementClass();
             ITextSymbol pTextSymbol = new TextSymbolClass();
             IRgbColor pColor = new RgbColorClass();
             IGraphicsContainer pGraphicsContainer;
-            pTextElement = null;
             if (pGeometry != null)
             {
                 pGraphicsContainer = (IGraphicsContainer)m_AxMapControl.ActiveView;
                 //设置位图透明颜色
-                pColor.Red = 255;
-                pColor.Green = 255;
-                pColor.Blue = 255;
+                pColor.Red = 11;
+                pColor.Green = 11;
+                pColor.Blue = 11;
                 pTextSymbol.Color = pColor;
-                pTextSymbol.Size = 70;
+                pTextSymbol.Size = 15;
                 //设置标记位置
                 pTextElement.Symbol = pTextSymbol;
+                pTextElement.Text = strText;
+                pTextElement.ScaleText = true;
                 ((IElement)pTextElement).Geometry = pGeometry;//IPoint
                 pGraphicsContainer.AddElement((IElement)pTextElement, 0);
+            }
+            else
+            {
+                pTextElement = null;
             }
             return pTextElement;
         }
 
-        //提取行驶路径的点信息，等距划分，距离为1米
-        public static void MakeMultiPoint(IGeometry pGeometry, int nPoints, ref IPointCollection pGeoCol)
+        /// <summary>提取行驶路径的点信息，等距划分，距离为1米
+        /// </summary>
+        /// <param name="pGeometry">多线对象</param>
+        /// <param name="pGeoCol">返回点数组</param>
+        public static void MakeMultiPoint(IGeometry pGeometry,ref IPointCollection pGeoCol)
         {
             if (pGeometry.GeometryType == esriGeometryType.esriGeometryPolyline)
             {
@@ -693,6 +772,76 @@ namespace Businfo.Globe
                 }
                 pGeoCol = (IPointCollection)pGeometryCollection;
             }
+        }
+
+       
+
+
+        /// <summary>拷贝元素
+        /// 
+        /// </summary>
+        /// <param name="pFeatureLayer">拷贝到的图层</param>
+        /// <param name="FormFeature">被拷贝的元素</param>
+        /// <returns>返回拷贝后的元素</returns>
+        public static IFeature CopyFeature(IFeatureLayer pFeatureLayer, IFeature FormFeature)
+        {
+            IFeature pFeature = pFeatureLayer.FeatureClass.CreateFeature();
+            pFeature.Shape = FormFeature.Shape;
+            for (int i = 0; i < FormFeature.Fields.FieldCount; i++)
+            {
+                IField pField = FormFeature.Fields.get_Field(i);
+                if (pField.Type != esriFieldType.esriFieldTypeGeometry && pField.Type != esriFieldType.esriFieldTypeOID && pField.Editable)
+                {
+                    pFeature.set_Value(i, FormFeature.get_Value(i));
+                }
+            }
+            pFeature.Store();
+            return pFeature;
+        }
+
+
+        public static void ZoomPoint(IPoint pPoint, double nMapScale)
+        {
+            IEnvelope pEnvelope;
+            IDisplayTransformation pDisplayTransformation;
+            pDisplayTransformation = EngineFuntions.m_AxMapControl.ActiveView.ScreenDisplay.DisplayTransformation;
+            pEnvelope = pDisplayTransformation.VisibleBounds;
+            pEnvelope.CenterAt(pPoint);
+            pDisplayTransformation.VisibleBounds = pEnvelope;
+            EngineFuntions.m_AxMapControl.Map.MapScale = nMapScale;
+            pDisplayTransformation.VisibleBounds = EngineFuntions.m_AxMapControl.ActiveView.Extent;
+            EngineFuntions.m_AxMapControl.ActiveView.ScreenDisplay.Invalidate(null, true, (short)esriScreenCache.esriAllScreenCaches);
+        }
+
+        public static bool GetLinkPoint(IPolyline pBeforeLine, IPolyline pAfterLine, ref IPoint PointLink)
+        {
+            IPoint PointBefore1, PointBefore2, PointAfter1, PointAfter2;
+            PointBefore1 = pBeforeLine.FromPoint;
+            PointBefore2 = pBeforeLine.ToPoint;
+            PointAfter1 = pAfterLine.FromPoint;
+            PointAfter2 = pAfterLine.ToPoint;
+            if (PointBefore1.Compare(PointAfter1) == 0)
+            {
+                PointLink = PointAfter2;
+            }
+            else if (PointBefore1.Compare(PointAfter2) == 0)
+            {
+                PointLink = PointAfter1;
+            }
+            else if (PointBefore2.Compare(PointAfter1) == 0)
+            {
+                PointLink = PointAfter2;
+            }
+            else if (PointBefore2.Compare(PointAfter2) == 0)
+            {
+                PointLink = PointAfter1;
+            }
+            else
+            {
+                MessageBox.Show("线路不连续！\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return false;
+            }
+            return true;
         }
 
         //public static List<IFeature> SortByDist(IFeature pFeature, List<IFeature> pFeatureCol)

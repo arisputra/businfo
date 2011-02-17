@@ -37,6 +37,7 @@
             this.BtnDele = new System.Windows.Forms.Button();
             this.BtnDOWN = new System.Windows.Forms.Button();
             this.Label1 = new System.Windows.Forms.Label();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.GroupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -99,6 +100,7 @@
             // 
             // GroupBox1
             // 
+            this.GroupBox1.Controls.Add(this.checkBox2);
             this.GroupBox1.Controls.Add(this.CheckBox1);
             this.GroupBox1.Controls.Add(this.BtnTrue);
             this.GroupBox1.Controls.Add(this.ListBox1);
@@ -142,6 +144,17 @@
             this.Label1.Size = new System.Drawing.Size(0, 16);
             this.Label1.TabIndex = 7;
             // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Location = new System.Drawing.Point(106, 18);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(91, 20);
+            this.checkBox2.TabIndex = 2;
+            this.checkBox2.Text = "站点反序";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
+            // 
             // frmRoadAndStation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -150,9 +163,12 @@
             this.Controls.Add(this.Lab_Name);
             this.Controls.Add(this.GroupBox1);
             this.Controls.Add(this.Label1);
+            this.MaximizeBox = false;
             this.Name = "frmRoadAndStation";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "关联站点";
             this.Load += new System.EventHandler(this.frmRoadAndStation_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmRoadAndStation_FormClosing);
             this.GroupBox1.ResumeLayout(false);
             this.GroupBox1.PerformLayout();
             this.ResumeLayout(false);
@@ -171,5 +187,6 @@
         internal System.Windows.Forms.Button BtnDele;
         internal System.Windows.Forms.Button BtnDOWN;
         internal System.Windows.Forms.Label Label1;
+        internal System.Windows.Forms.CheckBox checkBox2;
     }
 }
