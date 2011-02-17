@@ -18,6 +18,10 @@ using ESRI.ArcGIS.SystemUI;
 
 using XtremeDockingPane;
 using System.Globalization;
+using Microsoft.Office.Interop.Excel;
+using Winapp = System.Windows.Forms.Application;
+using GISPoint = ESRI.ArcGIS.Geometry.IPoint;
+using System.Data.OleDb;
 
 namespace Businfo
 {
@@ -31,12 +35,16 @@ namespace Businfo
         public frmStationPane m_frmStationPane = new frmStationPane();
         public frmRoadPane m_frmRoadPane = new frmRoadPane();
         public int m_ToolStatus;
-        public IPoint m_mapPoint;//鼠标点击查询处得坐标
+        public GISPoint m_mapPoint;//鼠标点击查询处得坐标
+        public GISPoint m_FormPoint;//添加线路的顺序节点
         public IFeatureLayer m_CurFeatureLayer ;//当前FeatureLayer
         public IFeature m_CurFeature ;  //当前feature
         public List<IFeature> m_featureCollection = new List<IFeature>();   //得到所有选中的feature
+        public List<IPolyline> m_PolylineCollection = new List<IPolyline>();   //得到所有选中的IPolyline
         public MovePointFeedbackClass m_FeedBack;
         public bool m_bShowLayer;
+        public int m_nPLineNum = 1;//线路每次包含总数
+        //AoInitialize m_pAoInitialize = new AoInitialize();//判断版本
         #endregion
 
         public frmMainNew()
@@ -46,11 +54,33 @@ namespace Businfo
 
         private void frmMainNew_FormClosed(object sender, FormClosedEventArgs e)
         {
-            m_frmFlash.Close();
+            ESRI.ArcGIS.ADF.COMSupport.AOUninitialize.Shutdown();
+            if (m_frmFlash != null)
+            {
+                m_frmFlash.Close();
+            }
         }
 
         private void frmMainNew_Load(object sender, EventArgs e)
         {
+           ////Create a new AoInitialize object
+           // if (m_pAoInitialize == null)
+           // {
+           //     this.Close();
+           // }
+           ////Determine if the product is available
+           // if (m_pAoInitialize.IsProductCodeAvailable(esriLicenseProductCode.esriLicenseProductCodeArcInfo) == esriLicenseStatus.esriLicenseAvailable)
+           // {
+           //     if (m_pAoInitialize.Initialize(esriLicenseProductCode.esriLicenseProductCodeEngine) != esriLicenseStatus.esriLicenseCheckedOut)
+           //     {
+           //          this.Close();
+           //     }
+           // } 
+           // else
+           // {
+           //     this.Close();
+           // }
+            
             EngineFuntions.m_AxMapControl = axMapControl1;//传递Map控件
 
             axCommandBars1.LoadDesignerBars(null, null);
@@ -60,9 +90,8 @@ namespace Businfo
             pColor = System.Convert.ToUInt32(ColorTranslator.ToOle(Color.FromArgb(255, 255, 255)).ToString());
             axCommandBars1.SetSpecialColor((XtremeCommandBars.XTPColorManagerColor)15, pColor);
 
-
             m_pMapDocument = new MapDocumentClass();
-            m_pMapDocument.Open(Application.StartupPath + "\\data\\JianCe.mxd", string.Empty);
+            m_pMapDocument.Open(Winapp.StartupPath + "\\data\\JianCe.mxd", string.Empty);
             axMapControl1.Map = m_pMapDocument.get_Map(0);
             axMapControl1.Map.Name = "查询";
             axMapControl1.Extent = axMapControl1.FullExtent;
@@ -74,6 +103,7 @@ namespace Businfo
 
             EngineFuntions.m_Layer_BusStation = EngineFuntions.GetLayerByName("公交站点", colLayers);
             EngineFuntions.m_Layer_BusRoad = EngineFuntions.GetLayerByName("公交站线", colLayers);
+            EngineFuntions.m_Layer_BackRoad = EngineFuntions.GetLayerByName("站线备份", colLayers);
 
 
             //Determine if Alpha Context is supported, if it is, then enable it
@@ -85,7 +115,7 @@ namespace Businfo
             axDockingPane1.TabPaintManager.Position = XTPTabPosition.xtpTabPositionTop;
             axDockingPane1.TabPaintManager.Appearance = XtremeDockingPane.XTPTabAppearanceStyle.xtpTabAppearanceVisualStudio;
 
-            Pane ThePane = axDockingPane1.CreatePane(ForBusInfo.Pan_Layer, 200, 200, DockingDirection.DockLeftOf, null);
+            XtremeDockingPane.Pane ThePane = axDockingPane1.CreatePane(ForBusInfo.Pan_Layer, 200, 200, DockingDirection.DockLeftOf, null);
             ThePane.Title = "图层配置";
             axDockingPane1.FindPane(ForBusInfo.Pan_Layer).Handle = m_frmlayerToc.Handle.ToInt32();
 
@@ -103,7 +133,7 @@ namespace Businfo
 
             //'鹰眼图：
             String sHawkEyeFileName;
-            sHawkEyeFileName = Application.StartupPath + "\\data\\JianCe.mxd";
+            sHawkEyeFileName = Winapp.StartupPath + "\\data\\JianCe.mxd";
             m_frmlayerToc.MapHawkEye.LoadMxFile(sHawkEyeFileName);
             m_frmlayerToc.MapHawkEye.Extent = m_frmlayerToc.MapHawkEye.FullExtent;
             //m_frmlayerToc.m_MapControl = axMapControl1.Object;
@@ -112,6 +142,7 @@ namespace Businfo
             axDockingPane1.SetCommandBars(axCommandBars1.GetDispatch());
             this.WindowState = FormWindowState.Maximized;
             m_bShowLayer = false;
+            ForBusInfo.Frm_Main = this;
         }
 
         private void axCommandBars1_Execute(object sender, AxXtremeCommandBars._DCommandBarsEvents_ExecuteEvent e)
@@ -175,9 +206,9 @@ namespace Businfo
                 case ForBusInfo.Map3D_Distance://计算长度
                     break;
 
-
                 case ForBusInfo.Map3D_Area://计算面积
                     break;
+
                 case ForBusInfo.Map3D_Full:
                     m_ToolStatus = ForBusInfo.Map3D_Full;
                     if (axMapControl1.Visible == true)
@@ -189,7 +220,7 @@ namespace Businfo
                     m_ToolStatus = ForBusInfo.Bus_Add;
                     axMapControl1.MousePointer = esriControlsMousePointer.esriPointerPencil;
                     break;
-                case ForBusInfo.Bus_BackUp:
+                case ForBusInfo.Bus_BackUp://站点不用备份
 
 
                 case ForBusInfo.Bus_Dele:
@@ -212,7 +243,7 @@ namespace Businfo
                     m_ToolStatus = ForBusInfo.Bus_Query;
                     axDockingPane1.FindPane(ForBusInfo.Pan_Station).Select();
                     break;
-                case ForBusInfo.Bus_Recover:
+                case ForBusInfo.Bus_Recover://站点不用恢复
 
 
                 case ForBusInfo.Road_Add:
@@ -223,7 +254,9 @@ namespace Businfo
                     m_ToolStatus = ForBusInfo.Road_Associate;
                     axMapControl1.MousePointer = esriControlsMousePointer.esriPointerPencil;
                     break;
-                case ForBusInfo.Road_BackUp:
+                case ForBusInfo.Road_BackUp://站线备份
+                    m_ToolStatus = ForBusInfo.Road_BackUp;
+                    axMapControl1.MousePointer = esriControlsMousePointer.esriPointerIdentify;
                     break;
                 case ForBusInfo.Road_Dele:
                     m_ToolStatus = ForBusInfo.Road_Dele;
@@ -235,10 +268,13 @@ namespace Businfo
                     break;
                 case ForBusInfo.Road_Query:
                     m_ToolStatus = ForBusInfo.Road_Query;
-                    m_frmRoadPane.Select();
+                    axDockingPane1.FindPane(ForBusInfo.Pan_Road).Select();
                     break;
-                case ForBusInfo.Road_Recover:
-
+                case ForBusInfo.Road_Recover://站线恢复
+                    m_ToolStatus = ForBusInfo.Road_Recover;
+                    axMapControl1.MousePointer = esriControlsMousePointer.esriPointerIdentify;
+                    frmRoadRecover frmPopup = new frmRoadRecover();
+                    frmPopup.ShowDialog();
                     break;
                 case ForBusInfo.BusInfo_Layer://开关图层
                     List<string> colLayerName = new List<string>();
@@ -259,6 +295,76 @@ namespace Businfo
                         m_bShowLayer = true;
                     }
                     break;
+                case ForBusInfo.Table_RoadExport://输出报表
+                    m_ToolStatus = ForBusInfo.Table_RoadExport;
+                    axDockingPane1.FindPane(ForBusInfo.Pan_Road).Select();
+                    break;
+                case ForBusInfo.Table_Operation://查看操作
+                    m_ToolStatus = ForBusInfo.Table_Operation;
+                    axDockingPane1.FindPane(ForBusInfo.Pan_Road).Select();
+                    frmOperation frmPopup1 = new frmOperation();
+                    frmPopup1.ShowDialog();
+                    break;
+                case ForBusInfo.Road_End://完成线路添加
+                    m_ToolStatus = ForBusInfo.Road_End;
+                    m_CurFeature = null;
+                    if (MessageBox.Show("是否选择完成？\n", "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+                    {
+                        
+                        IPolyline pPolyline = null;
+                        m_nPLineNum = 1;
+                        if (EngineFuntions.GetSeledFeatures(m_CurFeatureLayer, ref m_featureCollection))
+                        {
+                            if (EngineFuntions.MergeLines(m_featureCollection, ref pPolyline))
+                            {
+                                axMapControl1.MousePointer = esriControlsMousePointer.esriPointerDefault;
+                                frmRoadPara frmRoadPara = new frmRoadPara();
+                                frmRoadPara.m_pPolyline = pPolyline;
+                                if (frmRoadPara.ShowDialog() == DialogResult.OK)
+                                {
+                                    EngineFuntions.PartialRefresh(EngineFuntions.m_Layer_BusRoad);
+                                    m_CurFeature = frmRoadPara.m_pFeature;
+                                    frmRoadPara.Close();
+                                    System.Threading.Thread.Sleep(1000);
+                                    m_frmRoadPane.RefreshGrid();
+                                    axMapControl1.Map.ClearSelection();
+                                }
+                            }
+                            else
+                            {
+                                MessageBox.Show("提示：选择的线路不是连续的！\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("提示：请在公交线路中选中路段\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        m_PolylineCollection.Clear();
+                        EngineFuntions.m_AxMapControl.Map.ClearSelection();
+                        EngineFuntions.m_AxMapControl.Refresh();
+                    }
+                    break;
+                case ForBusInfo.Road_Reversed://线路反向
+                    //m_ToolStatus = ForBusInfo.Road_Reversed;
+                    if (m_ToolStatus == ForBusInfo.Road_End && m_CurFeature.Shape.GeometryType == esriGeometryType.esriGeometryPolyline)
+                    {
+                        IPolyline pPLine = m_CurFeature.ShapeCopy as IPolyline;
+                        pPLine.ReverseOrientation();
+                        m_CurFeature.Shape = pPLine;
+                        if (m_CurFeature.get_Value(m_CurFeature.Fields.FindField("RoadTravel")).ToString() == "去行")
+                        {
+                            m_CurFeature.set_Value(m_CurFeature.Fields.FindField("RoadTravel"), "回行");
+                        }
+                        else
+                        {
+                            m_CurFeature.set_Value(m_CurFeature.Fields.FindField("RoadTravel"), "去行");
+                        }
+                        EngineFuntions.CopyFeature(EngineFuntions.m_Layer_BusRoad, m_CurFeature);
+                        System.Threading.Thread.Sleep(1000);
+                        m_frmRoadPane.RefreshGrid();
+                        MessageBox.Show("反向线路添加完成，请关联站点！\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    break;
                 default :
                     break;
             }
@@ -275,18 +381,29 @@ namespace Businfo
         {
             m_mapPoint = axMapControl1.ToMapPoint(e.x, e.y);
             IActiveView pActiveView = axMapControl1.ActiveView;
-
-           if (e.button == 1)
+            if (e.button == 1)
              {
-	             switch (m_ToolStatus)
-	             {
+                 switch (m_ToolStatus)
+                 {
                      case ForBusInfo.Bus_Add:
                          {
                              frmStationPara frmPopup = new frmStationPara();
                              frmPopup.m_mapPoint = m_mapPoint;
+
+                             m_CurFeatureLayer = EngineFuntions.SetCanSelLay("道路中心线");
+                             EngineFuntions.ClickSel(m_mapPoint, false, false, 26);
+                             if (EngineFuntions.GetSeledFeatures(m_CurFeatureLayer, ref  m_featureCollection))
+                             {
+                                 foreach (IFeature pfea in m_featureCollection)
+                                 {
+                                     frmPopup.m_ListRoadName.Add(pfea.get_Value(pfea.Fields.FindField("道路名称")) as string);
+                                 }
+                             }
+                            
                              if (frmPopup.ShowDialog() == DialogResult.OK)
                              {
                                  EngineFuntions.PartialRefresh(EngineFuntions.m_Layer_BusStation);
+                                 ForBusInfo.Add_Log(ForBusInfo.Login_name, "添加站点", frmPopup.m_strLog, "");
                                  frmPopup.Close();
                                  System.Threading.Thread.Sleep(1000);
                                  m_frmStationPane.RefreshGrid();
@@ -296,18 +413,23 @@ namespace Businfo
                              break;
                          }
                      case ForBusInfo.Bus_Dele:
-                         
                         m_CurFeatureLayer = EngineFuntions.SetCanSelLay("公交站点");
                         EngineFuntions.ClickSel(m_mapPoint, false, false, 6);
                         if (EngineFuntions.GetSeledFeatures(m_CurFeatureLayer, ref  m_featureCollection))
                          {
                              m_CurFeature = m_featureCollection[0];
+                             
                              if (m_CurFeature != null)
                              {
-                                 m_CurFeature.Delete();
-                                 EngineFuntions.PartialRefresh(EngineFuntions.m_Layer_BusStation);
-                                 System.Threading.Thread.Sleep(1000);
-                                 m_frmStationPane.RefreshGrid();
+                                 string strName = m_CurFeature.get_Value(m_CurFeature.Fields.FindField("StationName")).ToString();
+                                 if (MessageBox.Show(string.Format("确认删除站点：{0}!", strName), "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Information) == DialogResult.OK)
+                                 {
+                                     m_CurFeature.Delete();
+                                     EngineFuntions.PartialRefresh(EngineFuntions.m_Layer_BusStation);
+                                     System.Threading.Thread.Sleep(1000);
+                                     m_frmStationPane.RefreshGrid();
+                                     ForBusInfo.Add_Log(ForBusInfo.Login_name, "删除站点", strName, "");
+                                 }
                              }
                          }
                         m_ToolStatus = -1;
@@ -317,19 +439,21 @@ namespace Businfo
                         {
                             m_CurFeatureLayer = EngineFuntions.SetCanSelLay("公交站点");
                             EngineFuntions.ClickSel(m_mapPoint, false, false, 6);
-                        if (EngineFuntions.GetSeledFeatures(m_CurFeatureLayer, ref  m_featureCollection))
-                         {
-                             m_CurFeature = m_featureCollection[0];
-                             if (m_CurFeature != null)
+                            if (EngineFuntions.GetSeledFeatures(m_CurFeatureLayer, ref  m_featureCollection))
                              {
-                                 m_FeedBack = new MovePointFeedbackClass();
+                                 m_CurFeature = m_featureCollection[0];
+                                 if (m_CurFeature != null)
+                                 {
+                                     m_FeedBack = new MovePointFeedbackClass();
 
-                                 m_FeedBack.Display = pActiveView.ScreenDisplay;
-                                 IMovePointFeedback pointMoveFeedback = m_FeedBack as IMovePointFeedback;
-                                 pointMoveFeedback.Start(m_CurFeature.Shape as IPoint, m_mapPoint);
+                                     m_FeedBack.Display = pActiveView.ScreenDisplay;
+                                     IMovePointFeedback pointMoveFeedback = m_FeedBack as IMovePointFeedback;
+                                     pointMoveFeedback.Start(m_CurFeature.Shape as GISPoint, m_mapPoint);
+                                     string strName = m_CurFeature.get_Value(m_CurFeature.Fields.FindField("StationName")).ToString();
+                                     ForBusInfo.Add_Log(ForBusInfo.Login_name, "移动站点", strName, "");
+                                 }
                              }
-                         }
-                         break;
+                             break;
                         }
                     case ForBusInfo.Bus_Pano:
                          {
@@ -359,12 +483,13 @@ namespace Businfo
                              EngineFuntions.ClickSel(m_mapPoint, false, false, 6);
                              if (EngineFuntions.GetSeledFeatures(m_CurFeatureLayer, ref  m_featureCollection))
                              {
-                                 m_CurFeature = m_featureCollection[0];
-                                 if (m_CurFeature != null)
+                                 //m_CurFeature = m_featureCollection[0];
+                                 if (m_featureCollection.Count > 0)
                                  {
                                      frmStationAllInfo frmPopup = new frmStationAllInfo();
-                                     frmPopup.m_nObjectId = (int)m_CurFeature.get_Value(m_CurFeature.Fields.FindField("OBJECTID"));
-                                     frmPopup.Show();
+                                     //frmPopup.m_nObjectId = (int)m_CurFeature.get_Value(m_CurFeature.Fields.FindField("OBJECTID"));
+                                     frmPopup.m_featureCollection = m_featureCollection;
+                                     frmPopup.ShowDialog();
                                  }
                              }
 
@@ -401,7 +526,7 @@ namespace Businfo
                                  {
                                       frmRoadAllInfo frmPopup = new frmRoadAllInfo();
                                       frmPopup.m_featureCollection = m_featureCollection;
-                                      frmPopup.Show();
+                                      frmPopup.ShowDialog();
                                  }
                              }
                              m_ToolStatus = -1;
@@ -410,14 +535,83 @@ namespace Businfo
                          }
                      case ForBusInfo.Road_Add:
                          {
+                             GISPoint PointBefore1, PointBefore2, PointAfter1, PointAfter2;
                              m_CurFeatureLayer = EngineFuntions.SetCanSelLay("道路中心线");
-                             if (1 == e.shift)
+                             //if (1 == e.shift)
+                            EngineFuntions.ClickSel(m_mapPoint, true, true, 6);
+                            if (EngineFuntions.GetSeledFeatures(m_CurFeatureLayer, ref  m_featureCollection))
                              {
-                                 EngineFuntions.ClickSel(m_mapPoint, true, true, 6);
-                             } 
-                             else
-                             {
-                                 EngineFuntions.ClickSel(m_mapPoint, false, true, 6);
+                                if (m_featureCollection.Count == 2)
+                                {
+                                    IPolyline pline = m_featureCollection[m_featureCollection.Count - 2].Shape as IPolyline;
+                                    m_PolylineCollection.Add(pline);
+                                    if (!EngineFuntions.GetLinkPoint(pline, m_featureCollection[m_featureCollection.Count - 1].Shape as IPolyline, ref m_FormPoint))
+                                     {
+                                         EngineFuntions.ClickSel(m_mapPoint, true, true, 6);//不连续再点击选择一次，取消不连续的线
+                                     }
+                                     else
+                                     {
+                                         m_PolylineCollection.Add(m_featureCollection[m_featureCollection.Count - 1].Shape as IPolyline);
+                                     }
+                                     m_nPLineNum = 2;
+                                }
+                                else if (m_nPLineNum < m_featureCollection.Count)
+                                {
+                                    IPolyline pline = m_featureCollection[m_featureCollection.Count - 1].Shape as IPolyline;
+                                    PointAfter1 = pline.FromPoint;
+                                    PointAfter2 = pline.ToPoint;
+                                     if (m_FormPoint.Compare(PointAfter1) == 0)
+                                     {
+                                         m_FormPoint = PointAfter2;
+                                         m_PolylineCollection.Add(pline);
+                                         m_nPLineNum = m_featureCollection.Count;
+                                     }
+                                     else if (m_FormPoint.Compare(PointAfter2) == 0)
+                                     {
+                                         m_FormPoint = PointAfter1;
+                                         m_PolylineCollection.Add(pline);
+                                         m_nPLineNum = m_featureCollection.Count;
+                                     }
+                                     else
+                                     {
+                                         MessageBox.Show("线路不连续！\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                         EngineFuntions.ClickSel(m_mapPoint, true, true, 6);//不连续再点击选择一次，取消不连续的线
+                                     }
+                                }
+                                else if (2 < m_featureCollection.Count)
+                                {
+                                    m_bShowLayer = true;
+                                    foreach (IFeature pfea in m_featureCollection)
+                                    {
+                                        IPolyline pline = pfea.ShapeCopy as IPolyline;
+                                        PointAfter1 = pline.FromPoint;
+                                        PointAfter2 = pline.ToPoint;
+                                        if (PointAfter1.Compare(m_PolylineCollection[m_PolylineCollection.Count - 1].FromPoint) == 0 && PointAfter2.Compare(m_PolylineCollection[m_PolylineCollection.Count - 1].ToPoint) == 0)
+                                        {
+                                            m_bShowLayer = false;
+                                            MessageBox.Show("线路不连续\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                            EngineFuntions.ClickSel(m_mapPoint, true, true, 6);//不连续再点击选择一次，取消不连续的线
+                                            break;
+                                        }
+                                    }
+                                    if (m_bShowLayer)
+                                    {
+                                        m_nPLineNum = m_featureCollection.Count;
+                                        if (!EngineFuntions.GetLinkPoint(m_PolylineCollection[m_PolylineCollection.Count - 3], m_PolylineCollection[m_PolylineCollection.Count - 2], ref m_FormPoint))
+                                        {
+                                            EngineFuntions.ClickSel(m_mapPoint, true, true, 6);//不连续再点击选择一次，取消不连续的线
+                                        }
+                                        else
+                                        {
+                                            m_PolylineCollection.RemoveAt(m_PolylineCollection.Count - 1);
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    m_FormPoint = m_mapPoint;
+                                }
+                                EngineFuntions.ZoomPoint(m_FormPoint, 3600);
                              }
                              break;
                          }
@@ -435,43 +629,27 @@ namespace Businfo
                             axMapControl1.MousePointer = esriControlsMousePointer.esriPointerDefault;
                              break;
                          }
-	                 default :
-	           	            break;
-	           }
-             }
-             if (2 == e.button && m_ToolStatus == ForBusInfo.Road_Add)
-           {
-               if (MessageBox.Show("是否选择完成？\n", "提示", MessageBoxButtons.YesNo,MessageBoxIcon.Information) == DialogResult.Yes)
-               {
-                   
-                   IPolyline pPolyline = null;
-                   if (EngineFuntions.GetSeledFeatures(m_CurFeatureLayer, ref m_featureCollection))
-                   {
-                       if (EngineFuntions.MergeLines(m_featureCollection, ref pPolyline))
-                       {
-                           m_ToolStatus = -1;
-                           axMapControl1.MousePointer = esriControlsMousePointer.esriPointerDefault;
-                           frmRoadPara frmPopup = new frmRoadPara();
-                           frmPopup.m_pPolyline = pPolyline;
-                           if (frmPopup.ShowDialog() == DialogResult.OK)
-                           {
-                               EngineFuntions.PartialRefresh(EngineFuntions.m_Layer_BusRoad);
-                               frmPopup.Close();
-                               System.Threading.Thread.Sleep(1000);
-                               m_frmRoadPane.RefreshGrid();
-                               axMapControl1.Map.ClearSelection();
-                           }
-                       }
-                       else
-                       {
-                           MessageBox.Show("提示：选择的线路不是连续的！\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                       }
-                   } 
-                   else
-                   {
-                       MessageBox.Show("提示：请在公交线路中选中路段\n"  , "提示", MessageBoxButtons.OK,MessageBoxIcon.Information);
-                   }
+                     case ForBusInfo.Road_BackUp:
+                         {
+                             m_CurFeatureLayer = EngineFuntions.SetCanSelLay("公交站线");
+                             EngineFuntions.ClickSel(m_mapPoint, false, false, 6);
+                             if (EngineFuntions.GetSeledFeatures(m_CurFeatureLayer, ref m_featureCollection))
+                             {
+                                 m_frmRoadPane.m_featureCollection = m_featureCollection;
+                                 m_frmRoadPane.RefreshSelectGrid();
+                                 axDockingPane1.FindPane(ForBusInfo.Pan_Road).Select();
+                             }
+                             m_ToolStatus = -1;
+                             axMapControl1.MousePointer = esriControlsMousePointer.esriPointerDefault;
+                             break;
+                         }
+                     default :
+           	                break;
                }
+             }
+           if (2 == e.button)
+           {
+               EngineFuntions.ZoomPoint(m_mapPoint, EngineFuntions.m_AxMapControl.Map.MapScale); 
            }
          
         }
@@ -520,9 +698,12 @@ namespace Businfo
             }
         }
 
-        private void axMapControl1_OnAfterDraw(object sender, IMapControlEvents2_OnAfterDrawEvent e)
+        private void frmMainNew_FormClosing(object sender, FormClosingEventArgs e)
         {
-
+            //Release COM objects and shut down the AoInitilaize object
+            //m_pAoInitialize.Shutdown();
+           
         }
+
     }
 }

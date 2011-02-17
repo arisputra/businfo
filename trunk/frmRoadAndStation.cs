@@ -17,6 +17,8 @@ namespace Businfo
         public List<IFeature> m_featureCollection;//站点
         public int m_nRoadID;
         public IFeature m_pCurFeature;
+        public List<BusStation> m_BusStationList = new List<BusStation>();
+
         public frmRoadAndStation()
         {
             InitializeComponent();
@@ -85,6 +87,7 @@ namespace Businfo
                     pCom = new OleDbCommand(pStrSQL, mycon);
                     pCom.ExecuteNonQuery();         
                 }
+                ForBusInfo.Add_Log(ForBusInfo.Login_name, "线路关联站点", m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("RoadName")).ToString(), "");
                 mycon.Close();
                 this.Close();
             }
@@ -118,22 +121,49 @@ namespace Businfo
             if (EngineFuntions.GetSeledFeatures(EngineFuntions.m_Layer_BusStation,ref m_featureCollection))
             {
                 ListBox1.Items.Clear();
+                m_BusStationList.Clear();
+                IPolyline pPLine = m_pCurFeature.ShapeCopy as IPolyline;
+                IPoint outPoint = new PointClass();
+                double distanceAlongCurve = 0;//该点在曲线上最近的点距曲线起点的距离
+                double distanceFromCurve = 0;//该点到曲线的直线距离
+                bool bRightSide = false;//点在线的左边还是右边
+                bool asRatio = false;  //asRatio：byval方式，bool类型，表示上面两个参数给定的长度是以绝对距离的方式给出还是以占曲线总长度的比例的方式给出
                 foreach (IFeature pfeat in m_featureCollection)
                 {
-                     ListBox1.Items.Add(new BusStation(pfeat.get_Value(pfeat.Fields.FindField("StationName")).ToString(),pfeat.get_Value(pfeat.Fields.FindField("Direct")).ToString(),(int)pfeat.get_Value(pfeat.Fields.FindField("OBJECTID"))));            
+                    pPLine.QueryPointAndDistance(esriSegmentExtension.esriNoExtension, pfeat.ShapeCopy as IPoint, asRatio, outPoint, ref distanceAlongCurve, ref distanceFromCurve, ref bRightSide);
+                    m_BusStationList.Add(new BusStation(pfeat.get_Value(pfeat.Fields.FindField("StationName")).ToString(), pfeat.get_Value(pfeat.Fields.FindField("Direct")).ToString(), (int)pfeat.get_Value(pfeat.Fields.FindField("OBJECTID")), distanceAlongCurve));
+                    EngineFuntions.AddTextElement(pfeat.Shape, pfeat.get_Value(pfeat.Fields.FindField("StationName")).ToString());
                 }
-                //ListBox1.SelectedIndex = 0;
+                m_BusStationList.Sort();
+                foreach (BusStation pItem in m_BusStationList)
+                {
+                    ListBox1.Items.Add(pItem);
+                }
             }
         }
 
         private void frmRoadAndStation_Load(object sender, EventArgs e)
         {
             ListBox1.Items.Clear();
+            m_BusStationList.Clear();
+            IPolyline pPLine = m_pCurFeature.ShapeCopy as IPolyline;
+            IPoint outPoint = new PointClass();
+            double distanceAlongCurve = 0;//该点在曲线上最近的点距曲线起点的距离
+            double distanceFromCurve = 0;//该点到曲线的直线距离
+            bool bRightSide = false;//点在线的左边还是右边
+            bool asRatio = false;  //asRatio：byval方式，bool类型，表示上面两个参数给定的长度是以绝对距离的方式给出还是以占曲线总长度的比例的方式给出
             foreach (IFeature pfeat in m_featureCollection)
             {
-                ListBox1.Items.Add(new BusStation(pfeat.get_Value(pfeat.Fields.FindField("StationName")).ToString(),pfeat.get_Value(pfeat.Fields.FindField("Direct")).ToString(),(int)pfeat.get_Value(pfeat.Fields.FindField("OBJECTID"))));
-             }
-            Label1.Text = m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("RoadName")).ToString();
+                pPLine.QueryPointAndDistance(esriSegmentExtension.esriNoExtension, pfeat.ShapeCopy as IPoint, asRatio, outPoint, ref distanceAlongCurve, ref distanceFromCurve, ref bRightSide);
+                m_BusStationList.Add(new BusStation(pfeat.get_Value(pfeat.Fields.FindField("StationName")).ToString(), pfeat.get_Value(pfeat.Fields.FindField("Direct")).ToString(), (int)pfeat.get_Value(pfeat.Fields.FindField("OBJECTID")), distanceAlongCurve));
+                EngineFuntions.AddTextElement(pfeat.Shape, pfeat.get_Value(pfeat.Fields.FindField("StationName")).ToString());
+            }
+            m_BusStationList.Sort();
+            foreach (BusStation pItem in m_BusStationList)
+            {
+                ListBox1.Items.Add(pItem);
+            }
+            Label1.Text = m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("RoadName")).ToString() + m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("RoadTravel")).ToString();
             m_nRoadID = (int)m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("OBJECTID"));
             //ListBox1.SelectedIndex = 0;
         }
@@ -146,6 +176,21 @@ namespace Businfo
             ListBox1.Items[nTo] = Temp;
             ListBox1.SelectedIndices.Remove(nTo);
             ListBox1.SelectedIndices.Add(nForm);
+        }
+
+        private void frmRoadAndStation_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            EngineFuntions.m_AxMapControl.ActiveView.GraphicsContainer.DeleteAllElements();
+        }
+
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            ListBox1.Items.Clear();
+            m_BusStationList.Reverse();
+            foreach (BusStation pItem in m_BusStationList)
+            {
+                ListBox1.Items.Add(pItem);
+            }
         }
     }
 }

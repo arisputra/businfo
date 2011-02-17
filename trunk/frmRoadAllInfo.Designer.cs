@@ -199,7 +199,7 @@
             this.companyDataGridViewTextBoxColumn.Frozen = true;
             this.companyDataGridViewTextBoxColumn.HeaderText = "所属公司";
             this.companyDataGridViewTextBoxColumn.Name = "companyDataGridViewTextBoxColumn";
-            this.companyDataGridViewTextBoxColumn.Width = 72;
+            this.companyDataGridViewTextBoxColumn.Width = 61;
             // 
             // roadNameDataGridViewTextBoxColumn
             // 
@@ -207,273 +207,273 @@
             this.roadNameDataGridViewTextBoxColumn.Frozen = true;
             this.roadNameDataGridViewTextBoxColumn.HeaderText = "线路名称";
             this.roadNameDataGridViewTextBoxColumn.Name = "roadNameDataGridViewTextBoxColumn";
-            this.roadNameDataGridViewTextBoxColumn.Width = 78;
+            this.roadNameDataGridViewTextBoxColumn.Width = 61;
             // 
             // roadTypeDataGridViewTextBoxColumn
             // 
             this.roadTypeDataGridViewTextBoxColumn.DataPropertyName = "RoadType";
             this.roadTypeDataGridViewTextBoxColumn.HeaderText = "线路类型";
             this.roadTypeDataGridViewTextBoxColumn.Name = "roadTypeDataGridViewTextBoxColumn";
-            this.roadTypeDataGridViewTextBoxColumn.Width = 78;
+            this.roadTypeDataGridViewTextBoxColumn.Width = 61;
             // 
             // roadTravelDataGridViewTextBoxColumn
             // 
             this.roadTravelDataGridViewTextBoxColumn.DataPropertyName = "RoadTravel";
             this.roadTravelDataGridViewTextBoxColumn.HeaderText = "线路行程";
             this.roadTravelDataGridViewTextBoxColumn.Name = "roadTravelDataGridViewTextBoxColumn";
-            this.roadTravelDataGridViewTextBoxColumn.Width = 90;
+            this.roadTravelDataGridViewTextBoxColumn.Width = 61;
             // 
             // firstStartTimeDataGridViewTextBoxColumn
             // 
             this.firstStartTimeDataGridViewTextBoxColumn.DataPropertyName = "FirstStartTime";
             this.firstStartTimeDataGridViewTextBoxColumn.HeaderText = "首站开班时间";
             this.firstStartTimeDataGridViewTextBoxColumn.Name = "firstStartTimeDataGridViewTextBoxColumn";
-            this.firstStartTimeDataGridViewTextBoxColumn.Width = 114;
+            this.firstStartTimeDataGridViewTextBoxColumn.Width = 72;
             // 
             // firstCloseTimeDataGridViewTextBoxColumn
             // 
             this.firstCloseTimeDataGridViewTextBoxColumn.DataPropertyName = "FirstCloseTime";
             this.firstCloseTimeDataGridViewTextBoxColumn.HeaderText = "首站收班时间";
             this.firstCloseTimeDataGridViewTextBoxColumn.Name = "firstCloseTimeDataGridViewTextBoxColumn";
-            this.firstCloseTimeDataGridViewTextBoxColumn.Width = 114;
+            this.firstCloseTimeDataGridViewTextBoxColumn.Width = 72;
             // 
             // endStartTimeDataGridViewTextBoxColumn
             // 
             this.endStartTimeDataGridViewTextBoxColumn.DataPropertyName = "EndStartTime";
             this.endStartTimeDataGridViewTextBoxColumn.HeaderText = "末站开班时间";
             this.endStartTimeDataGridViewTextBoxColumn.Name = "endStartTimeDataGridViewTextBoxColumn";
-            this.endStartTimeDataGridViewTextBoxColumn.Width = 102;
+            this.endStartTimeDataGridViewTextBoxColumn.Width = 72;
             // 
             // endCloseTimDataGridViewTextBoxColumn
             // 
             this.endCloseTimDataGridViewTextBoxColumn.DataPropertyName = "EndCloseTim";
             this.endCloseTimDataGridViewTextBoxColumn.HeaderText = "末站收班时间";
             this.endCloseTimDataGridViewTextBoxColumn.Name = "endCloseTimDataGridViewTextBoxColumn";
-            this.endCloseTimDataGridViewTextBoxColumn.Width = 96;
+            this.endCloseTimDataGridViewTextBoxColumn.Width = 72;
             // 
             // ticketPrice1DataGridViewTextBoxColumn
             // 
             this.ticketPrice1DataGridViewTextBoxColumn.DataPropertyName = "TicketPrice1";
             this.ticketPrice1DataGridViewTextBoxColumn.HeaderText = "票价1";
             this.ticketPrice1DataGridViewTextBoxColumn.Name = "ticketPrice1DataGridViewTextBoxColumn";
-            this.ticketPrice1DataGridViewTextBoxColumn.Width = 102;
+            this.ticketPrice1DataGridViewTextBoxColumn.Width = 51;
             // 
             // ticketPrice2DataGridViewTextBoxColumn
             // 
             this.ticketPrice2DataGridViewTextBoxColumn.DataPropertyName = "TicketPrice2";
             this.ticketPrice2DataGridViewTextBoxColumn.HeaderText = "票价2";
             this.ticketPrice2DataGridViewTextBoxColumn.Name = "ticketPrice2DataGridViewTextBoxColumn";
-            this.ticketPrice2DataGridViewTextBoxColumn.Width = 102;
+            this.ticketPrice2DataGridViewTextBoxColumn.Width = 51;
             // 
             // ticketPrice3DataGridViewTextBoxColumn
             // 
             this.ticketPrice3DataGridViewTextBoxColumn.DataPropertyName = "TicketPrice3";
             this.ticketPrice3DataGridViewTextBoxColumn.HeaderText = "票价3";
             this.ticketPrice3DataGridViewTextBoxColumn.Name = "ticketPrice3DataGridViewTextBoxColumn";
-            this.ticketPrice3DataGridViewTextBoxColumn.Width = 102;
+            this.ticketPrice3DataGridViewTextBoxColumn.Width = 51;
             // 
             // roadNoDataGridViewTextBoxColumn
             // 
             this.roadNoDataGridViewTextBoxColumn.DataPropertyName = "RoadNo";
             this.roadNoDataGridViewTextBoxColumn.HeaderText = "线路编号";
             this.roadNoDataGridViewTextBoxColumn.Name = "roadNoDataGridViewTextBoxColumn";
-            this.roadNoDataGridViewTextBoxColumn.Width = 66;
+            this.roadNoDataGridViewTextBoxColumn.Width = 61;
             // 
             // lengthDataGridViewTextBoxColumn
             // 
             this.lengthDataGridViewTextBoxColumn.DataPropertyName = "Length";
             this.lengthDataGridViewTextBoxColumn.HeaderText = "长度";
             this.lengthDataGridViewTextBoxColumn.Name = "lengthDataGridViewTextBoxColumn";
-            this.lengthDataGridViewTextBoxColumn.Width = 66;
+            this.lengthDataGridViewTextBoxColumn.Width = 51;
             // 
             // averageLoadFactorDataGridViewTextBoxColumn
             // 
             this.averageLoadFactorDataGridViewTextBoxColumn.DataPropertyName = "AverageLoadFactor";
             this.averageLoadFactorDataGridViewTextBoxColumn.HeaderText = "平均满载率";
             this.averageLoadFactorDataGridViewTextBoxColumn.Name = "averageLoadFactorDataGridViewTextBoxColumn";
-            this.averageLoadFactorDataGridViewTextBoxColumn.Width = 132;
+            this.averageLoadFactorDataGridViewTextBoxColumn.Width = 72;
             // 
             // busNumberDataGridViewTextBoxColumn
             // 
             this.busNumberDataGridViewTextBoxColumn.DataPropertyName = "BusNumber";
             this.busNumberDataGridViewTextBoxColumn.HeaderText = "运营车次";
             this.busNumberDataGridViewTextBoxColumn.Name = "busNumberDataGridViewTextBoxColumn";
-            this.busNumberDataGridViewTextBoxColumn.Width = 84;
+            this.busNumberDataGridViewTextBoxColumn.Width = 61;
             // 
             // capacityDataGridViewTextBoxColumn
             // 
             this.capacityDataGridViewTextBoxColumn.DataPropertyName = "Capacity";
             this.capacityDataGridViewTextBoxColumn.HeaderText = "运力配备";
             this.capacityDataGridViewTextBoxColumn.Name = "capacityDataGridViewTextBoxColumn";
-            this.capacityDataGridViewTextBoxColumn.Width = 78;
+            this.capacityDataGridViewTextBoxColumn.Width = 61;
             // 
             // passengerSumDataGridViewTextBoxColumn
             // 
             this.passengerSumDataGridViewTextBoxColumn.DataPropertyName = "PassengerSum";
             this.passengerSumDataGridViewTextBoxColumn.HeaderText = "客运量";
             this.passengerSumDataGridViewTextBoxColumn.Name = "passengerSumDataGridViewTextBoxColumn";
-            this.passengerSumDataGridViewTextBoxColumn.Width = 102;
+            this.passengerSumDataGridViewTextBoxColumn.Width = 61;
             // 
             // passengerWorkSumDataGridViewTextBoxColumn
             // 
             this.passengerWorkSumDataGridViewTextBoxColumn.DataPropertyName = "PassengerWorkSum";
             this.passengerWorkSumDataGridViewTextBoxColumn.HeaderText = "客运工作量";
             this.passengerWorkSumDataGridViewTextBoxColumn.Name = "passengerWorkSumDataGridViewTextBoxColumn";
-            this.passengerWorkSumDataGridViewTextBoxColumn.Width = 126;
+            this.passengerWorkSumDataGridViewTextBoxColumn.Width = 72;
             // 
             // averageSpeedDataGridViewTextBoxColumn
             // 
             this.averageSpeedDataGridViewTextBoxColumn.DataPropertyName = "AverageSpeed";
             this.averageSpeedDataGridViewTextBoxColumn.HeaderText = "平均车速";
             this.averageSpeedDataGridViewTextBoxColumn.Name = "averageSpeedDataGridViewTextBoxColumn";
-            this.averageSpeedDataGridViewTextBoxColumn.Width = 102;
+            this.averageSpeedDataGridViewTextBoxColumn.Width = 61;
             // 
             // nulineCoefficientDataGridViewTextBoxColumn
             // 
             this.nulineCoefficientDataGridViewTextBoxColumn.DataPropertyName = "NulineCoefficient";
             this.nulineCoefficientDataGridViewTextBoxColumn.HeaderText = "非直线系数";
             this.nulineCoefficientDataGridViewTextBoxColumn.Name = "nulineCoefficientDataGridViewTextBoxColumn";
-            this.nulineCoefficientDataGridViewTextBoxColumn.Width = 132;
+            this.nulineCoefficientDataGridViewTextBoxColumn.Width = 72;
             // 
             // nulineCoefficient2DataGridViewTextBoxColumn
             // 
             this.nulineCoefficient2DataGridViewTextBoxColumn.DataPropertyName = "NulineCoefficient2";
             this.nulineCoefficient2DataGridViewTextBoxColumn.HeaderText = "非直线系数2";
             this.nulineCoefficient2DataGridViewTextBoxColumn.Name = "nulineCoefficient2DataGridViewTextBoxColumn";
-            this.nulineCoefficient2DataGridViewTextBoxColumn.Width = 138;
+            this.nulineCoefficient2DataGridViewTextBoxColumn.Width = 72;
             // 
             // picture1DataGridViewTextBoxColumn
             // 
             this.picture1DataGridViewTextBoxColumn.DataPropertyName = "Picture1";
             this.picture1DataGridViewTextBoxColumn.HeaderText = "图片1";
             this.picture1DataGridViewTextBoxColumn.Name = "picture1DataGridViewTextBoxColumn";
-            this.picture1DataGridViewTextBoxColumn.Width = 78;
+            this.picture1DataGridViewTextBoxColumn.Width = 51;
             // 
             // picture2DataGridViewTextBoxColumn
             // 
             this.picture2DataGridViewTextBoxColumn.DataPropertyName = "Picture2";
             this.picture2DataGridViewTextBoxColumn.HeaderText = "图片2";
             this.picture2DataGridViewTextBoxColumn.Name = "picture2DataGridViewTextBoxColumn";
-            this.picture2DataGridViewTextBoxColumn.Width = 78;
+            this.picture2DataGridViewTextBoxColumn.Width = 51;
             // 
             // picture3DataGridViewTextBoxColumn
             // 
             this.picture3DataGridViewTextBoxColumn.DataPropertyName = "Picture3";
             this.picture3DataGridViewTextBoxColumn.HeaderText = "图片3";
             this.picture3DataGridViewTextBoxColumn.Name = "picture3DataGridViewTextBoxColumn";
-            this.picture3DataGridViewTextBoxColumn.Width = 78;
+            this.picture3DataGridViewTextBoxColumn.Width = 51;
             // 
             // picture4DataGridViewTextBoxColumn
             // 
             this.picture4DataGridViewTextBoxColumn.DataPropertyName = "Picture4";
             this.picture4DataGridViewTextBoxColumn.HeaderText = "图片4";
             this.picture4DataGridViewTextBoxColumn.Name = "picture4DataGridViewTextBoxColumn";
-            this.picture4DataGridViewTextBoxColumn.Width = 78;
+            this.picture4DataGridViewTextBoxColumn.Width = 51;
             // 
             // picture5DataGridViewTextBoxColumn
             // 
             this.picture5DataGridViewTextBoxColumn.DataPropertyName = "Picture5";
             this.picture5DataGridViewTextBoxColumn.HeaderText = "图片5";
             this.picture5DataGridViewTextBoxColumn.Name = "picture5DataGridViewTextBoxColumn";
-            this.picture5DataGridViewTextBoxColumn.Width = 78;
+            this.picture5DataGridViewTextBoxColumn.Width = 51;
             // 
             // unitDataGridViewTextBoxColumn
             // 
             this.unitDataGridViewTextBoxColumn.DataPropertyName = "Unit";
             this.unitDataGridViewTextBoxColumn.HeaderText = "所属单位";
             this.unitDataGridViewTextBoxColumn.Name = "unitDataGridViewTextBoxColumn";
-            this.unitDataGridViewTextBoxColumn.Width = 54;
+            this.unitDataGridViewTextBoxColumn.Width = 61;
             // 
             // serveAreaDataGridViewTextBoxColumn
             // 
             this.serveAreaDataGridViewTextBoxColumn.DataPropertyName = "ServeArea";
             this.serveAreaDataGridViewTextBoxColumn.HeaderText = "服务面积";
             this.serveAreaDataGridViewTextBoxColumn.Name = "serveAreaDataGridViewTextBoxColumn";
-            this.serveAreaDataGridViewTextBoxColumn.Width = 84;
+            this.serveAreaDataGridViewTextBoxColumn.Width = 61;
             // 
             // averageLengthDataGridViewTextBoxColumn
             // 
             this.averageLengthDataGridViewTextBoxColumn.DataPropertyName = "AverageLength";
             this.averageLengthDataGridViewTextBoxColumn.HeaderText = "平均运距";
             this.averageLengthDataGridViewTextBoxColumn.Name = "averageLengthDataGridViewTextBoxColumn";
-            this.averageLengthDataGridViewTextBoxColumn.Width = 108;
+            this.averageLengthDataGridViewTextBoxColumn.Width = 61;
             // 
             // higeLoadFactorDataGridViewTextBoxColumn
             // 
             this.higeLoadFactorDataGridViewTextBoxColumn.DataPropertyName = "HigeLoadFactor";
             this.higeLoadFactorDataGridViewTextBoxColumn.HeaderText = "高峰满载率";
             this.higeLoadFactorDataGridViewTextBoxColumn.Name = "higeLoadFactorDataGridViewTextBoxColumn";
-            this.higeLoadFactorDataGridViewTextBoxColumn.Width = 114;
+            this.higeLoadFactorDataGridViewTextBoxColumn.Width = 72;
             // 
             // roadLoadDataGridViewTextBoxColumn
             // 
             this.roadLoadDataGridViewTextBoxColumn.DataPropertyName = "RoadLoad";
             this.roadLoadDataGridViewTextBoxColumn.HeaderText = "线路负荷";
             this.roadLoadDataGridViewTextBoxColumn.Name = "roadLoadDataGridViewTextBoxColumn";
-            this.roadLoadDataGridViewTextBoxColumn.Width = 78;
+            this.roadLoadDataGridViewTextBoxColumn.Width = 61;
             // 
             // directImbalanceDataGridViewTextBoxColumn
             // 
             this.directImbalanceDataGridViewTextBoxColumn.DataPropertyName = "DirectImbalance";
             this.directImbalanceDataGridViewTextBoxColumn.HeaderText = "方向不均衡";
             this.directImbalanceDataGridViewTextBoxColumn.Name = "directImbalanceDataGridViewTextBoxColumn";
-            this.directImbalanceDataGridViewTextBoxColumn.Width = 120;
+            this.directImbalanceDataGridViewTextBoxColumn.Width = 72;
             // 
             // alternatelyCoefficientDataGridViewTextBoxColumn
             // 
             this.alternatelyCoefficientDataGridViewTextBoxColumn.DataPropertyName = "AlternatelyCoefficient";
             this.alternatelyCoefficientDataGridViewTextBoxColumn.HeaderText = "交替系数";
             this.alternatelyCoefficientDataGridViewTextBoxColumn.Name = "alternatelyCoefficientDataGridViewTextBoxColumn";
-            this.alternatelyCoefficientDataGridViewTextBoxColumn.Width = 162;
+            this.alternatelyCoefficientDataGridViewTextBoxColumn.Width = 61;
             // 
             // timeCoefficientDataGridViewTextBoxColumn
             // 
             this.timeCoefficientDataGridViewTextBoxColumn.DataPropertyName = "TimeCoefficient";
             this.timeCoefficientDataGridViewTextBoxColumn.HeaderText = "时不均系数";
             this.timeCoefficientDataGridViewTextBoxColumn.Name = "timeCoefficientDataGridViewTextBoxColumn";
-            this.timeCoefficientDataGridViewTextBoxColumn.Width = 120;
+            this.timeCoefficientDataGridViewTextBoxColumn.Width = 72;
             // 
             // dayCoefficientDataGridViewTextBoxColumn
             // 
             this.dayCoefficientDataGridViewTextBoxColumn.DataPropertyName = "DayCoefficient";
             this.dayCoefficientDataGridViewTextBoxColumn.HeaderText = "天不均系数";
             this.dayCoefficientDataGridViewTextBoxColumn.Name = "dayCoefficientDataGridViewTextBoxColumn";
-            this.dayCoefficientDataGridViewTextBoxColumn.Width = 114;
+            this.dayCoefficientDataGridViewTextBoxColumn.Width = 72;
             // 
             // highHourSectDataGridViewTextBoxColumn
             // 
             this.highHourSectDataGridViewTextBoxColumn.DataPropertyName = "HighHourSect";
             this.highHourSectDataGridViewTextBoxColumn.HeaderText = "高峰小时段";
             this.highHourSectDataGridViewTextBoxColumn.Name = "highHourSectDataGridViewTextBoxColumn";
-            this.highHourSectDataGridViewTextBoxColumn.Width = 102;
+            this.highHourSectDataGridViewTextBoxColumn.Width = 72;
             // 
             // highHourAreaDataGridViewTextBoxColumn
             // 
             this.highHourAreaDataGridViewTextBoxColumn.DataPropertyName = "HighHourArea";
             this.highHourAreaDataGridViewTextBoxColumn.HeaderText = "高峰小时面";
             this.highHourAreaDataGridViewTextBoxColumn.Name = "highHourAreaDataGridViewTextBoxColumn";
-            this.highHourAreaDataGridViewTextBoxColumn.Width = 102;
+            this.highHourAreaDataGridViewTextBoxColumn.Width = 72;
             // 
             // highHourMassDataGridViewTextBoxColumn
             // 
             this.highHourMassDataGridViewTextBoxColumn.DataPropertyName = "HighHourMass";
             this.highHourMassDataGridViewTextBoxColumn.HeaderText = "高峰小时量";
             this.highHourMassDataGridViewTextBoxColumn.Name = "highHourMassDataGridViewTextBoxColumn";
-            this.highHourMassDataGridViewTextBoxColumn.Width = 102;
+            this.highHourMassDataGridViewTextBoxColumn.Width = 72;
             // 
             // highPassengerMassDataGridViewTextBoxColumn
             // 
             this.highPassengerMassDataGridViewTextBoxColumn.DataPropertyName = "HighPassengerMass";
             this.highPassengerMassDataGridViewTextBoxColumn.HeaderText = "高峰客运量";
             this.highPassengerMassDataGridViewTextBoxColumn.Name = "highPassengerMassDataGridViewTextBoxColumn";
-            this.highPassengerMassDataGridViewTextBoxColumn.Width = 132;
+            this.highPassengerMassDataGridViewTextBoxColumn.Width = 72;
             // 
             // sHAPELengthDataGridViewTextBoxColumn
             // 
             this.sHAPELengthDataGridViewTextBoxColumn.DataPropertyName = "SHAPE_Length";
             this.sHAPELengthDataGridViewTextBoxColumn.HeaderText = "线路长度";
             this.sHAPELengthDataGridViewTextBoxColumn.Name = "sHAPELengthDataGridViewTextBoxColumn";
-            this.sHAPELengthDataGridViewTextBoxColumn.Width = 102;
+            this.sHAPELengthDataGridViewTextBoxColumn.Width = 61;
             // 
             // 公交站线BindingSource
             // 
@@ -517,7 +517,7 @@
             // 
             this.fillByINOBJECTIDToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.fillByINOBJECTIDToolStripButton.Name = "fillByINOBJECTIDToolStripButton";
-            this.fillByINOBJECTIDToolStripButton.Size = new System.Drawing.Size(95, 22);
+            this.fillByINOBJECTIDToolStripButton.Size = new System.Drawing.Size(105, 22);
             this.fillByINOBJECTIDToolStripButton.Text = "FillByINOBJECTID";
             this.fillByINOBJECTIDToolStripButton.Click += new System.EventHandler(this.fillByINOBJECTIDToolStripButton_Click);
             // 
@@ -530,7 +530,7 @@
             this.Controls.Add(this.Button1);
             this.Controls.Add(this.DataGridView1);
             this.Name = "frmRoadAllInfo";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "线路信息";
             this.Load += new System.EventHandler(this.frmRoadAllInfo_Load);
             ((System.ComponentModel.ISupportInitialize)(this.DataGridView1)).EndInit();

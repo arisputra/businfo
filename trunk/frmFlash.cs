@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using Businfo.Globe;
 
 namespace Businfo
 {
@@ -14,15 +15,12 @@ namespace Businfo
         public frmFlash()
         {
             InitializeComponent();
-            timer1.Start();
-    
         }
 
         [STAThread]
         static void Main()
         {
-            Application.Run(new frmFlash());
-
+            Application.Run(new frmMainNew());
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -39,6 +37,25 @@ namespace Businfo
                 frmmain.m_frmFlash = this;
                 frmmain.Show();
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (maskedTextBox1.Text.ToLower() == "admin")
+            {
+                ForBusInfo.Login_name = textBox1.Text;
+                timer1.Start();
+            }
+            else
+            {
+                MessageBox.Show("密码错误，请重新输入\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+           
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

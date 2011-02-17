@@ -2924,7 +2924,14 @@ WHERE     (OBJECTID IN ({0}))";
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Fill, false)]
         public virtual int FillByINOBJECTID(StationDataSet.公交站点DataTable dataTable, string Param1) {
-            this.CommandCollection[3].CommandText = string.Format(this.CommandCollection[3].CommandText, Param1);
+            this.CommandCollection[3].CommandText = string.Format(@"SELECT     OBJECTID, SHAPE, StationNo, StationName, StationAlias, Direct, MainSymbol, StationCharacter, GPSLongtitude, GPSLatitude, GPSHigh, 
+                      RodMaterialFirst, RodStyleFirst, StationMaterial, StationStyle, Chair, StationType, BusShelter, Constructor, ConstructionTime, StationLand, 
+                      TrafficVolume, PictureFirst, PictureSecond, PictureThird, StationArea, ServiceArea, DayTrafficVolume, PassSum, PassRode, HourMass, HourEvacuate, 
+                      DayMass, DayEvacuate, RouteSum, MoveTime, RebuildTime, RemoveTime, StationLong, RodMaterialSecond, RodMaterialThird, RodStyleSecond, 
+                      RodStyleThird, DispatchCompanyFirst, DispatchRouteFirst, DispatchStationFirst, DispatchCompanySecond, DispatchRouteSecond, 
+                      DispatchStationSecond, DispatchCompanyThird, DispatchRouteThird, DispatchStationThird, Classify
+FROM         公交站点
+WHERE     (OBJECTID IN ({0}))", Param1);
             this.Adapter.SelectCommand = this.CommandCollection[3];
             //if ((Param1 == null)) {
             //    throw new global::System.ArgumentNullException("Param1");

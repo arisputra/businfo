@@ -28,9 +28,7 @@ namespace Businfo
         private void frmlayerToc_Load(object sender, EventArgs e)
         {
             m_pTOCControl = (ITOCControl)TOCControl.Object;
-
-              TOCControl.EnableLayerDragDrop = true;
-
+            TOCControl.EnableLayerDragDrop = true;
         }
 
         private void MapHawkEye_OnMouseDown(object sender, IMapControlEvents2_OnMouseDownEvent e)

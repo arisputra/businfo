@@ -39,6 +39,7 @@ namespace Businfo
 
         private void Button1_Click(object sender, EventArgs e)
         {
+            checkBox1.Checked = false;
             if (String.IsNullOrEmpty(TextBox1.Text))
             {
                 this.公交站点TableAdapter.Fill(this.stationDataSet.公交站点);
@@ -77,16 +78,24 @@ namespace Businfo
             {
                 if (DataGridView1.Rows[i].Cells[0].Value != null && (bool)DataGridView1.Rows[i].Cells[0].Value == true)
                 {
-                    pCurFeature = EngineFuntions.GetFeatureByFieldAndValue(EngineFuntions.m_Layer_BusStation, "OBJECTID", DataGridView1.Rows[i].Cells[1].Value.ToString());
-                    pCurFeature.Delete();
-                    DataGridView1.Rows.RemoveAt(DataGridView1.Rows[i].Index);
+                    if (MessageBox.Show(string.Format("确认删除站点：{0}!", DataGridView1.Rows[i].Cells[3].Value.ToString()), "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Information) == DialogResult.OK)
+                    {
+                        pCurFeature = EngineFuntions.GetFeatureByFieldAndValue(EngineFuntions.m_Layer_BusStation, "OBJECTID", DataGridView1.Rows[i].Cells[1].Value.ToString());
+                        pCurFeature.Delete();
+                        ForBusInfo.Add_Log(ForBusInfo.Login_name, "删除站点", DataGridView1.Rows[i].Cells[3].Value.ToString(), "");
+                        DataGridView1.Rows.RemoveAt(DataGridView1.Rows[i].Index);
+                    }
                     bCheck = true;
                 }
             }
             if (!bCheck & m_pCurFeature != null)
             {
-                m_pCurFeature.Delete();
-                DataGridView1.Rows.RemoveAt(m_nCurRowIndex);
+                if (MessageBox.Show(string.Format("确认删除站点：{0}!", DataGridView1.Rows[m_nCurRowIndex].Cells[3].Value.ToString()), "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Information) == DialogResult.OK)
+                {
+                    m_pCurFeature.Delete();
+                    ForBusInfo.Add_Log(ForBusInfo.Login_name, "删除站点", DataGridView1.Rows[m_nCurRowIndex].Cells[3].Value.ToString(), "");
+                    DataGridView1.Rows.RemoveAt(m_nCurRowIndex);
+                }
             }
             EngineFuntions.PartialRefresh(EngineFuntions.m_Layer_BusStation);
         }
@@ -113,13 +122,13 @@ namespace Businfo
                 {
                     m_featureCollection.Add(m_pCurFeature);
                     frmPopup.m_featureCollection = m_featureCollection;
-                    frmPopup.Show();
+                    frmPopup.ShowDialog();
                 }
             }
             else
             {
                 frmPopup.m_featureCollection = m_featureCollection;
-                frmPopup.Show();
+                frmPopup.ShowDialog();
                 //frmPopup.RefreshSelectGrid();
             }
         }
@@ -168,5 +177,33 @@ namespace Businfo
             }
 
         }
-    }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox1.Checked)
+            {
+                foreach (DataGridViewRow eRow in DataGridView1.Rows)
+                {
+                    eRow.Cells[0].Value = true;
+                }
+            } 
+            else
+            {
+                foreach (DataGridViewRow eRow in DataGridView1.Rows)
+                {
+                    eRow.Cells[0].Value = false;
+                }
+            }
+
+        }
+
+        private void DataGridView1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                DataGridView1.EndEdit();
+            }
+        }
+
+     }
 }

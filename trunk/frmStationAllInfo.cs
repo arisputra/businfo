@@ -128,6 +128,8 @@ namespace Businfo
                      }
                      m_pCurFeature.Store();   
                 }
+                string strName = m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("StationName")).ToString();
+                ForBusInfo.Add_Log(ForBusInfo.Login_name, "–ﬁ∏ƒ’æµ„ Ù–‘", strName, "");
                  m_bEdit = false;
             }
             

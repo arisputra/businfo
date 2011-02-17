@@ -47,6 +47,7 @@
             this.ClientSize = new System.Drawing.Size(817, 618);
             this.Controls.Add(this.webBrowser1);
             this.Name = "frmPano";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "frmPano";
             this.Load += new System.EventHandler(this.frmPano_Load);
             this.ResumeLayout(false);

@@ -2454,7 +2454,16 @@ WHERE (RoadName LIKE ?)";
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Fill, false)]
         public virtual int FillByINOBJECTID(RoadDataSet.公交站线DataTable dataTable, string Param1) {
-            this.CommandCollection[1].CommandText = string.Format(this.CommandCollection[1].CommandText, Param1);
+            this.CommandCollection[1].CommandText = string.Format(@"SELECT OBJECTID, SHAPE, RoadID, Company, RoadName, RoadType, RoadTravel, 
+      FirstStartTime, FirstCloseTime, EndStartTime, EndCloseTim, TicketPrice1, 
+      TicketPrice2, TicketPrice3, RoadNo, Length, AverageLoadFactor, BusNumber, 
+      Capacity, PassengerSum, PassengerWorkSum, AverageSpeed, NulineCoefficient, 
+      NulineCoefficient2, Picture1, Picture2, Picture3, Picture4, Picture5, Unit, ServeArea, 
+      AverageLength, HigeLoadFactor, RoadLoad, DirectImbalance, AlternatelyCoefficient, 
+      TimeCoefficient, DayCoefficient, HighHourSect, HighHourArea, HighHourMass, 
+      HighPassengerMass, SHAPE_Length
+FROM 公交站线
+WHERE (OBJECTID IN ({0}))", Param1);
             this.Adapter.SelectCommand = this.CommandCollection[1];
             //if ((Param1 == null)) {
             //    throw new global::System.ArgumentNullException("Param1");

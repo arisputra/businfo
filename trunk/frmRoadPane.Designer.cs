@@ -33,19 +33,6 @@
             this.TextBox1 = new System.Windows.Forms.TextBox();
             this.Button1 = new System.Windows.Forms.Button();
             this.DataGridView1 = new System.Windows.Forms.DataGridView();
-            this.公交站线BindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.roadDataSet = new Businfo.RoadDataSet();
-            this.fillByRoadNameToolStrip = new System.Windows.Forms.ToolStrip();
-            this.roadNameToolStripLabel = new System.Windows.Forms.ToolStripLabel();
-            this.roadNameToolStripTextBox = new System.Windows.Forms.ToolStripTextBox();
-            this.fillByRoadNameToolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.定位到ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.删除线路ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.属性编辑ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.关联站点ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.显示站点ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.公交站线TableAdapter = new Businfo.RoadDataSetTableAdapters.公交站线TableAdapter();
             this.CheckBox = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.oBJECTIDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.roadIDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -89,6 +76,22 @@
             this.highHourMassDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.highPassengerMassDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.sHAPELengthDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.公交站线BindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.roadDataSet = new Businfo.RoadDataSet();
+            this.fillByRoadNameToolStrip = new System.Windows.Forms.ToolStrip();
+            this.roadNameToolStripLabel = new System.Windows.Forms.ToolStripLabel();
+            this.roadNameToolStripTextBox = new System.Windows.Forms.ToolStripTextBox();
+            this.fillByRoadNameToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.定位到ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.删除线路ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.属性编辑ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.关联站点ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.显示站点ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.制作单ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.备份站点ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.公交站线TableAdapter = new Businfo.RoadDataSetTableAdapters.公交站线TableAdapter();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.DataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.公交站线BindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.roadDataSet)).BeginInit();
@@ -172,106 +175,15 @@
             this.highPassengerMassDataGridViewTextBoxColumn,
             this.sHAPELengthDataGridViewTextBoxColumn});
             this.DataGridView1.DataSource = this.公交站线BindingSource;
-            this.DataGridView1.Location = new System.Drawing.Point(5, 48);
+            this.DataGridView1.Location = new System.Drawing.Point(5, 59);
             this.DataGridView1.MultiSelect = false;
             this.DataGridView1.Name = "DataGridView1";
             this.DataGridView1.RowHeadersWidth = 20;
             this.DataGridView1.RowTemplate.Height = 23;
-            this.DataGridView1.Size = new System.Drawing.Size(259, 442);
+            this.DataGridView1.Size = new System.Drawing.Size(259, 431);
             this.DataGridView1.TabIndex = 6;
+            this.DataGridView1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DataGridView1_MouseDown);
             this.DataGridView1.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridView1_CellMouseDown);
-            // 
-            // 公交站线BindingSource
-            // 
-            this.公交站线BindingSource.DataMember = "公交站线";
-            this.公交站线BindingSource.DataSource = this.roadDataSet;
-            // 
-            // roadDataSet
-            // 
-            this.roadDataSet.DataSetName = "RoadDataSet";
-            this.roadDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
-            // fillByRoadNameToolStrip
-            // 
-            this.fillByRoadNameToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.roadNameToolStripLabel,
-            this.roadNameToolStripTextBox,
-            this.fillByRoadNameToolStripButton});
-            this.fillByRoadNameToolStrip.Location = new System.Drawing.Point(0, 0);
-            this.fillByRoadNameToolStrip.Name = "fillByRoadNameToolStrip";
-            this.fillByRoadNameToolStrip.Size = new System.Drawing.Size(269, 25);
-            this.fillByRoadNameToolStrip.TabIndex = 9;
-            this.fillByRoadNameToolStrip.Text = "fillByRoadNameToolStrip";
-            this.fillByRoadNameToolStrip.Visible = false;
-            // 
-            // roadNameToolStripLabel
-            // 
-            this.roadNameToolStripLabel.Name = "roadNameToolStripLabel";
-            this.roadNameToolStripLabel.Size = new System.Drawing.Size(63, 22);
-            this.roadNameToolStripLabel.Text = "RoadName:";
-            // 
-            // roadNameToolStripTextBox
-            // 
-            this.roadNameToolStripTextBox.Name = "roadNameToolStripTextBox";
-            this.roadNameToolStripTextBox.Size = new System.Drawing.Size(100, 25);
-            // 
-            // fillByRoadNameToolStripButton
-            // 
-            this.fillByRoadNameToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.fillByRoadNameToolStripButton.Name = "fillByRoadNameToolStripButton";
-            this.fillByRoadNameToolStripButton.Size = new System.Drawing.Size(87, 22);
-            this.fillByRoadNameToolStripButton.Text = "FillByRoadName";
-            this.fillByRoadNameToolStripButton.Click += new System.EventHandler(this.fillByRoadNameToolStripButton_Click);
-            // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.定位到ToolStripMenuItem,
-            this.删除线路ToolStripMenuItem,
-            this.属性编辑ToolStripMenuItem,
-            this.关联站点ToolStripMenuItem,
-            this.显示站点ToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(123, 114);
-            // 
-            // 定位到ToolStripMenuItem
-            // 
-            this.定位到ToolStripMenuItem.Name = "定位到ToolStripMenuItem";
-            this.定位到ToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
-            this.定位到ToolStripMenuItem.Text = "定位到";
-            this.定位到ToolStripMenuItem.Click += new System.EventHandler(this.定位到ToolStripMenuItem_Click);
-            // 
-            // 删除线路ToolStripMenuItem
-            // 
-            this.删除线路ToolStripMenuItem.Name = "删除线路ToolStripMenuItem";
-            this.删除线路ToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
-            this.删除线路ToolStripMenuItem.Text = "删除线路";
-            this.删除线路ToolStripMenuItem.Click += new System.EventHandler(this.删除线路ToolStripMenuItem_Click);
-            // 
-            // 属性编辑ToolStripMenuItem
-            // 
-            this.属性编辑ToolStripMenuItem.Name = "属性编辑ToolStripMenuItem";
-            this.属性编辑ToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
-            this.属性编辑ToolStripMenuItem.Text = "属性编辑";
-            this.属性编辑ToolStripMenuItem.Click += new System.EventHandler(this.属性编辑ToolStripMenuItem_Click);
-            // 
-            // 关联站点ToolStripMenuItem
-            // 
-            this.关联站点ToolStripMenuItem.Name = "关联站点ToolStripMenuItem";
-            this.关联站点ToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
-            this.关联站点ToolStripMenuItem.Text = "关联站点";
-            this.关联站点ToolStripMenuItem.Click += new System.EventHandler(this.关联站点ToolStripMenuItem_Click);
-            // 
-            // 显示站点ToolStripMenuItem
-            // 
-            this.显示站点ToolStripMenuItem.Name = "显示站点ToolStripMenuItem";
-            this.显示站点ToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
-            this.显示站点ToolStripMenuItem.Text = "显示站点";
-            this.显示站点ToolStripMenuItem.Click += new System.EventHandler(this.显示站点ToolStripMenuItem_Click);
-            // 
-            // 公交站线TableAdapter
-            // 
-            this.公交站线TableAdapter.ClearBeforeFill = true;
             // 
             // CheckBox
             // 
@@ -306,6 +218,7 @@
             this.roadNameDataGridViewTextBoxColumn.DataPropertyName = "RoadName";
             this.roadNameDataGridViewTextBoxColumn.HeaderText = "线路名称";
             this.roadNameDataGridViewTextBoxColumn.Name = "roadNameDataGridViewTextBoxColumn";
+            this.roadNameDataGridViewTextBoxColumn.ReadOnly = true;
             this.roadNameDataGridViewTextBoxColumn.Width = 78;
             // 
             // roadTypeDataGridViewTextBoxColumn
@@ -320,6 +233,7 @@
             this.roadTravelDataGridViewTextBoxColumn.DataPropertyName = "RoadTravel";
             this.roadTravelDataGridViewTextBoxColumn.HeaderText = "线路行程";
             this.roadTravelDataGridViewTextBoxColumn.Name = "roadTravelDataGridViewTextBoxColumn";
+            this.roadTravelDataGridViewTextBoxColumn.ReadOnly = true;
             this.roadTravelDataGridViewTextBoxColumn.Width = 55;
             // 
             // firstStartTimeDataGridViewTextBoxColumn
@@ -574,9 +488,129 @@
             this.sHAPELengthDataGridViewTextBoxColumn.Name = "sHAPELengthDataGridViewTextBoxColumn";
             this.sHAPELengthDataGridViewTextBoxColumn.Visible = false;
             // 
+            // 公交站线BindingSource
+            // 
+            this.公交站线BindingSource.DataMember = "公交站线";
+            this.公交站线BindingSource.DataSource = this.roadDataSet;
+            // 
+            // roadDataSet
+            // 
+            this.roadDataSet.DataSetName = "RoadDataSet";
+            this.roadDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            // 
+            // fillByRoadNameToolStrip
+            // 
+            this.fillByRoadNameToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.roadNameToolStripLabel,
+            this.roadNameToolStripTextBox,
+            this.fillByRoadNameToolStripButton});
+            this.fillByRoadNameToolStrip.Location = new System.Drawing.Point(0, 0);
+            this.fillByRoadNameToolStrip.Name = "fillByRoadNameToolStrip";
+            this.fillByRoadNameToolStrip.Size = new System.Drawing.Size(269, 25);
+            this.fillByRoadNameToolStrip.TabIndex = 9;
+            this.fillByRoadNameToolStrip.Text = "fillByRoadNameToolStrip";
+            this.fillByRoadNameToolStrip.Visible = false;
+            // 
+            // roadNameToolStripLabel
+            // 
+            this.roadNameToolStripLabel.Name = "roadNameToolStripLabel";
+            this.roadNameToolStripLabel.Size = new System.Drawing.Size(59, 22);
+            this.roadNameToolStripLabel.Text = "RoadName:";
+            // 
+            // roadNameToolStripTextBox
+            // 
+            this.roadNameToolStripTextBox.Name = "roadNameToolStripTextBox";
+            this.roadNameToolStripTextBox.Size = new System.Drawing.Size(100, 25);
+            // 
+            // fillByRoadNameToolStripButton
+            // 
+            this.fillByRoadNameToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.fillByRoadNameToolStripButton.Name = "fillByRoadNameToolStripButton";
+            this.fillByRoadNameToolStripButton.Size = new System.Drawing.Size(93, 22);
+            this.fillByRoadNameToolStripButton.Text = "FillByRoadName";
+            this.fillByRoadNameToolStripButton.Click += new System.EventHandler(this.fillByRoadNameToolStripButton_Click);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.定位到ToolStripMenuItem,
+            this.删除线路ToolStripMenuItem,
+            this.属性编辑ToolStripMenuItem,
+            this.关联站点ToolStripMenuItem,
+            this.显示站点ToolStripMenuItem,
+            this.制作单ToolStripMenuItem,
+            this.备份站点ToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(119, 158);
+            // 
+            // 定位到ToolStripMenuItem
+            // 
+            this.定位到ToolStripMenuItem.Name = "定位到ToolStripMenuItem";
+            this.定位到ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.定位到ToolStripMenuItem.Text = "定位到";
+            this.定位到ToolStripMenuItem.Click += new System.EventHandler(this.定位到ToolStripMenuItem_Click);
+            // 
+            // 删除线路ToolStripMenuItem
+            // 
+            this.删除线路ToolStripMenuItem.Name = "删除线路ToolStripMenuItem";
+            this.删除线路ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.删除线路ToolStripMenuItem.Text = "删除线路";
+            this.删除线路ToolStripMenuItem.Click += new System.EventHandler(this.删除线路ToolStripMenuItem_Click);
+            // 
+            // 属性编辑ToolStripMenuItem
+            // 
+            this.属性编辑ToolStripMenuItem.Name = "属性编辑ToolStripMenuItem";
+            this.属性编辑ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.属性编辑ToolStripMenuItem.Text = "属性编辑";
+            this.属性编辑ToolStripMenuItem.Click += new System.EventHandler(this.属性编辑ToolStripMenuItem_Click);
+            // 
+            // 关联站点ToolStripMenuItem
+            // 
+            this.关联站点ToolStripMenuItem.Name = "关联站点ToolStripMenuItem";
+            this.关联站点ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.关联站点ToolStripMenuItem.Text = "关联站点";
+            this.关联站点ToolStripMenuItem.Click += new System.EventHandler(this.关联站点ToolStripMenuItem_Click);
+            // 
+            // 显示站点ToolStripMenuItem
+            // 
+            this.显示站点ToolStripMenuItem.Name = "显示站点ToolStripMenuItem";
+            this.显示站点ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.显示站点ToolStripMenuItem.Text = "显示站点";
+            this.显示站点ToolStripMenuItem.Click += new System.EventHandler(this.显示站点ToolStripMenuItem_Click);
+            // 
+            // 制作单ToolStripMenuItem
+            // 
+            this.制作单ToolStripMenuItem.Name = "制作单ToolStripMenuItem";
+            this.制作单ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.制作单ToolStripMenuItem.Text = "报表输出";
+            this.制作单ToolStripMenuItem.Click += new System.EventHandler(this.制作单ToolStripMenuItem_Click);
+            // 
+            // 备份站点ToolStripMenuItem
+            // 
+            this.备份站点ToolStripMenuItem.Name = "备份站点ToolStripMenuItem";
+            this.备份站点ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.备份站点ToolStripMenuItem.Text = "备份站点";
+            this.备份站点ToolStripMenuItem.Click += new System.EventHandler(this.备份站点ToolStripMenuItem_Click);
+            // 
+            // 公交站线TableAdapter
+            // 
+            this.公交站线TableAdapter.ClearBeforeFill = true;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(5, 37);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(48, 16);
+            this.checkBox1.TabIndex = 10;
+            this.checkBox1.Text = "全选";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
             // frmRoadPane
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
+            this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.fillByRoadNameToolStrip);
             this.Controls.Add(this.TextBox1);
             this.Controls.Add(this.Button1);
@@ -613,6 +647,9 @@
         private System.Windows.Forms.ToolStripMenuItem 属性编辑ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 关联站点ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 显示站点ToolStripMenuItem;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.ToolStripMenuItem 制作单ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 备份站点ToolStripMenuItem;
         private System.Windows.Forms.DataGridViewCheckBoxColumn CheckBox;
         private System.Windows.Forms.DataGridViewTextBoxColumn oBJECTIDDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn roadIDDataGridViewTextBoxColumn;

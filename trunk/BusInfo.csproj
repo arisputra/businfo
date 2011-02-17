@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{8DB60BEA-B126-4ACD-ABF2-7CC17A182AAE}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -123,6 +123,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\Program Files\ArcGIS\DotNet\ESRI.ArcGIS.Utility.dll</HintPath>
     </Reference>
+    <Reference Include="IrisSkin, Version=2006.3.22.45, Culture=neutral" />
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" />
+    <Reference Include="Office, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" />
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -192,6 +195,9 @@
       <SubType>Designer</SubType>
       <DependentUpon>frmMainNew.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmOperation.resx">
+      <DependentUpon>frmOperation.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmPano.resx">
       <SubType>Designer</SubType>
       <DependentUpon>frmPano.cs</DependentUpon>
@@ -207,6 +213,9 @@
     <EmbeddedResource Include="frmRoadPane.resx">
       <SubType>Designer</SubType>
       <DependentUpon>frmRoadPane.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmRoadRecover.resx">
+      <DependentUpon>frmRoadRecover.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmStationAllInfo.resx">
       <SubType>Designer</SubType>
@@ -249,6 +258,12 @@
     <Compile Include="frmMainNew.Designer.cs">
       <DependentUpon>frmMainNew.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmOperation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmOperation.Designer.cs">
+      <DependentUpon>frmOperation.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmPano.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -272,6 +287,12 @@
     </Compile>
     <Compile Include="frmRoadPane.Designer.cs">
       <DependentUpon>frmRoadPane.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmRoadRecover.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmRoadRecover.Designer.cs">
+      <DependentUpon>frmRoadRecover.cs</DependentUpon>
     </Compile>
     <Compile Include="frmStationAllInfo.cs">
       <SubType>Form</SubType>
@@ -336,6 +357,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <EmbeddedResource Include="DiamondBlue.ssk" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

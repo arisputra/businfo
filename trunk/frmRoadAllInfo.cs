@@ -85,14 +85,15 @@ namespace Businfo
                 }
                 DataGridView1.EndEdit();
                 m_nObjectId = (int)DataGridView1.Rows[m_nCurRowIndex].Cells[1].Value;
-                m_pCurFeature = EngineFuntions.GetFeatureByFieldAndValue(EngineFuntions.m_Layer_BusStation, "OBJECTID", m_nObjectId.ToString());
+                m_pCurFeature = EngineFuntions.GetFeatureByFieldAndValue(EngineFuntions.m_Layer_BusRoad, "OBJECTID", m_nObjectId.ToString());
                 if (m_pCurFeature != null)
                 {
-                    for (int i = 3; i < m_pCurFeature.Fields.FieldCount; i++)
+                    for (int i = 3; i < m_pCurFeature.Fields.FieldCount-1; i++)
                     {
                         m_pCurFeature.set_Value(i, DataGridView1.Rows[m_nCurRowIndex].Cells[i].Value);
                     }
                     m_pCurFeature.Store();
+                    ForBusInfo.Add_Log(ForBusInfo.Login_name, "编辑站线属性", DataGridView1.Rows[m_nCurRowIndex].Cells[4].Value.ToString(), "");
                 }
                 m_bEdit = false;
             }
