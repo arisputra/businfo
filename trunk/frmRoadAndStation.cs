@@ -66,12 +66,16 @@ namespace Businfo
 
         private void BtnTrue_Click(object sender, EventArgs e)
         {
+            int nDirect;
+            if (CheckBox1.Checked)
+               nDirect = -35;
+            else
+               nDirect = 35;
             String sConn ;
             OleDbConnection mycon;
             sConn = "provider=Microsoft.Jet.OLEDB.4.0;data source=" + Application.StartupPath + "\\data\\¹«½».mdb";
             mycon = new OleDbConnection(sConn);
             mycon.Open();
-
             try
             {
                 int nOrder = 0;
@@ -82,8 +86,8 @@ namespace Businfo
                 pCom.ExecuteNonQuery();
                 foreach (BusStation pBusStation in ListBox1.Items)
                 {
-                    pStrSQL = String.Format("insert into RoadAndStation(RoadID,StationID,StationOrder) values({0},{1},{2})"
-                        ,m_nRoadID, pBusStation.ID, nOrder++);
+                    pStrSQL = String.Format("insert into RoadAndStation(RoadID,StationID,StationOrder,BufferLength) values({0},{1},{2},{3})"
+                        , m_nRoadID, pBusStation.ID, nOrder++,nDirect);
                     pCom = new OleDbCommand(pStrSQL, mycon);
                     pCom.ExecuteNonQuery();         
                 }
