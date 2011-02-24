@@ -310,7 +310,6 @@ namespace Businfo
                     m_CurFeature = null;
                     if (MessageBox.Show("是否选择完成？\n", "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
                     {
-                        
                         IPolyline pPolyline = null;
                         m_nPLineNum = 1;
                         if (EngineFuntions.GetSeledFeatures(m_CurFeatureLayer, ref m_featureCollection))
