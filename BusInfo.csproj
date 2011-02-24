@@ -240,6 +240,12 @@
     <Compile Include="ControlsSynchronizer.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="frmEditRoadAndStation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmEditRoadAndStation.Designer.cs">
+      <DependentUpon>frmEditRoadAndStation.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmFlash.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -358,6 +364,9 @@
   <ItemGroup>
     <None Include="app.config" />
     <EmbeddedResource Include="DiamondBlue.ssk" />
+    <EmbeddedResource Include="frmEditRoadAndStation.resx">
+      <DependentUpon>frmEditRoadAndStation.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
