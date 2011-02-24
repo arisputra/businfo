@@ -92,6 +92,7 @@
             this.备份站点ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.公交站线TableAdapter = new Businfo.RoadDataSetTableAdapters.公交站线TableAdapter();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.生成反向线路ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.DataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.公交站线BindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.roadDataSet)).BeginInit();
@@ -539,56 +540,57 @@
             this.关联站点ToolStripMenuItem,
             this.显示站点ToolStripMenuItem,
             this.制作单ToolStripMenuItem,
-            this.备份站点ToolStripMenuItem});
+            this.备份站点ToolStripMenuItem,
+            this.生成反向线路ToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(119, 158);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 202);
             // 
             // 定位到ToolStripMenuItem
             // 
             this.定位到ToolStripMenuItem.Name = "定位到ToolStripMenuItem";
-            this.定位到ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.定位到ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.定位到ToolStripMenuItem.Text = "定位到";
             this.定位到ToolStripMenuItem.Click += new System.EventHandler(this.定位到ToolStripMenuItem_Click);
             // 
             // 删除线路ToolStripMenuItem
             // 
             this.删除线路ToolStripMenuItem.Name = "删除线路ToolStripMenuItem";
-            this.删除线路ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.删除线路ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.删除线路ToolStripMenuItem.Text = "删除线路";
             this.删除线路ToolStripMenuItem.Click += new System.EventHandler(this.删除线路ToolStripMenuItem_Click);
             // 
             // 属性编辑ToolStripMenuItem
             // 
             this.属性编辑ToolStripMenuItem.Name = "属性编辑ToolStripMenuItem";
-            this.属性编辑ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.属性编辑ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.属性编辑ToolStripMenuItem.Text = "属性编辑";
             this.属性编辑ToolStripMenuItem.Click += new System.EventHandler(this.属性编辑ToolStripMenuItem_Click);
             // 
             // 关联站点ToolStripMenuItem
             // 
             this.关联站点ToolStripMenuItem.Name = "关联站点ToolStripMenuItem";
-            this.关联站点ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.关联站点ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.关联站点ToolStripMenuItem.Text = "关联站点";
             this.关联站点ToolStripMenuItem.Click += new System.EventHandler(this.关联站点ToolStripMenuItem_Click);
             // 
             // 显示站点ToolStripMenuItem
             // 
             this.显示站点ToolStripMenuItem.Name = "显示站点ToolStripMenuItem";
-            this.显示站点ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.显示站点ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.显示站点ToolStripMenuItem.Text = "显示站点";
             this.显示站点ToolStripMenuItem.Click += new System.EventHandler(this.显示站点ToolStripMenuItem_Click);
             // 
             // 制作单ToolStripMenuItem
             // 
             this.制作单ToolStripMenuItem.Name = "制作单ToolStripMenuItem";
-            this.制作单ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.制作单ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.制作单ToolStripMenuItem.Text = "报表输出";
             this.制作单ToolStripMenuItem.Click += new System.EventHandler(this.制作单ToolStripMenuItem_Click);
             // 
             // 备份站点ToolStripMenuItem
             // 
             this.备份站点ToolStripMenuItem.Name = "备份站点ToolStripMenuItem";
-            this.备份站点ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.备份站点ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.备份站点ToolStripMenuItem.Text = "备份站点";
             this.备份站点ToolStripMenuItem.Click += new System.EventHandler(this.备份站点ToolStripMenuItem_Click);
             // 
@@ -606,6 +608,13 @@
             this.checkBox1.Text = "全选";
             this.checkBox1.UseVisualStyleBackColor = true;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
+            // 生成反向线路ToolStripMenuItem
+            // 
+            this.生成反向线路ToolStripMenuItem.Name = "生成反向线路ToolStripMenuItem";
+            this.生成反向线路ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.生成反向线路ToolStripMenuItem.Text = "生成反向线路";
+            this.生成反向线路ToolStripMenuItem.Click += new System.EventHandler(this.生成反向线路ToolStripMenuItem_Click);
             // 
             // frmRoadPane
             // 
@@ -693,5 +702,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn highHourMassDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn highPassengerMassDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn sHAPELengthDataGridViewTextBoxColumn;
+        private System.Windows.Forms.ToolStripMenuItem 生成反向线路ToolStripMenuItem;
     }
 }

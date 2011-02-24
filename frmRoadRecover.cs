@@ -54,8 +54,8 @@ namespace Businfo
                     int nQueryCount = da.Fill(ds);
                     foreach (DataRow eDataRow in ds.Tables[0].Rows)
                     {
-                        da.InsertCommand.CommandText = String.Format("insert into RoadAndStation(RoadID,StationID,StationOrder) values({0},{1},{2})"
-                       , pFeature.get_Value(pFeature.Fields.FindField("OBJECTID")), eDataRow[2], eDataRow[3]);
+                        da.InsertCommand.CommandText = String.Format("insert into RoadAndStation(RoadID,StationID,StationOrder,BufferLength) values({0},{1},{2},{3})"
+                       , pFeature.get_Value(pFeature.Fields.FindField("OBJECTID")), eDataRow[2], eDataRow[3], eDataRow[4]);
                         da.InsertCommand.ExecuteNonQuery();
                     }
                     da.DeleteCommand.ExecuteNonQuery();//删除备份站线关联站点数据

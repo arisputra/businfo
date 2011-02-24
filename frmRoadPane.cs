@@ -150,21 +150,72 @@ namespace Businfo
         {
             if (m_pCurFeature != null)
             {
-                EngineFuntions.m_AxMapControl.ActiveView.GraphicsContainer.DeleteAllElements();
-                object Missing = Type.Missing;
-                IConstructCurve mycurve = new PolylineClass();
-                mycurve.ConstructOffset((IPolycurve)m_pCurFeature.Shape, 35, ref Missing, ref Missing);
-                IPolygon pPolygon;
-                EngineFuntions.m_Layer_BusStation.Selectable = true;
-                pPolygon = (IPolygon)EngineFuntions.ClickSel((IGeometry)mycurve , false, false, 35);
-                EngineFuntions.AddPolygonElement(pPolygon);
-                if (EngineFuntions.GetSeledFeatures(EngineFuntions.m_Layer_BusStation,ref m_featureCollection))
+                String sConn = "provider=Microsoft.Jet.OLEDB.4.0;data source=" + Winapp.StartupPath + "\\data\\公交.mdb";
+                OleDbConnection mycon = new OleDbConnection(sConn);
+                mycon.Open();
+                try
                 {
-                    frmRoadAndStation frmPopup = new frmRoadAndStation();
-                    frmPopup.m_featureCollection = m_featureCollection;
-                    frmPopup.m_pCurFeature = m_pCurFeature;
-                    frmPopup.Show();
-                    //frmPopup.ShowDialog();
+                    sConn = String.Format("select StationID,StationOrder,BufferLength from  RoadAndStation where RoadID = {0} Order by StationOrder", m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("OBJECTID")));
+                    OleDbDataAdapter da = new OleDbDataAdapter(sConn, mycon);
+                    DataSet ds = new DataSet();
+                    int nQueryCount = da.Fill(ds);
+                    if (nQueryCount > 0)
+                    {
+                        frmEditRoadAndStation frmPopup = new frmEditRoadAndStation();
+                        foreach (DataRow eRow in ds.Tables[0].Rows)
+                        {
+                            frmPopup.m_CurStationList.Add(EngineFuntions.GetOneSeartchFeature(EngineFuntions.m_Layer_BusStation, "OBJECTID = " + eRow[0].ToString()));
+                            frmPopup.n_nBufferLength = (int)eRow[2];
+                        }
+                        frmPopup.m_pCurFeature = m_pCurFeature;
+                        EngineFuntions.m_AxMapControl.ActiveView.GraphicsContainer.DeleteAllElements();
+                        object Missing = Type.Missing;
+                        IConstructCurve mycurve = new PolylineClass();
+                        mycurve.ConstructOffset((IPolycurve)m_pCurFeature.Shape, frmPopup.n_nBufferLength, ref Missing, ref Missing);
+                        IPolygon pPolygon;
+                        EngineFuntions.m_Layer_BusStation.Selectable = true;
+                        pPolygon = (IPolygon)EngineFuntions.ClickSel((IGeometry)mycurve, false, false, 35);
+                        if (EngineFuntions.GetSeledFeatures(EngineFuntions.m_Layer_BusStation, ref m_featureCollection))
+                        {
+                            for (int i = m_featureCollection.Count; i > 0; i--)
+                            {
+                                foreach (IFeature eFeature in frmPopup.m_CurStationList)
+                                {
+                                    if (m_featureCollection[i - 1].OID == eFeature.OID)
+                                    {
+                                        m_featureCollection.Remove(m_featureCollection[i - 1]);
+                                        break;
+                                    }
+                                }
+                            }
+                            
+                            frmPopup.m_SelStationList = m_featureCollection;
+                        }
+                        frmPopup.Show();
+                    }
+                    else
+                    {
+                        EngineFuntions.m_AxMapControl.ActiveView.GraphicsContainer.DeleteAllElements();
+                        object Missing = Type.Missing;
+                        IConstructCurve mycurve = new PolylineClass();
+                        mycurve.ConstructOffset((IPolycurve)m_pCurFeature.Shape, 35, ref Missing, ref Missing);
+                        IPolygon pPolygon;
+                        EngineFuntions.m_Layer_BusStation.Selectable = true;
+                        pPolygon = (IPolygon)EngineFuntions.ClickSel((IGeometry)mycurve, false, false, 35);
+                        EngineFuntions.AddPolygonElement(pPolygon);
+                        if (EngineFuntions.GetSeledFeatures(EngineFuntions.m_Layer_BusStation, ref m_featureCollection))
+                        {
+                            frmRoadAndStation frmPopup = new frmRoadAndStation();
+                            frmPopup.m_featureCollection = m_featureCollection;
+                            frmPopup.m_pCurFeature = m_pCurFeature;
+                            frmPopup.Show();
+                        }
+                    }
+                    mycon.Close();
+                }
+                catch (System.Exception ex)
+                {
+                    MessageBox.Show("生成关联表出错\n" + ex.ToString(), "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
         }
@@ -519,8 +570,8 @@ namespace Businfo
                         int nQueryCount = da.Fill(ds);
                         foreach (DataRow eDataRow in ds.Tables[0].Rows)
                         {
-                            da.InsertCommand.CommandText = String.Format("insert into BackRAndS(RoadID,StationID,StationOrder) values({0},{1},{2})"
-                           , pFeature.get_Value(pFeature.Fields.FindField("OBJECTID")), eDataRow[2], eDataRow[3]);
+                            da.InsertCommand.CommandText = String.Format("insert into BackRAndS(RoadID,StationID,StationOrder,BufferLength) values({0},{1},{2},{3})"
+                           , pFeature.get_Value(pFeature.Fields.FindField("OBJECTID")), eDataRow[2], eDataRow[3], eDataRow[4]);
                             da.InsertCommand.ExecuteNonQuery();
                         }
                         da.DeleteCommand.ExecuteNonQuery();//删除原始站线关联站点数据
@@ -535,13 +586,13 @@ namespace Businfo
                     EngineFuntions.PartialRefresh(EngineFuntions.m_Layer_BackRoad);
                 }
             }
-            for (int i = DataGridView1.Rows.Count - 1; i >= 0; i--)//列表中删除已经备份的站线的显示行
-            {
-                if (DataGridView1.Rows[i].Cells[0].Value != null && (bool)DataGridView1.Rows[i].Cells[0].Value == true)
-                {
-                   DataGridView1.Rows.RemoveAt(DataGridView1.Rows[i].Index);
-                }
-            }
+            //for (int i = DataGridView1.Rows.Count - 1; i >= 0; i--)//列表中删除已经备份的站线的显示行
+            //{
+            //    if (DataGridView1.Rows[i].Cells[0].Value != null && (bool)DataGridView1.Rows[i].Cells[0].Value == true)
+            //    {
+            //       DataGridView1.Rows.RemoveAt(DataGridView1.Rows[i].Index);
+            //    }
+            //}
             if (!bCheck)//没有check状态
             {
                 if (m_pCurFeature != null)
@@ -566,8 +617,8 @@ namespace Businfo
                         int nQueryCount = da.Fill(ds);
                         foreach (DataRow eRow in ds.Tables[0].Rows)
                         {
-                            da.InsertCommand.CommandText = String.Format("insert into BackRAndS(RoadID,StationID,StationOrder) values({0},{1},{2})"
-                                , pFeature.get_Value(pFeature.Fields.FindField("OBJECTID")), eRow[2], eRow[3]);
+                            da.InsertCommand.CommandText = String.Format("insert into BackRAndS(RoadID,StationID,StationOrder,BufferLength) values({0},{1},{2},{3})"
+                                , pFeature.get_Value(pFeature.Fields.FindField("OBJECTID")), eRow[2], eRow[3], eRow[4]);
                             da.InsertCommand.ExecuteNonQuery();
                         }
                         da.DeleteCommand.ExecuteNonQuery();//删除原始站线关联站点数据
@@ -580,7 +631,7 @@ namespace Businfo
                         MessageBox.Show("生成关联表出错\n" + ex.ToString(), "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     EngineFuntions.PartialRefresh(EngineFuntions.m_Layer_BackRoad);
-                    DataGridView1.Rows.RemoveAt(m_nCurRowIndex);
+                    //DataGridView1.Rows.RemoveAt(m_nCurRowIndex);
                 }
             }
         }
@@ -591,6 +642,64 @@ namespace Businfo
             {
                 DataGridView1.EndEdit();
             }
+        }
+
+        private void 生成反向线路ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            bool bCheck = false;
+            string strDirect;
+            foreach (DataGridViewRow eRow in DataGridView1.Rows)
+            {
+                if (eRow.Cells[0].Value != null && (bool)eRow.Cells[0].Value == true)
+                {
+                    bCheck = true;
+                    if (eRow.Cells[6].Value.ToString() == "去行")
+                        strDirect = "回行";
+                    else
+                        strDirect = "去行";
+
+                    m_pCurFeature = EngineFuntions.GetOneSeartchFeature(EngineFuntions.m_Layer_BusRoad, string.Format("Roadname = '{0}' AND RoadTravel = '{1}'", eRow.Cells[4].Value.ToString(), strDirect));
+                    if (m_pCurFeature != null)
+                    {
+                        MessageBox.Show("线路图层已经存在反向线路\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        break;
+                    }
+                    m_pCurFeature = EngineFuntions.GetOneSeartchFeature(EngineFuntions.m_Layer_BusRoad, string.Format("Roadname = '{0}' AND RoadTravel = '{1}'", eRow.Cells[4].Value.ToString(), eRow.Cells[6].Value.ToString()));
+                    IPolyline pPLine = m_pCurFeature.ShapeCopy as IPolyline;
+                    pPLine.ReverseOrientation();
+                    m_pCurFeature.Shape = pPLine;
+                    m_pCurFeature.set_Value(m_pCurFeature.Fields.FindField("RoadTravel"), strDirect);
+                    EngineFuntions.CopyFeature(EngineFuntions.m_Layer_BusRoad, m_pCurFeature);
+                    System.Threading.Thread.Sleep(1000);
+                    MessageBox.Show("反向线路添加完成，请关联站点！\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            if (!bCheck)//没有check状态
+            {
+                if (m_pCurFeature != null)
+                {
+                    if (m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("RoadTravel")).ToString() == "去行")
+                        strDirect = "回行";
+                    else
+                        strDirect = "去行";
+                    IFeature pFeature = EngineFuntions.GetOneSeartchFeature(EngineFuntions.m_Layer_BusRoad, string.Format("Roadname = '{0}' AND RoadTravel = '{1}'", m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("Roadname")).ToString(), strDirect));
+                    if (pFeature != null)
+                    {
+                        MessageBox.Show("线路图层已经存在反向线路\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
+
+                    IPolyline pPLine = m_pCurFeature.ShapeCopy as IPolyline;
+                    pPLine.ReverseOrientation();
+                    m_pCurFeature.Shape = pPLine;
+                    m_pCurFeature.set_Value(m_pCurFeature.Fields.FindField("RoadTravel"), strDirect);
+                    EngineFuntions.CopyFeature(EngineFuntions.m_Layer_BusRoad, m_pCurFeature);
+                    System.Threading.Thread.Sleep(1000);
+                    MessageBox.Show("反向线路添加完成，请关联站点！\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            RefreshGrid();
+            EngineFuntions.PartialRefresh(EngineFuntions.m_Layer_BackRoad);
         }
     }
 }
