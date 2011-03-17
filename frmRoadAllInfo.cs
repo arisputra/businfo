@@ -49,7 +49,8 @@ namespace Businfo
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            this.公交站线TableAdapter.Fill(this.roadDataSet.公交站线);
+            ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Road_FillAll, "");
+            //this.公交站线TableAdapter.Fill(this.roadDataSet.公交站线);
             foreach (DataGridViewColumn eColumn in DataGridView1.Columns)
             {
                 eColumn.ReadOnly = true;
@@ -71,7 +72,8 @@ namespace Businfo
                 {
                     strInPara = String.Format("{0}{1},", strInPara, pFeature.get_Value(pFeature.Fields.FindField("OBJECTID")).ToString());
                 }
-                this.公交站线TableAdapter.FillByINOBJECTID(this.roadDataSet.公交站线, strInPara);
+                ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Road_FillByOBJECTID, string.Format(" WHERE (OBJECTID IN ({0}))", strInPara.Substring(0, strInPara.Length - 1)));
+                //this.公交站线TableAdapter.FillByINOBJECTID(this.roadDataSet.公交站线, strInPara);
             }
         }
 
@@ -90,7 +92,7 @@ namespace Businfo
                 {
                     for (int i = 3; i < m_pCurFeature.Fields.FieldCount-1; i++)
                     {
-                        m_pCurFeature.set_Value(i, DataGridView1.Rows[m_nCurRowIndex].Cells[i].Value);
+                        m_pCurFeature.set_Value(i-1, DataGridView1.Rows[m_nCurRowIndex].Cells[i].Value);
                     }
                     m_pCurFeature.Store();
                     ForBusInfo.Add_Log(ForBusInfo.Login_name, "编辑站线属性", DataGridView1.Rows[m_nCurRowIndex].Cells[4].Value.ToString(), "");
@@ -125,12 +127,12 @@ namespace Businfo
                     {
                         DataGridView1.EndEdit();
                         m_nObjectId = (int)DataGridView1.Rows[m_nCurRowIndex].Cells[1].Value;
-                        m_pCurFeature = EngineFuntions.GetFeatureByFieldAndValue(EngineFuntions.m_Layer_BusStation, "OBJECTID", m_nObjectId.ToString());
+                        m_pCurFeature = EngineFuntions.GetFeatureByFieldAndValue(EngineFuntions.m_Layer_BusRoad, "OBJECTID", m_nObjectId.ToString());
                         if (m_pCurFeature != null)
                         {
-                            for (int i = 3; i < m_pCurFeature.Fields.FieldCount; i++)
+                            for (int i = 3; i < m_pCurFeature.Fields.FieldCount-1; i++)
                             {
-                                DataGridView1.Rows[m_nCurRowIndex].Cells[i].Value = m_pCurFeature.get_Value(i);
+                                DataGridView1.Rows[m_nCurRowIndex].Cells[i].Value = m_pCurFeature.get_Value(i-1);
                             }
                             foreach (DataGridViewCell eCell in DataGridView1.Rows[m_nCurRowIndex].Cells)
                             {
@@ -145,6 +147,11 @@ namespace Businfo
                     }
                 }
             }
+        }
+
+        private void DataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
 
     }

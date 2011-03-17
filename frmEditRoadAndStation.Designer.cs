@@ -124,7 +124,9 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.checkedListBox2);
             this.Controls.Add(this.checkedListBox1);
+            this.MaximizeBox = false;
             this.Name = "frmEditRoadAndStation";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "编辑线路停靠站点";
             this.Load += new System.EventHandler(this.frmEditRoadAndStation_Load);
             this.ResumeLayout(false);

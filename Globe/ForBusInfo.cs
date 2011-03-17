@@ -6,6 +6,9 @@ using System.Drawing;
 using System.Data.OleDb;
 using System.Data.SqlClient;
 using System.Data;
+using System.IO;
+using System.Xml;
+using System.Runtime.InteropServices;
 
 namespace Businfo.Globe
 {
@@ -40,6 +43,7 @@ namespace Businfo.Globe
         public const int Table_Operation = 1062; //查看记录
         public const int Road_End = 1063; //完成线路添加
         public const int Road_Reversed = 1064; //线路反向
+        public const int Map3D_Select = 1065; //拉框选择
 
         public const int Map3D_ZoomIn = 10211; //放大
         public const int Map3D_ZoomOut = 10212; //缩小
@@ -54,9 +58,11 @@ namespace Businfo.Globe
         public const int Map3D_Area = 10224; //面积
 
         public static string Login_name = "admin"; //登录名
+        public static string Login_Operation = "" ;//允许操作
         public static frmMainNew Frm_Main; //主窗体类
+        public enum GridSetType {Station_FillPan = 1, Station_FillAll, Station_FillByOBJECTID, Station_FillByStationName, Road_FillPan, Road_FillAll, Road_FillByOBJECTID, Road_FillByStationName};
 
-        #endregion
+         #endregion
 
         public static void SetRowColor_Alternation(DataGridViewRowCollection RowCollection)
         {
@@ -79,15 +85,14 @@ namespace Businfo.Globe
 
         public static void Add_Log(string strName,string strOperation,string strField,string Description)
         {
-            OleDbConnection mycon;
-            String sConn;
-            sConn = "provider=Microsoft.Jet.OLEDB.4.0;data source=" + Application.StartupPath + "\\data\\公交.mdb";
-            mycon = new OleDbConnection(sConn);
+            String sConn = "Provider=sqloledb;Data Source = 172.16.34.120;Initial Catalog=sde;User Id = sa;Password = sa";
+            OleDbConnection mycon = new OleDbConnection(sConn);
+            //sConn = "provider=Microsoft.Jet.OLEDB.4.0;data source=" + ForBusInfo.GetProfileString("Businfo", "DataPos", Application.StartupPath + "\\Businfo.ini") + "\\data\\公交.mdb";
             mycon.Open();
             try
             {
                 OleDbCommand pCom;
-                sConn = String.Format("insert into OperationLog(Name,LogTime,Field,Operation,LogScribe) values('{0}','{1}','{2}','{3}','{4}')"
+                sConn = String.Format("insert into sde.OperationLog(Name,LogTime,Field,Operation,LogScribe) values('{0}','{1}','{2}','{3}','{4}')"
                       , strName, DateTime.Now.ToString(), strField,strOperation, Description);
                 pCom = new OleDbCommand(sConn, mycon);
                 pCom.ExecuteNonQuery();         
@@ -118,7 +123,458 @@ namespace Businfo.Globe
             return adapter;
         }
 
+        public static void StationFill(DataGridView grid, GridSetType emunType,string strQuery)
+        {
+            String sConn = "Provider=sqloledb;Data Source = 172.16.34.120;Initial Catalog = sde;User Id = sa;Password = sa";
+            OleDbConnection mycon = new OleDbConnection(sConn);
+            //sConn = "provider=Microsoft.Jet.OLEDB.4.0;data source=" + ForBusInfo.GetProfileString("Businfo", "DataPos", Application.StartupPath + "\\Businfo.ini") + "\\data\\公交.mdb";
+            mycon.Open();
+            string strStationSQL = @"SELECT  OBJECTID,StationNo,StationName,Direct,StationAlias,  MainSymbol, StationCharacter, GPSLongtitude, GPSLatitude, GPSHigh,
+                      RodMaterialFirst, RodStyleFirst, StationMaterial, StationStyle, Chair, StationType, BusShelter, Constructor, ConstructionTime, StationLand, 
+                      TrafficVolume, PictureFirst, PictureSecond, PictureThird, StationArea, ServiceArea, DayTrafficVolume, PassSum, PassRode, HourMass, HourEvacuate, 
+                      DayMass, DayEvacuate, RouteSum, MoveTime, RebuildTime, RemoveTime, StationLong, RodMaterialSecond, RodMaterialThird, RodStyleSecond, 
+                      RodStyleThird, DispatchCompanyFirst, DispatchRouteFirst, DispatchStationFirst, DispatchCompanySecond, DispatchRouteSecond, 
+                      DispatchStationSecond, DispatchCompanyThird, DispatchRouteThird, DispatchStationThird, Classify FROM sde.公交站点";
 
+            string strRoadSQL = @"SELECT OBJECTID,RoadID,RoadName,RoadTravel, Company,  RoadType,FirstStartTime, FirstCloseTime, EndStartTime, EndCloseTim, TicketPrice1, 
+                      TicketPrice2, TicketPrice3, RoadNo, Length, AverageLoadFactor, BusNumber, 
+                      Capacity, PassengerSum, PassengerWorkSum, AverageSpeed, NulineCoefficient, 
+                      NulineCoefficient2, Picture1, Picture2, Picture3, Picture4, Picture5, Unit, ServeArea, 
+                      AverageLength, HigeLoadFactor, RoadLoad, DirectImbalance, AlternatelyCoefficient, 
+                      TimeCoefficient, DayCoefficient, HighHourSect, HighHourArea, HighHourMass, 
+                      HighPassengerMass FROM sde.公交站线";
+            try
+            {
+               switch (emunType)
+               {
+                   case GridSetType.Station_FillPan:
+                       OleDbDataAdapter da = ForBusInfo.CreateCustomerAdapter(mycon, strStationSQL, "", "");
+                       da.SelectCommand.ExecuteNonQuery();
+                       DataSet ds = new DataSet();
+                       int nQueryCount = da.Fill(ds, "Station");
+                       if (nQueryCount > 0)
+                       {
+                           grid.DataSource = ds;
+                           grid.DataMember = "Station";
+                           foreach (DataGridViewColumn eCol in grid.Columns)
+                           {
+                               eCol.Visible = false;
+                               eCol.ReadOnly = true;
+                               eCol.Resizable = DataGridViewTriState.False;
+                           }
+                           grid.Columns[0].Visible = true;
+                           grid.Columns[0].ReadOnly = false;
+                           grid.Columns[0].HeaderText = "";
+                           grid.Columns[0].Width = 35;
+                           grid.Columns[3].Visible = true;
+                           grid.Columns[3].HeaderText = "站点名称";
+                           grid.Columns[3].Width = 78;
+                           grid.Columns[4].Visible = true;
+                           grid.Columns[4].HeaderText = "行向";
+                           grid.Columns[4].Width = 55;
+                       }
+                       break;
+                   case GridSetType.Station_FillAll:
+                       da = ForBusInfo.CreateCustomerAdapter(mycon, strStationSQL, "", "");
+                       da.SelectCommand.ExecuteNonQuery();
+                       ds = new DataSet();
+                       nQueryCount = da.Fill(ds, "Station");
+                       if (nQueryCount > 0)
+                       {
+                           grid.DataSource = ds;
+                           grid.DataMember = "Station";
+                           foreach (DataGridViewColumn eCol in grid.Columns)
+                           {
+                               eCol.ReadOnly = true;
+                               eCol.Resizable = DataGridViewTriState.False;
+                           }
+                           grid.Columns[0].ReadOnly = false;
+                           grid.Columns[0].HeaderText = "";
+                           grid.Columns[1].Visible = false;
+                           grid.Columns[2].Visible = false;
+
+                           grid.Columns[3].HeaderText = "站点名称";
+                           grid.Columns[4].HeaderText = "行向";
+                           grid.Columns[5].HeaderText = "副站名";
+                           grid.Columns[5].Frozen = true;
+                           grid.Columns[6].HeaderText = "主要标识物";
+                           grid.Columns[7].HeaderText = "站点所在道路";
+                           grid.Columns[8].HeaderText = "GPS经度";
+                           grid.Columns[9].HeaderText = "GPS纬度";
+                           grid.Columns[10].HeaderText = "GPS高度";
+                           grid.Columns[11].HeaderText = "站杆材质";
+                           grid.Columns[12].HeaderText = "站杆式样";
+                           grid.Columns[13].HeaderText = "站牌材质";
+                           grid.Columns[14].HeaderText = "站牌规格";
+                           grid.Columns[15].HeaderText = "有无板凳";
+                           grid.Columns[16].HeaderText = "站点类型";
+                           grid.Columns[17].HeaderText = "候车亭样式";
+                           grid.Columns[18].HeaderText = "建设商";
+                           grid.Columns[19].HeaderText = "建设时间";
+                           grid.Columns[20].HeaderText = "站点用地";
+                           grid.Columns[21].HeaderText = "集散量高峰";
+                           grid.Columns[22].HeaderText = "图片一";
+                           grid.Columns[23].HeaderText = "图片二";
+                           grid.Columns[24].HeaderText = "图片三";
+                           grid.Columns[25].HeaderText = "站点面积";
+                           grid.Columns[26].HeaderText = "站服务面积";
+                           grid.Columns[27].HeaderText = "天集散量高峰";
+                           grid.Columns[28].HeaderText = "通过线路数";
+                           grid.Columns[29].HeaderText = "通道条数";
+                           grid.Columns[30].HeaderText = "小时集结量";
+                           grid.Columns[31].HeaderText = "小时疏散量";
+                           grid.Columns[32].HeaderText = "全天集结量";
+                           grid.Columns[33].HeaderText = "全天疏散量";
+                           grid.Columns[34].HeaderText = "线路数";
+                           grid.Columns[35].HeaderText = "迁移安装时间";
+                           grid.Columns[36].HeaderText = "改建时间";
+                           grid.Columns[37].HeaderText = "拆除时间";
+                           grid.Columns[38].HeaderText = "候车亭长度";
+                           grid.Columns[39].HeaderText = "站杆材质2";
+                           grid.Columns[40].HeaderText = "站杆材质3";
+                           grid.Columns[41].HeaderText = "站杆样式2";
+                           grid.Columns[42].HeaderText = "站杆样式3";
+                           grid.Columns[43].HeaderText = "调度公司1";
+                           grid.Columns[44].HeaderText = "调度线路1";
+                           grid.Columns[45].HeaderText = "调度站道1";
+                           grid.Columns[46].HeaderText = "调度公司2";
+                           grid.Columns[47].HeaderText = "调度线路2";
+                           grid.Columns[48].HeaderText = "调度站道2";
+                           grid.Columns[49].HeaderText = "调度公司3";
+                           grid.Columns[50].HeaderText = "调度线路3";
+                           grid.Columns[51].HeaderText = "调度站道3";
+                           grid.Columns[52].HeaderText = "站点类别";
+                        }
+                       break;
+                   case GridSetType.Station_FillByOBJECTID:
+                       da = ForBusInfo.CreateCustomerAdapter(mycon, strStationSQL + strQuery, "", "");
+                       da.SelectCommand.ExecuteNonQuery();
+                    ds = new DataSet();
+                    nQueryCount = da.Fill(ds, "Station");
+                    if (nQueryCount > 0)
+                    {
+                        grid.DataSource = ds;
+                        grid.DataMember = "Station";
+                        foreach (DataGridViewColumn eCol in grid.Columns)
+                        {
+                            eCol.ReadOnly = true;
+                            eCol.Resizable = DataGridViewTriState.False;
+                        }
+                        grid.Columns[0].ReadOnly = false;
+                        grid.Columns[0].HeaderText = "";
+                        grid.Columns[1].Visible = false;
+                        grid.Columns[2].Visible = false;
+
+                        grid.Columns[3].HeaderText = "站点名称";
+                        grid.Columns[4].HeaderText = "行向";
+                        grid.Columns[5].HeaderText = "副站名";
+                        grid.Columns[5].Frozen = true;
+                        grid.Columns[6].HeaderText = "主要标识物";
+                        grid.Columns[7].HeaderText = "站点所在道路";
+                        grid.Columns[8].HeaderText = "GPS经度";
+                        grid.Columns[9].HeaderText = "GPS纬度";
+                        grid.Columns[10].HeaderText = "GPS高度";
+                        grid.Columns[11].HeaderText = "站杆材质";
+                        grid.Columns[12].HeaderText = "站杆式样";
+                        grid.Columns[13].HeaderText = "站牌材质";
+                        grid.Columns[14].HeaderText = "站牌规格";
+                        grid.Columns[15].HeaderText = "有无板凳";
+                        grid.Columns[16].HeaderText = "站点类型";
+                        grid.Columns[17].HeaderText = "候车亭样式";
+                        grid.Columns[18].HeaderText = "建设商";
+                        grid.Columns[19].HeaderText = "建设时间";
+                        grid.Columns[20].HeaderText = "站点用地";
+                        grid.Columns[21].HeaderText = "集散量高峰";
+                        grid.Columns[22].HeaderText = "图片一";
+                        grid.Columns[23].HeaderText = "图片二";
+                        grid.Columns[24].HeaderText = "图片三";
+                        grid.Columns[25].HeaderText = "站点面积";
+                        grid.Columns[26].HeaderText = "站服务面积";
+                        grid.Columns[27].HeaderText = "天集散量高峰";
+                        grid.Columns[28].HeaderText = "通过线路数";
+                        grid.Columns[29].HeaderText = "通道条数";
+                        grid.Columns[30].HeaderText = "小时集结量";
+                        grid.Columns[31].HeaderText = "小时疏散量";
+                        grid.Columns[32].HeaderText = "全天集结量";
+                        grid.Columns[33].HeaderText = "全天疏散量";
+                        grid.Columns[34].HeaderText = "线路数";
+                        grid.Columns[35].HeaderText = "迁移安装时间";
+                        grid.Columns[36].HeaderText = "改建时间";
+                        grid.Columns[37].HeaderText = "拆除时间";
+                        grid.Columns[38].HeaderText = "候车亭长度";
+                        grid.Columns[39].HeaderText = "站杆材质2";
+                        grid.Columns[40].HeaderText = "站杆材质3";
+                        grid.Columns[41].HeaderText = "站杆样式2";
+                        grid.Columns[42].HeaderText = "站杆样式3";
+                        grid.Columns[43].HeaderText = "调度公司1";
+                        grid.Columns[44].HeaderText = "调度线路1";
+                        grid.Columns[45].HeaderText = "调度站道1";
+                        grid.Columns[46].HeaderText = "调度公司2";
+                        grid.Columns[47].HeaderText = "调度线路2";
+                        grid.Columns[48].HeaderText = "调度站道2";
+                        grid.Columns[49].HeaderText = "调度公司3";
+                        grid.Columns[50].HeaderText = "调度线路3";
+                        grid.Columns[51].HeaderText = "调度站道3";
+                        grid.Columns[52].HeaderText = "站点类别";
+                    }
+                    break;
+                   case GridSetType.Station_FillByStationName:
+                    da = ForBusInfo.CreateCustomerAdapter(mycon, strStationSQL + strQuery, "", "");
+                    da.SelectCommand.ExecuteNonQuery();
+                    ds = new DataSet();
+                    nQueryCount = da.Fill(ds, "Station");
+                    if (nQueryCount > 0)
+                    {
+                        grid.DataSource = ds;
+                        grid.DataMember = "Station";
+                        foreach (DataGridViewColumn eCol in grid.Columns)
+                        {
+                            eCol.ReadOnly = true;
+                            eCol.Resizable = DataGridViewTriState.False;
+                        }
+                    }
+                    break;
+                   case GridSetType.Road_FillPan :
+                    da = ForBusInfo.CreateCustomerAdapter(mycon, strRoadSQL, "", "");
+                    da.SelectCommand.ExecuteNonQuery();
+                    ds = new DataSet();
+                    nQueryCount = da.Fill(ds, "Road");
+                    if (nQueryCount > 0)
+                    {
+                        grid.DataSource = ds;
+                        grid.DataMember = "Road";
+                        foreach (DataGridViewColumn eCol in grid.Columns)
+                        {
+                            eCol.Visible = false;
+                            eCol.ReadOnly = true;
+                            eCol.Resizable = DataGridViewTriState.False;
+                        }
+                        grid.Columns[0].Visible = true;
+                        grid.Columns[0].ReadOnly = false;
+                        grid.Columns[0].HeaderText = "";
+                        grid.Columns[0].Width = 35;
+                        grid.Columns[3].Visible = true;
+                        grid.Columns[3].HeaderText = "线路名称";
+                        grid.Columns[3].Width = 78;
+                        grid.Columns[4].Visible = true;
+                        grid.Columns[4].HeaderText = "行向";
+                        grid.Columns[4].Width = 55;
+                    }
+                    break;
+                   case GridSetType.Road_FillAll:
+                    da = ForBusInfo.CreateCustomerAdapter(mycon, strRoadSQL, "", "");
+                    da.SelectCommand.ExecuteNonQuery();
+                    ds = new DataSet();
+                    nQueryCount = da.Fill(ds, "Road");
+                    if (nQueryCount > 0)
+                    {
+                        grid.DataSource = ds;
+                        grid.DataMember = "Road";
+                        foreach (DataGridViewColumn eCol in grid.Columns)
+                        {
+                            eCol.ReadOnly = true;
+                            eCol.Resizable = DataGridViewTriState.False;
+                        }
+                        grid.Columns[0].ReadOnly = false;
+                        grid.Columns[0].HeaderText = "";
+                        grid.Columns[1].Visible = false;
+                        grid.Columns[2].Visible = false;
+
+                        grid.Columns[3].HeaderText = "线路名称";
+                        grid.Columns[4].HeaderText = "线路行程";
+                        grid.Columns[4].Frozen = true;
+                        grid.Columns[5].HeaderText = "所属公司";
+                        grid.Columns[6].HeaderText = "线路类型";
+                        grid.Columns[7].HeaderText = "首站开班时间";
+                        grid.Columns[8].HeaderText = "首站收班时间";
+                        grid.Columns[9].HeaderText = "末站开班时间";
+                        grid.Columns[10].HeaderText = "末站收班时间";
+                        grid.Columns[11].HeaderText = "票价1";
+                        grid.Columns[12].HeaderText = "票价2";
+                        grid.Columns[13].HeaderText = "票价3";
+                        grid.Columns[14].HeaderText = "线路编号";
+                        grid.Columns[15].HeaderText = "长度";
+                        grid.Columns[16].HeaderText = "平均满载率";
+                        grid.Columns[17].HeaderText = "运营车次";
+                        grid.Columns[18].HeaderText = "运力配备";
+                        grid.Columns[19].HeaderText = "客运量";
+                        grid.Columns[20].HeaderText = "客运工作量";
+                        grid.Columns[21].HeaderText = "平均车速";
+                        grid.Columns[22].HeaderText = "非直线系数";
+                        grid.Columns[23].HeaderText = "非直线系数2";
+                        grid.Columns[24].HeaderText = "图片1";
+                        grid.Columns[25].HeaderText = "图片2";
+                        grid.Columns[26].HeaderText = "图片3";
+                        grid.Columns[27].HeaderText = "图片4";
+                        grid.Columns[28].HeaderText = "图片5";
+                        grid.Columns[29].HeaderText = "所属单位";
+                        grid.Columns[30].HeaderText = "服务面积";
+                        grid.Columns[31].HeaderText = "平均运距";
+                        grid.Columns[32].HeaderText = "高峰满载率";
+                        grid.Columns[33].HeaderText = "线路负荷";
+                        grid.Columns[34].HeaderText = "方向不均衡";
+                        grid.Columns[35].HeaderText = "交替系数";
+                        grid.Columns[36].HeaderText = "时不均系数";
+                        grid.Columns[37].HeaderText = "天不均系数";
+                        grid.Columns[38].HeaderText = "高峰小时段";
+                        grid.Columns[39].HeaderText = "高峰小时面";
+                        grid.Columns[40].HeaderText = "高峰小时量";
+                        grid.Columns[41].HeaderText = "高峰客运量";
+                    }
+                    break;
+                   case GridSetType.Road_FillByOBJECTID:
+                    da = ForBusInfo.CreateCustomerAdapter(mycon, strRoadSQL + strQuery, "", "");
+                    da.SelectCommand.ExecuteNonQuery();
+                    ds = new DataSet();
+                    nQueryCount = da.Fill(ds, "Road");
+                    if (nQueryCount > 0)
+                    {
+                        grid.DataSource = ds;
+                        grid.DataMember = "Road";
+                        foreach (DataGridViewColumn eCol in grid.Columns)
+                        {
+                            eCol.ReadOnly = true;
+                            eCol.Resizable = DataGridViewTriState.False;
+                        }
+                        grid.Columns[0].ReadOnly = false;
+                        grid.Columns[0].HeaderText = "";
+                        grid.Columns[1].Visible = false;
+                        grid.Columns[2].Visible = false;
+
+                        grid.Columns[3].HeaderText = "线路名称";
+                        grid.Columns[4].HeaderText = "线路行程";
+                        grid.Columns[4].Frozen = true;
+                        grid.Columns[5].HeaderText = "所属公司";
+                        grid.Columns[6].HeaderText = "线路类型";
+                        grid.Columns[7].HeaderText = "首站开班时间";
+                        grid.Columns[8].HeaderText = "首站收班时间";
+                        grid.Columns[9].HeaderText = "末站开班时间";
+                        grid.Columns[10].HeaderText = "末站收班时间";
+                        grid.Columns[11].HeaderText = "票价1";
+                        grid.Columns[12].HeaderText = "票价2";
+                        grid.Columns[13].HeaderText = "票价3";
+                        grid.Columns[14].HeaderText = "线路编号";
+                        grid.Columns[15].HeaderText = "长度";
+                        grid.Columns[16].HeaderText = "平均满载率";
+                        grid.Columns[17].HeaderText = "运营车次";
+                        grid.Columns[18].HeaderText = "运力配备";
+                        grid.Columns[19].HeaderText = "客运量";
+                        grid.Columns[20].HeaderText = "客运工作量";
+                        grid.Columns[21].HeaderText = "平均车速";
+                        grid.Columns[22].HeaderText = "非直线系数";
+                        grid.Columns[23].HeaderText = "非直线系数2";
+                        grid.Columns[24].HeaderText = "图片1";
+                        grid.Columns[25].HeaderText = "图片2";
+                        grid.Columns[26].HeaderText = "图片3";
+                        grid.Columns[27].HeaderText = "图片4";
+                        grid.Columns[28].HeaderText = "图片5";
+                        grid.Columns[29].HeaderText = "所属单位";
+                        grid.Columns[30].HeaderText = "服务面积";
+                        grid.Columns[31].HeaderText = "平均运距";
+                        grid.Columns[32].HeaderText = "高峰满载率";
+                        grid.Columns[33].HeaderText = "线路负荷";
+                        grid.Columns[34].HeaderText = "方向不均衡";
+                        grid.Columns[35].HeaderText = "交替系数";
+                        grid.Columns[36].HeaderText = "时不均系数";
+                        grid.Columns[37].HeaderText = "天不均系数";
+                        grid.Columns[38].HeaderText = "高峰小时段";
+                        grid.Columns[39].HeaderText = "高峰小时面";
+                        grid.Columns[40].HeaderText = "高峰小时量";
+                        grid.Columns[41].HeaderText = "高峰客运量";
+                    }
+                    break;
+                   case GridSetType.Road_FillByStationName:
+                    da = ForBusInfo.CreateCustomerAdapter(mycon, strRoadSQL + strQuery, "", "");
+                    da.SelectCommand.ExecuteNonQuery();
+                    ds = new DataSet();
+                    nQueryCount = da.Fill(ds, "Road");
+                    if (nQueryCount > 0)
+                    {
+                        grid.DataSource = ds;
+                        grid.DataMember = "Road";
+                        foreach (DataGridViewColumn eCol in grid.Columns)
+                        {
+                            eCol.ReadOnly = true;
+                            eCol.Resizable = DataGridViewTriState.False;
+                        }
+                    }
+                    break;
+               }
+                mycon.Close();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show("添加日志文件出错\n" + ex.ToString(), "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        public static void SaveXml(Form myForm) //保存窗口textbox输入为xml 
+        {
+             string FileName = Application.ExecutablePath;
+             string xmlFileName = Path.ChangeExtension(FileName, ".xml");
+             if (File.Exists(xmlFileName))
+                 File.Delete(xmlFileName);
+             XmlTextWriter tw = new XmlTextWriter(xmlFileName, null);
+             tw.Formatting = Formatting.Indented;
+             tw.WriteStartDocument();
+             tw.WriteStartElement("savetextconent");
+             tw.WriteAttributeString("Text", "SaveText");
+             foreach (object obj in myForm.Controls)
+             {
+                 TextBox myextBox;
+                 if (obj is TextBox)
+                 {
+                     myextBox = (TextBox)obj;
+                     tw.WriteElementString(myextBox.Name, myextBox.Text);
+                 }
+                 else
+                 {
+                     if (obj is Form)//递归保存窗口内的xml
+                         SaveXml((Form)obj);
+                 }
+             }
+                tw.WriteEndElement();
+             tw.WriteEndDocument();
+             tw.Flush();
+             tw.Close();
+        }
+
+        public static void loadXml(Form myForm) //载入上次保存的xml到窗口textbox 
+         {
+             string FileName = Application.ExecutablePath;
+             string xmlFileName = Path.ChangeExtension(FileName, ".xml");
+             if (!File.Exists(xmlFileName)) return;
+             XmlDocument xmldoc = new XmlDocument();
+             xmldoc.Load(xmlFileName);
+             XmlElement root = xmldoc.DocumentElement;
+             XmlNodeList xnl = root.ChildNodes;
+             for (int i = 0; i < xnl.Count; i++)
+             {
+                 object textobj = myForm.GetType().GetField(xnl.Item(i).Name,
+                 System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).GetValue(myForm);
+                 if (textobj != null)
+                 {
+                        TextBox textBox = textobj as TextBox;
+                     textBox.Text = xnl.Item(i).InnerText;
+                 }
+             }
+         }
+
+        //声明读写INI文件的API函数
+        [DllImport("kernel32")]
+        public static extern bool WritePrivateProfileString(string section, string key, string val, string filePath);
+        [DllImport("kernel32")]
+        private static extern int GetPrivateProfileString(string section, string key, string def, byte[] retVal, int size, string filePath);
+
+        public static string GetProfileString(string section, string key, string filePath)
+        {
+            Byte[] Buffer = new Byte[65535];
+            int bufLen = GetPrivateProfileString(section, key, "", Buffer, Buffer.GetUpperBound(0), filePath);
+            //必须设定0（系统默认的代码页）的编码方式，否则无法支持中文
+            string s = Encoding.GetEncoding(0).GetString(Buffer);
+            s = s.Substring(0, bufLen);
+            return s.Trim();
+        }
     }
 
     public class BusStation : IComparable<BusStation>
@@ -157,4 +613,208 @@ namespace Businfo.Globe
          #endregion
 
     }
+
+    // public class IniFiles
+    //{
+    //    public string FileName; //INI文件名
+    //    //string path   =   System.IO.Path.Combine(Application.StartupPath,"pos.ini");
+
+    //    //声明读写INI文件的API函数
+    //    [DllImport("kernel32")]
+    //    private static extern bool WritePrivateProfileString(string section, string key, string val, string filePath);
+    //    [DllImport("kernel32")]
+    //    private static extern int GetPrivateProfileString(string section, string key, string def, byte[] retVal, int size, string filePath);
+
+    //    //类的构造函数，传递INI文件名
+    //    public IniFiles(string AFileName)
+    //    {
+    //        // 判断文件是否存在
+    //        FileInfo fileInfo = new FileInfo(AFileName);
+    //        //Todo:搞清枚举的用法
+    //        if ((!fileInfo.Exists))
+    //        { //|| (FileAttributes.Directory in fileInfo.Attributes))
+    //            //文件不存在，建立文件
+    //            System.IO.StreamWriter sw = new System.IO.StreamWriter(AFileName, false, System.Text.Encoding.Default);
+    //            try
+    //            {
+    //                sw.Write("#表格配置档案");
+    //                sw.Close();
+    //            }
+    //            catch
+    //            {
+    //                throw (new ApplicationException("Ini文件不存在"));
+    //            }
+    //        }
+    //        //必须是完全路径，不能是相对路径
+    //        FileName = fileInfo.FullName;
+    //    }
+
+    //    //写INI文件
+    //    public void WriteString(string Section, string Ident, string Value)
+    //    {
+    //        if (!WritePrivateProfileString(Section, Ident, Value, FileName))
+    //        {
+
+    //            throw (new ApplicationException("写Ini文件出错"));
+    //        }
+    //    }
+
+    //    //读取INI文件指定
+    //    public string ReadString(string Section, string Ident, string Default)
+    //    {
+    //        Byte[] Buffer = new Byte[65535];
+    //        int bufLen = GetPrivateProfileString(Section, Ident, Default, Buffer, Buffer.GetUpperBound(0), FileName);
+    //        //必须设定0（系统默认的代码页）的编码方式，否则无法支持中文
+    //        string s = Encoding.GetEncoding(0).GetString(Buffer);
+    //        s = s.Substring(0, bufLen);
+    //        return s.Trim();
+    //    }
+
+    //    //读整数
+    //    public int ReadInteger(string Section, string Ident, int Default)
+    //    {
+    //        string intStr = ReadString(Section, Ident, Convert.ToString(Default));
+    //        try
+    //        {
+    //            return Convert.ToInt32(intStr);
+    //        }
+    //        catch (Exception ex)
+    //        {
+    //            Console.WriteLine(ex.Message);
+    //            return Default;
+    //        }
+    //    }
+
+    //    //写整数
+    //    public void WriteInteger(string Section, string Ident, int Value)
+    //    {
+    //        WriteString(Section, Ident, Value.ToString());
+    //    }
+
+    //    //读布尔
+    //    public bool ReadBool(string Section, string Ident, bool Default)
+    //    {
+    //        try
+    //        {
+    //            return Convert.ToBoolean(ReadString(Section, Ident, Convert.ToString(Default)));
+    //        }
+    //        catch (Exception ex)
+    //        {
+    //            Console.WriteLine(ex.Message);
+    //            return Default;
+    //        }
+    //    }
+
+    //    //写Bool
+    //    public void WriteBool(string Section, string Ident, bool Value)
+    //    {
+    //        WriteString(Section, Ident, Convert.ToString(Value));
+    //    }
+
+    //    //从Ini文件中，将指定的Section名称中的所有Ident添加到列表中
+    //    public void ReadSection(string Section, StringCollection Idents)
+    //    {
+    //        Byte[] Buffer = new Byte[16384];
+    //        //Idents.Clear();
+
+    //        int bufLen = GetPrivateProfileString(Section, null, null, Buffer, Buffer.GetUpperBound(0), FileName);
+    //        //对Section进行解析
+    //        GetStringsFromBuffer(Buffer, bufLen, Idents);
+    //    }
+
+    //    private void GetStringsFromBuffer(Byte[] Buffer, int bufLen, StringCollection Strings)
+    //    {
+    //        Strings.Clear();
+    //        if (bufLen != 0)
+    //        {
+    //            int start = 0;
+    //            for (int i = 0; i < bufLen; i++)
+    //            {
+    //                if ((Buffer[i] == 0) && ((i - start) > 0))
+    //                {
+    //                    String s = Encoding.GetEncoding(0).GetString(Buffer, start, i - start);
+    //                    Strings.Add(s);
+    //                    start = i + 1;
+    //                }
+    //            }
+    //        }
+    //    }
+
+    //    //从Ini文件中，读取所有的Sections的名称
+    //    public void ReadSections(StringCollection SectionList)
+    //    {
+    //        //Note:必须得用Bytes来实现，StringBuilder只能取到第一个Section
+    //        byte[] Buffer = new byte[65535];
+    //        int bufLen = 0;
+    //        bufLen = GetPrivateProfileString(null, null, null, Buffer,
+    //        Buffer.GetUpperBound(0), FileName);
+    //        GetStringsFromBuffer(Buffer, bufLen, SectionList);
+    //    }
+
+    //    //读取指定的Section的所有Value到列表中
+    //    public void ReadSectionValues(string Section, NameValueCollection Values)
+    //    {
+    //        StringCollection KeyList = new StringCollection();
+    //        ReadSection(Section, KeyList);
+    //        Values.Clear();
+    //        foreach (string key in KeyList)
+    //        {
+    //            Values.Add(key, ReadString(Section, key, ""));
+    //        }
+    //    }
+
+    //    /**/
+    //    ////读取指定的Section的所有Value到列表中，
+    //    //public void ReadSectionValues(string Section, NameValueCollection Values,char splitString)
+    //    //{　 string sectionValue;
+    //    //　　string[] sectionValueSplit;
+    //    //　　StringCollection KeyList = new StringCollection();
+    //    //　　ReadSection(Section, KeyList);
+    //    //　　Values.Clear();
+    //    //　　foreach (string key in KeyList)
+    //    //　　{
+    //    //　　　　sectionValue=ReadString(Section, key, "");
+    //    //　　　　sectionValueSplit=sectionValue.Split(splitString);
+    //    //　　　　Values.Add(key, sectionValueSplit[0].ToString(),sectionValueSplit[1].ToString());
+    //    //　　}
+    //    //}
+
+    //    //清除某个Section
+    //    public void EraseSection(string Section)
+    //    {
+    //        if (!WritePrivateProfileString(Section, null, null, FileName))
+    //        {
+    //            throw (new ApplicationException("无法清除Ini文件中的Section"));
+    //        }
+    //    }
+
+    //    //删除某个Section下的键
+    //    public void DeleteKey(string Section, string Ident)
+    //    {
+    //        WritePrivateProfileString(Section, Ident, null, FileName);
+    //    }
+
+    //    //Note:对于Win9X，来说需要实现UpdateFile方法将缓冲中的数据写入文件
+    //    //在Win NT, 2000和XP上，都是直接写文件，没有缓冲，所以，无须实现UpdateFile
+    //    //执行完对Ini文件的修改之后，应该调用本方法更新缓冲区。
+    //    public void UpdateFile()
+    //    {
+    //        WritePrivateProfileString(null, null, null, FileName);
+    //    }
+
+    //    //检查某个Section下的某个键值是否存在
+    //    public bool ValueExists(string Section, string Ident)
+    //    {
+    //        StringCollection Idents = new StringCollection();
+    //        ReadSection(Section, Idents);
+    //        return Idents.IndexOf(Ident) > -1;
+    //    }
+
+    //    //确保资源的释放
+    //    ~IniFiles()
+    //    {
+    //        UpdateFile();
+    //    }
+    //}
 }
+

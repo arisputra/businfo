@@ -18,7 +18,7 @@ namespace Businfo
         public List<IFeature> m_SelStationList = new List<IFeature>();//站点
         public int m_nRoadID,n_nBufferLength;
         public IFeature m_pCurFeature;
-        public bool m_bReverse;
+        public bool m_bReverse;//是不是反向的队列
         public List<BusStation> m_BusStationList = new List<BusStation>();
         public List<BusStation> m_SelBusStationList = new List<BusStation>();
 
@@ -93,7 +93,6 @@ namespace Businfo
             {
                 checkedListBox1.Items.Add(pItem);
             }
-
             if (m_BusStationList[0].rLength > m_BusStationList[1].rLength)
                 m_bReverse = true;
             else
@@ -106,7 +105,7 @@ namespace Businfo
                 EngineFuntions.AddTextElement(pfeat.Shape, pfeat.get_Value(pfeat.Fields.FindField("StationName")).ToString());
             }
             m_SelBusStationList.Sort();
-            if (m_bReverse)
+            if (m_bReverse)//是不是反向的队列
                 m_SelBusStationList.Reverse();
             foreach (BusStation pItem in m_SelBusStationList)
             {
@@ -118,22 +117,21 @@ namespace Businfo
 
         private void button3_Click(object sender, EventArgs e)
         {
-            String sConn;
-            OleDbConnection mycon;
-            sConn = "provider=Microsoft.Jet.OLEDB.4.0;data source=" + Application.StartupPath + "\\data\\公交.mdb";
-            mycon = new OleDbConnection(sConn);
+            String sConn = "Provider=sqloledb;Data Source = 172.16.34.120;Initial Catalog=sde;User Id = sa;Password = sa";
+            //sConn = "provider=Microsoft.Jet.OLEDB.4.0;data source=" + ForBusInfo.GetProfileString("Businfo", "DataPos", Application.StartupPath + "\\Businfo.ini") + "\\data\\公交.mdb";
+            OleDbConnection mycon = new OleDbConnection(sConn);
             mycon.Open();
             try
             {
                 int nOrder = 0;
                 string pStrSQL;
                 OleDbCommand pCom;
-                pStrSQL = String.Format("delete from  RoadAndStation where RoadID = {0}", m_nRoadID);
+                pStrSQL = String.Format("delete from  sde.RoadAndStation where RoadID = {0}", m_nRoadID);
                 pCom = new OleDbCommand(pStrSQL, mycon);
                 pCom.ExecuteNonQuery();
                 foreach (BusStation pBusStation in checkedListBox1.Items)
                 {
-                    pStrSQL = String.Format("insert into RoadAndStation(RoadID,StationID,StationOrder,BufferLength) values({0},{1},{2},{3})"
+                    pStrSQL = String.Format("insert into sde.RoadAndStation(RoadID,StationID,StationOrder,BufferLength) values({0},{1},{2},{3})"
                         , m_nRoadID, pBusStation.ID, nOrder++, n_nBufferLength);
                     pCom = new OleDbCommand(pStrSQL, mycon);
                     pCom.ExecuteNonQuery();

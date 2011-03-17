@@ -42,11 +42,12 @@ namespace Businfo
             checkBox1.Checked = false;
             if (String.IsNullOrEmpty(TextBox1.Text))
             {
-                this.公交站点TableAdapter.Fill(this.stationDataSet.公交站点);
+                RefreshGrid();
             } 
             else
             {
-                this.公交站点TableAdapter.FillByStationName(this.stationDataSet.公交站点, "%" + TextBox1.Text + "%");
+                ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Station_FillByStationName,string.Format(" WHERE (StationName LIKE '%{0}%')",TextBox1.Text));
+                //this.公交站点TableAdapter.FillByStationName(this.stationDataSet.公交站点, "%" + TextBox1.Text + "%");
             }
         }
 
@@ -145,7 +146,8 @@ namespace Businfo
 
         private void frmStationPane_Load(object sender, EventArgs e)
         {
-           this.公交站点TableAdapter.Fill(this.stationDataSet.公交站点);
+            RefreshGrid();
+           //this.公交站点TableAdapter.Fill(this.stationDataSet.公交站点);
         }
 
         private void DataGridView1_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
@@ -155,29 +157,18 @@ namespace Businfo
             {
                 m_nCurRowIndex = e.RowIndex;
                 DataGridView1.Rows[m_nCurRowIndex].Selected = true;
-                ContextMenuStrip1.Show(MousePosition.X, MousePosition.Y);
+                ContextMenuStrip1.Show(MousePosition.X,MousePosition.Y);
                 m_pCurFeature = EngineFuntions.GetFeatureByFieldAndValue(EngineFuntions.m_Layer_BusStation , "OBJECTID", DataGridView1.Rows[m_nCurRowIndex].Cells[1].Value.ToString());
             }
         }
 
         public void RefreshGrid()
         {
-            this.公交站点TableAdapter.Fill(this.stationDataSet.公交站点);
+            ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Station_FillPan, "");
+            //this.公交站点TableAdapter.Fill(this.stationDataSet.公交站点);
         }
 
-        private void fillByStationNameToolStripButton_Click_1(object sender, EventArgs e)
-        {
-            try
-            {
-                this.公交站点TableAdapter.FillByStationName(this.stationDataSet.公交站点, stationNameToolStripTextBox.Text);
-            }
-            catch (System.Exception ex)
-            {
-                System.Windows.Forms.MessageBox.Show(ex.Message);
-            }
-
-        }
-
+    
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             if (checkBox1.Checked)
@@ -197,6 +188,7 @@ namespace Businfo
 
         }
 
+        //鼠标右键就结束DataGridView1编辑，不然DataGridView1最后编辑状态没有结束，值不更新。
         private void DataGridView1_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)

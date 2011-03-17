@@ -36,7 +36,15 @@ namespace Businfo
                 this.DialogResult = DialogResult.None;
                 return;
             }
-            m_pFeature = EngineFuntions.m_Layer_BusStation.FeatureClass.CreateFeature();
+            try
+            {
+                m_pFeature = EngineFuntions.m_Layer_BusStation.FeatureClass.CreateFeature();
+            }
+            catch (System.Exception ex)
+            {
+            	
+            }
+            //m_pFeature = EngineFuntions.m_Layer_BusStation.FeatureClass.CreateFeature();
             m_pFeature.Shape = m_mapPoint;
 
             IFields fields = m_pFeature.Fields;
@@ -65,6 +73,9 @@ namespace Businfo
             nIndex = fields.FindField("StationAlias");
             m_pFeature.set_Value(nIndex, textBox9.Text);
             m_pFeature.Store();
+
+            EngineFuntions.m_AxMapControl.Map.ClearSelection();
+            EngineFuntions.m_AxMapControl.ActiveView.GraphicsContainer.DeleteAllElements();
         }
 
         private void frmStationPara_Load(object sender, EventArgs e)

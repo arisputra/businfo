@@ -844,6 +844,20 @@ namespace Businfo.Globe
             return true;
         }
 
+        public static void FlashShape(IGeometry pGeo)
+          {
+              IRgbColor pColor = new RgbColorClass();
+              pColor.Red = 0;
+              pColor.Green = 0;
+              pColor.Blue = 255;
+              ISimpleMarkerSymbol pSimpleMarkerSymbol;
+              pSimpleMarkerSymbol = new SimpleMarkerSymbolClass();
+              pSimpleMarkerSymbol.Color = pColor;
+              pSimpleMarkerSymbol.Style = esriSimpleMarkerStyle.esriSMSCircle;
+              pSimpleMarkerSymbol.Size = 10;
+              m_AxMapControl.FlashShape(pGeo, 3, 500, pSimpleMarkerSymbol as ISymbol);
+          }
+        
         //public static List<IFeature> SortByDist(IFeature pFeature, List<IFeature> pFeatureCol)
         //{
         //    IPolyline pPolyline = (IPolyline)pFeature.Shape;

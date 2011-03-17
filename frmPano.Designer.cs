@@ -48,7 +48,7 @@
             this.Controls.Add(this.webBrowser1);
             this.Name = "frmPano";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "frmPano";
+            this.Text = "全景浏览";
             this.Load += new System.EventHandler(this.frmPano_Load);
             this.ResumeLayout(false);
 

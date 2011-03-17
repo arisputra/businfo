@@ -71,7 +71,7 @@
             // button1
             // 
             this.button1.BackColor = System.Drawing.SystemColors.Desktop;
-            this.button1.Location = new System.Drawing.Point(348, 260);
+            this.button1.Location = new System.Drawing.Point(348, 233);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(77, 23);
             this.button1.TabIndex = 4;
@@ -82,7 +82,7 @@
             // button2
             // 
             this.button2.BackColor = System.Drawing.SystemColors.Desktop;
-            this.button2.Location = new System.Drawing.Point(348, 233);
+            this.button2.Location = new System.Drawing.Point(348, 260);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(77, 23);
             this.button2.TabIndex = 4;
@@ -105,6 +105,7 @@
             this.Name = "frmFlash";
             this.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Load += new System.EventHandler(this.frmFlash_Load);
             ((System.ComponentModel.ISupportInitialize)(this.PictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
