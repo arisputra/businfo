@@ -28,13 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmlayerToc));
             this.AxLicenseControl1 = new ESRI.ArcGIS.Controls.AxLicenseControl();
             this.MapHawkEye = new ESRI.ArcGIS.Controls.AxMapControl();
             this.TOCControl = new ESRI.ArcGIS.Controls.AxTOCControl();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.属性管理ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.AxLicenseControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MapHawkEye)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TOCControl)).BeginInit();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // AxLicenseControl1
@@ -62,6 +66,22 @@
             this.TOCControl.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("TOCControl.OcxState")));
             this.TOCControl.Size = new System.Drawing.Size(152, 264);
             this.TOCControl.TabIndex = 3;
+            this.TOCControl.OnEndLabelEdit += new ESRI.ArcGIS.Controls.ITOCControlEvents_Ax_OnEndLabelEditEventHandler(this.TOCControl_OnEndLabelEdit);
+            this.TOCControl.OnMouseDown += new ESRI.ArcGIS.Controls.ITOCControlEvents_Ax_OnMouseDownEventHandler(this.TOCControl_OnMouseDown);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.属性管理ToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(119, 26);
+            // 
+            // 属性管理ToolStripMenuItem
+            // 
+            this.属性管理ToolStripMenuItem.Name = "属性管理ToolStripMenuItem";
+            this.属性管理ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.属性管理ToolStripMenuItem.Text = "属性管理";
+            this.属性管理ToolStripMenuItem.Click += new System.EventHandler(this.属性管理ToolStripMenuItem_Click);
             // 
             // frmlayerToc
             // 
@@ -76,6 +96,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.AxLicenseControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.MapHawkEye)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.TOCControl)).EndInit();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -85,5 +106,7 @@
         internal ESRI.ArcGIS.Controls.AxLicenseControl AxLicenseControl1;
         internal ESRI.ArcGIS.Controls.AxMapControl MapHawkEye;
         internal ESRI.ArcGIS.Controls.AxTOCControl TOCControl;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem 属性管理ToolStripMenuItem;
     }
 }
