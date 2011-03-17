@@ -71,22 +71,21 @@ namespace Businfo
                nDirect = -35;
             else
                nDirect = 35;
-            String sConn ;
-            OleDbConnection mycon;
-            sConn = "provider=Microsoft.Jet.OLEDB.4.0;data source=" + Application.StartupPath + "\\data\\公交.mdb";
-            mycon = new OleDbConnection(sConn);
+            String sConn = "Provider=sqloledb;Data Source = 172.16.34.120;Initial Catalog=sde;User Id = sa;Password = sa";
+            OleDbConnection mycon = new OleDbConnection(sConn);;
+            //sConn = "provider=Microsoft.Jet.OLEDB.4.0;data source=" + ForBusInfo.GetProfileString("Businfo", "DataPos", Application.StartupPath + "\\Businfo.ini") + "\\data\\公交.mdb";
             mycon.Open();
             try
             {
                 int nOrder = 0;
                 string pStrSQL;
                 OleDbCommand pCom;
-                pStrSQL = String.Format("delete from  RoadAndStation where RoadID = {0}", m_nRoadID);
+                pStrSQL = String.Format("delete from sde.RoadAndStation where RoadID = {0}", m_nRoadID);
                 pCom = new OleDbCommand(pStrSQL, mycon);
                 pCom.ExecuteNonQuery();
                 foreach (BusStation pBusStation in ListBox1.Items)
                 {
-                    pStrSQL = String.Format("insert into RoadAndStation(RoadID,StationID,StationOrder,BufferLength) values({0},{1},{2},{3})"
+                    pStrSQL = String.Format("insert into sde.RoadAndStation(RoadID,StationID,StationOrder,BufferLength) values({0},{1},{2},{3})"
                         , m_nRoadID, pBusStation.ID, nOrder++,nDirect);
                     pCom = new OleDbCommand(pStrSQL, mycon);
                     pCom.ExecuteNonQuery();         

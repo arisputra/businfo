@@ -37,24 +37,24 @@ namespace Businfo
                 if (pBusRoad != null)
                 {
                     MessageBox.Show("公交线路图层已经存在该线路！\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    break;
+                    return;
                 }
                 pBusRoad = EngineFuntions.GetOneSeartchFeature(EngineFuntions.m_Layer_BackRoad , "OBJECTID = " + pBusStation.ID);
                 IFeature pFeature = EngineFuntions.CopyFeature(EngineFuntions.m_Layer_BusRoad, pBusRoad);
-
-                String sConn = "provider=Microsoft.Jet.OLEDB.4.0;data source=" + Application.StartupPath + "\\data\\公交.mdb";
+                String sConn = "Provider=sqloledb;Data Source = 172.16.34.120;Initial Catalog=sde;User Id = sa;Password = sa";
+                //String sConn = "provider=Microsoft.Jet.OLEDB.4.0;data source=" + ForBusInfo.GetProfileString("Businfo", "DataPos", Application.StartupPath + "\\Businfo.ini") + "\\data\\公交.mdb";
                 OleDbConnection mycon = new OleDbConnection(sConn);
                 mycon.Open();
                 try
                 {
-                    OleDbDataAdapter da = ForBusInfo.CreateCustomerAdapter(mycon, String.Format("select * from  BackRAndS where RoadID = {0}", pBusRoad.get_Value(pBusRoad.Fields.FindField("OBJECTID"))),
-                       "", String.Format("delete from  BackRAndS where RoadID = {0}", pBusRoad.get_Value(pBusRoad.Fields.FindField("OBJECTID"))));
+                    OleDbDataAdapter da = ForBusInfo.CreateCustomerAdapter(mycon, String.Format("select * from  sde.BackRAndS where RoadID = {0}", pBusRoad.get_Value(pBusRoad.Fields.FindField("OBJECTID"))),
+                       "", String.Format("delete from  sde.BackRAndS where RoadID = {0}", pBusRoad.get_Value(pBusRoad.Fields.FindField("OBJECTID"))));
                     da.SelectCommand.ExecuteNonQuery();
                     DataSet ds = new DataSet();
                     int nQueryCount = da.Fill(ds);
                     foreach (DataRow eDataRow in ds.Tables[0].Rows)
                     {
-                        da.InsertCommand.CommandText = String.Format("insert into RoadAndStation(RoadID,StationID,StationOrder,BufferLength) values({0},{1},{2},{3})"
+                        da.InsertCommand.CommandText = String.Format("insert into sde.RoadAndStation(RoadID,StationID,StationOrder,BufferLength) values({0},{1},{2},{3})"
                        , pFeature.get_Value(pFeature.Fields.FindField("OBJECTID")), eDataRow[2], eDataRow[3], eDataRow[4]);
                         da.InsertCommand.ExecuteNonQuery();
                     }
@@ -81,13 +81,14 @@ namespace Businfo
             foreach (BusStation pBusStation in checkedListBox1.CheckedItems)
             {
                 IFeature pBackRoad = EngineFuntions.GetOneSeartchFeature(EngineFuntions.m_Layer_BackRoad, "OBJECTID = " + pBusStation.ID);
-                String sConn = "provider=Microsoft.Jet.OLEDB.4.0;data source=" + Application.StartupPath + "\\data\\公交.mdb";
+                String sConn = "Provider=sqloledb;Data Source = 172.16.34.120;Initial Catalog=sde;User Id = sa;Password = sa";
+                //String sConn = "provider=Microsoft.Jet.OLEDB.4.0;data source=" + ForBusInfo.GetProfileString("Businfo", "DataPos", Application.StartupPath + "\\Businfo.ini") + "\\data\\公交.mdb";
                 OleDbConnection mycon = new OleDbConnection(sConn);
                 mycon.Open();
                 try
                 {
                     OleDbDataAdapter da = ForBusInfo.CreateCustomerAdapter(mycon,"",
-                       "", String.Format("delete from BackRAndS where RoadID = {0}", pBackRoad.get_Value(pBackRoad.Fields.FindField("OBJECTID"))));
+                       "", String.Format("delete from sde.BackRAndS where RoadID = {0}", pBackRoad.get_Value(pBackRoad.Fields.FindField("OBJECTID"))));
                     da.DeleteCommand.ExecuteNonQuery();//删除备份站线关联站点数据
                     ForBusInfo.Add_Log(ForBusInfo.Login_name, "删除备份站线", pBackRoad.get_Value(pBackRoad.Fields.FindField("RoadName")).ToString(), "");
                     mycon.Close();

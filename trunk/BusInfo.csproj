@@ -350,6 +350,10 @@
       <DependentUpon>RoadDataSet.xsd</DependentUpon>
     </Compile>
     <Compile Include="Settings.cs" />
+    <Compile Include="StationDataSet.cs">
+      <DependentUpon>StationDataSet.xsd</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="StationDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -363,7 +367,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <EmbeddedResource Include="DiamondBlue.ssk" />
     <EmbeddedResource Include="frmEditRoadAndStation.resx">
       <DependentUpon>frmEditRoadAndStation.cs</DependentUpon>
     </EmbeddedResource>

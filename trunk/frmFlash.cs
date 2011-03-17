@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using Businfo.Globe;
+using System.Data.OleDb;
 
 namespace Businfo
 {
@@ -41,21 +42,41 @@ namespace Businfo
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (maskedTextBox1.Text.ToLower() == "admin")
+            String sConn = "Provider=sqloledb;Data Source = 172.16.34.120;Initial Catalog=sde;User Id = sa;Password = sa";
+            //String sConn = "provider=Microsoft.Jet.OLEDB.4.0;data source=" + ForBusInfo.GetProfileString("Businfo", "DataPos", Application.StartupPath + "\\Businfo.ini") + "\\data\\公交.mdb";
+            OleDbConnection mycon = new OleDbConnection(sConn);
+            mycon.Open();
+            OleDbDataAdapter da = ForBusInfo.CreateCustomerAdapter(mycon, string.Format("select * from sde.Login where Name = '{0}'", textBox1.Text), "", "");
+            da.SelectCommand.ExecuteNonQuery();
+            DataSet ds = new DataSet();
+            int nQueryCount = da.Fill(ds);
+            if (nQueryCount < 1)
+            {
+                MessageBox.Show("用户名不存在，请重新输入\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else if (maskedTextBox1.Text.ToLower() == ds.Tables[0].Rows[0][2].ToString().ToLower())
             {
                 ForBusInfo.Login_name = textBox1.Text;
+                ForBusInfo.Login_Operation = ds.Tables[0].Rows[0][3].ToString();
                 timer1.Start();
+                ForBusInfo.WritePrivateProfileString("Businfo", "LoginName", textBox1.Text, Application.StartupPath + "\\Businfo.ini");
             }
             else
             {
                 MessageBox.Show("密码错误，请重新输入\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+            mycon.Close();
            
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void frmFlash_Load(object sender, EventArgs e)
+        {
+            textBox1.Text = ForBusInfo.GetProfileString("Businfo", "LoginName", Application.StartupPath + "\\Businfo.ini");
         }
     }
 }
