@@ -44,7 +44,7 @@ namespace Businfo
         public MovePointFeedbackClass m_FeedBack;
         public bool m_bShowLayer;
         public int m_nPLineNum = 1;//线路每次包含总数
-        //AoInitialize m_pAoInitialize = new AoInitialize();//判断版本
+        AoInitialize m_pAoInitialize = new AoInitialize();//判断版本
         #endregion
 
         public frmMainNew()
@@ -63,23 +63,23 @@ namespace Businfo
 
         private void frmMainNew_Load(object sender, EventArgs e)
         {
-           ////Create a new AoInitialize object
-           // if (m_pAoInitialize == null)
-           // {
-           //     this.Close();
-           // }
-           ////Determine if the product is available
-           // if (m_pAoInitialize.IsProductCodeAvailable(esriLicenseProductCode.esriLicenseProductCodeArcInfo) == esriLicenseStatus.esriLicenseAvailable)
-           // {
-           //     if (m_pAoInitialize.Initialize(esriLicenseProductCode.esriLicenseProductCodeEngine) != esriLicenseStatus.esriLicenseCheckedOut)
-           //     {
-           //          this.Close();
-           //     }
-           // } 
-           // else
-           // {
-           //     this.Close();
-           // }
+            ////Create a new AoInitialize object
+            //if (m_pAoInitialize == null)
+            //{
+            //    this.Close();
+            //}
+            ////Determine if the product is available
+            //if (m_pAoInitialize.IsProductCodeAvailable(esriLicenseProductCode.esriLicenseProductCodeEngineGeoDB) == esriLicenseStatus.esriLicenseAvailable)
+            //{
+            //    if (m_pAoInitialize.Initialize(esriLicenseProductCode.esriLicenseProductCodeEngine) != esriLicenseStatus.esriLicenseCheckedOut)
+            //    {
+            //        this.Close();
+            //    }
+            //}
+            //else
+            //{
+            //    this.Close();
+            //}
             
             EngineFuntions.m_AxMapControl = axMapControl1;//传递Map控件
 
@@ -91,7 +91,7 @@ namespace Businfo
             axCommandBars1.SetSpecialColor((XtremeCommandBars.XTPColorManagerColor)15, pColor);
 
             m_pMapDocument = new MapDocumentClass();
-            m_pMapDocument.Open(Winapp.StartupPath + "\\data\\JianCe.mxd", string.Empty);
+            m_pMapDocument.Open(ForBusInfo.GetProfileString("Businfo", "DataPos", Winapp.StartupPath + "\\Businfo.ini") + "\\data\\JianCe.mxd", string.Empty);
             axMapControl1.Map = m_pMapDocument.get_Map(0);
             axMapControl1.Map.Name = "查询";
             axMapControl1.Extent = axMapControl1.FullExtent;
@@ -133,7 +133,7 @@ namespace Businfo
 
             //'鹰眼图：
             String sHawkEyeFileName;
-            sHawkEyeFileName = Winapp.StartupPath + "\\data\\JianCe.mxd";
+            sHawkEyeFileName = ForBusInfo.GetProfileString("Businfo", "DataPos", Winapp.StartupPath + "\\Businfo.ini") + "\\data\\JianCe.mxd";
             m_frmlayerToc.MapHawkEye.LoadMxFile(sHawkEyeFileName);
             m_frmlayerToc.MapHawkEye.Extent = m_frmlayerToc.MapHawkEye.FullExtent;
             //m_frmlayerToc.m_MapControl = axMapControl1.Object;
@@ -143,6 +143,22 @@ namespace Businfo
             this.WindowState = FormWindowState.Maximized;
             m_bShowLayer = false;
             ForBusInfo.Frm_Main = this;
+
+            if(ForBusInfo.Login_Operation != "")//设置用户权限对应禁止的操作
+            {
+                string[] strColu = ForBusInfo.Login_Operation.Split('；');
+                int nCol;
+                foreach (string eStrRow in strColu)
+                {
+                    nCol = Convert.ToInt32(eStrRow[0].ToString());
+                    string strRow = eStrRow.Substring(2);
+                    string[] strRows = strRow.Split('、');
+                    foreach (string eStrRows in strRows)
+                    {
+                        axCommandBars1[nCol].Controls[Convert.ToInt32(eStrRows)].Enabled = false;
+                    }
+                }
+            }
         }
 
         private void axCommandBars1_Execute(object sender, AxXtremeCommandBars._DCommandBarsEvents_ExecuteEvent e)
@@ -184,6 +200,8 @@ namespace Businfo
                     m_ToolStatus = ForBusInfo.Map3D_Reflash;
                     if (axMapControl1.Visible == true)
                     {
+                       axMapControl1.Map.ClearSelection();
+                       axMapControl1.ActiveView.GraphicsContainer.DeleteAllElements();
                        EngineFuntions.MapRefresh();
                     }
                     break;
@@ -207,6 +225,12 @@ namespace Businfo
                     break;
 
                 case ForBusInfo.Map3D_Area://计算面积
+                    break;
+                
+                case ForBusInfo.Map3D_Select ://拉框选择
+                    m_ToolStatus = ForBusInfo.Map3D_Select;
+                    axMapControl1.MousePointer = esriControlsMousePointer.esriPointerPencil;
+                    
                     break;
 
                 case ForBusInfo.Map3D_Full:
@@ -384,6 +408,22 @@ namespace Businfo
              {
                  switch (m_ToolStatus)
                  {
+                     case ForBusInfo.Map3D_Select:
+                         if (axMapControl1.Visible == true)
+                         {
+                            IGeometry pGeo;
+                            pGeo = axMapControl1.TrackRectangle();
+                            List<IFeature> pSelFea = EngineFuntions.GetSeartchFeatures(EngineFuntions.m_Layer_BusStation,pGeo);
+                            if (pSelFea.Count > 0)
+                            {
+                               
+                                frmStationAllInfo frmPopup = new frmStationAllInfo();
+                                frmPopup.m_featureCollection = pSelFea;
+                                frmPopup.ShowDialog();
+                                
+                            }    
+                         }
+                         break;
                      case ForBusInfo.Bus_Add:
                          {
                              frmStationPara frmPopup = new frmStationPara();
@@ -662,9 +702,9 @@ namespace Businfo
                     case ForBusInfo.Bus_Move:
                         m_mapPoint = axMapControl1.ToMapPoint(e.x, e.y);
                         m_FeedBack.MoveTo(m_mapPoint);
-                	break;
-                default :
-                	break;
+                        break;
+                    default:
+                        break;
                 }
             }
         }
@@ -701,6 +741,11 @@ namespace Businfo
         {
             //Release COM objects and shut down the AoInitilaize object
             //m_pAoInitialize.Shutdown();
+            
+        }
+
+        private void axMapControl1_OnAfterScreenDraw(object sender, IMapControlEvents2_OnAfterScreenDrawEvent e)
+        {
            
         }
 
