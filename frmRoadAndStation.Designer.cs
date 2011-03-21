@@ -34,29 +34,30 @@
             this.ListBox1 = new System.Windows.Forms.ListBox();
             this.BtnUP = new System.Windows.Forms.Button();
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.BtnDele = new System.Windows.Forms.Button();
             this.BtnDOWN = new System.Windows.Forms.Button();
             this.Label1 = new System.Windows.Forms.Label();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.GroupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // Lab_Name
             // 
             this.Lab_Name.AutoSize = true;
-            this.Lab_Name.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.Lab_Name.Font = new System.Drawing.Font("宋体", 11F, System.Drawing.FontStyle.Bold);
+            this.Lab_Name.ForeColor = System.Drawing.Color.Red;
             this.Lab_Name.Location = new System.Drawing.Point(12, 6);
             this.Lab_Name.Name = "Lab_Name";
-            this.Lab_Name.Size = new System.Drawing.Size(93, 16);
+            this.Lab_Name.Size = new System.Drawing.Size(87, 15);
             this.Lab_Name.TabIndex = 8;
             this.Lab_Name.Text = "线路名称：";
             // 
             // CheckBox1
             // 
             this.CheckBox1.AutoSize = true;
-            this.CheckBox1.Location = new System.Drawing.Point(9, 18);
+            this.CheckBox1.Location = new System.Drawing.Point(9, 20);
             this.CheckBox1.Name = "CheckBox1";
-            this.CheckBox1.Size = new System.Drawing.Size(91, 20);
+            this.CheckBox1.Size = new System.Drawing.Size(72, 16);
             this.CheckBox1.TabIndex = 2;
             this.CheckBox1.Text = "换边选择";
             this.CheckBox1.UseVisualStyleBackColor = true;
@@ -64,7 +65,7 @@
             // 
             // BtnTrue
             // 
-            this.BtnTrue.Location = new System.Drawing.Point(234, 324);
+            this.BtnTrue.Location = new System.Drawing.Point(234, 322);
             this.BtnTrue.Name = "BtnTrue";
             this.BtnTrue.Size = new System.Drawing.Size(61, 44);
             this.BtnTrue.TabIndex = 1;
@@ -74,23 +75,19 @@
             // 
             // ListBox1
             // 
-            this.ListBox1.Font = new System.Drawing.Font("宋体", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ListBox1.Font = new System.Drawing.Font("宋体", 11F);
             this.ListBox1.FormattingEnabled = true;
-            this.ListBox1.ItemHeight = 20;
-            this.ListBox1.Items.AddRange(new object[] {
-            "11111",
-            "22222",
-            "33333",
-            "44444",
-            "55555"});
-            this.ListBox1.Location = new System.Drawing.Point(7, 42);
+            this.ListBox1.ItemHeight = 15;
+            this.ListBox1.Location = new System.Drawing.Point(7, 47);
             this.ListBox1.Name = "ListBox1";
-            this.ListBox1.Size = new System.Drawing.Size(222, 324);
+            this.ListBox1.Size = new System.Drawing.Size(222, 319);
             this.ListBox1.TabIndex = 0;
+            this.ListBox1.DoubleClick += new System.EventHandler(this.ListBox1_DoubleClick);
+            this.ListBox1.Click += new System.EventHandler(this.ListBox1_Click);
             // 
             // BtnUP
             // 
-            this.BtnUP.Location = new System.Drawing.Point(235, 44);
+            this.BtnUP.Location = new System.Drawing.Point(235, 85);
             this.BtnUP.Name = "BtnUP";
             this.BtnUP.Size = new System.Drawing.Size(61, 46);
             this.BtnUP.TabIndex = 1;
@@ -107,17 +104,28 @@
             this.GroupBox1.Controls.Add(this.BtnUP);
             this.GroupBox1.Controls.Add(this.BtnDele);
             this.GroupBox1.Controls.Add(this.BtnDOWN);
-            this.GroupBox1.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.GroupBox1.Location = new System.Drawing.Point(8, 40);
+            this.GroupBox1.Font = new System.Drawing.Font("宋体", 9F);
+            this.GroupBox1.Location = new System.Drawing.Point(13, 35);
             this.GroupBox1.Name = "GroupBox1";
             this.GroupBox1.Size = new System.Drawing.Size(305, 379);
             this.GroupBox1.TabIndex = 6;
             this.GroupBox1.TabStop = false;
             this.GroupBox1.Text = "线路站点列表";
             // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Location = new System.Drawing.Point(106, 20);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(72, 16);
+            this.checkBox2.TabIndex = 2;
+            this.checkBox2.Text = "站点反序";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
+            // 
             // BtnDele
             // 
-            this.BtnDele.Location = new System.Drawing.Point(234, 180);
+            this.BtnDele.Location = new System.Drawing.Point(234, 243);
             this.BtnDele.Name = "BtnDele";
             this.BtnDele.Size = new System.Drawing.Size(61, 46);
             this.BtnDele.TabIndex = 1;
@@ -127,7 +135,7 @@
             // 
             // BtnDOWN
             // 
-            this.BtnDOWN.Location = new System.Drawing.Point(234, 109);
+            this.BtnDOWN.Location = new System.Drawing.Point(234, 164);
             this.BtnDOWN.Name = "BtnDOWN";
             this.BtnDOWN.Size = new System.Drawing.Size(61, 46);
             this.BtnDOWN.TabIndex = 1;
@@ -143,17 +151,6 @@
             this.Label1.Name = "Label1";
             this.Label1.Size = new System.Drawing.Size(0, 16);
             this.Label1.TabIndex = 7;
-            // 
-            // checkBox2
-            // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(106, 18);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(91, 20);
-            this.checkBox2.TabIndex = 2;
-            this.checkBox2.Text = "站点反序";
-            this.checkBox2.UseVisualStyleBackColor = true;
-            this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
             // 
             // frmRoadAndStation
             // 

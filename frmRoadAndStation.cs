@@ -9,6 +9,7 @@ using ESRI.ArcGIS.Geodatabase;
 using Businfo.Globe;
 using System.Data.OleDb;
 using ESRI.ArcGIS.Geometry;
+using ESRI.ArcGIS.Display;
 
 namespace Businfo
 {
@@ -93,6 +94,8 @@ namespace Businfo
                 ForBusInfo.Add_Log(ForBusInfo.Login_name, "线路关联站点", m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("RoadName")).ToString(), "");
                 mycon.Close();
                 this.Close();
+                EngineFuntions.m_AxMapControl.Map.ClearSelection();
+                EngineFuntions.m_AxMapControl.ActiveView.Refresh();
             }
             catch (System.Exception ex)
             {
@@ -193,6 +196,40 @@ namespace Businfo
             foreach (BusStation pItem in m_BusStationList)
             {
                 ListBox1.Items.Add(pItem);
+            }
+        }
+
+        private void ListBox1_Click(object sender, EventArgs e)
+        {
+            if (ListBox1.SelectedIndex >= 0)
+            {
+                BusStation pBusStation = (BusStation)ListBox1.SelectedItem;
+                IFeature pFeature = EngineFuntions.GetFeatureByFieldAndValue(EngineFuntions.m_Layer_BusStation, "OBJECTID", pBusStation.ID.ToString());
+                Application.DoEvents();
+                EngineFuntions.FlashShape(pFeature.ShapeCopy);
+            }
+        }
+
+        private void ListBox1_DoubleClick(object sender, EventArgs e)
+        {
+            if (ListBox1.SelectedIndex >= 0)
+            {
+                BusStation pBusStation = (BusStation)ListBox1.SelectedItem;
+                IFeature pFeature = EngineFuntions.GetFeatureByFieldAndValue(EngineFuntions.m_Layer_BusStation, "OBJECTID", pBusStation.ID.ToString());
+                IPoint pPoint;
+                IEnvelope pEnvelope;
+                IDisplayTransformation pDisplayTransformation;
+                pDisplayTransformation = EngineFuntions.m_AxMapControl.ActiveView.ScreenDisplay.DisplayTransformation;
+                pEnvelope = pFeature.Extent;
+                pPoint = pEnvelope.UpperLeft;
+                pEnvelope = pDisplayTransformation.VisibleBounds;
+                pEnvelope.CenterAt(pPoint);
+                pDisplayTransformation.VisibleBounds = pEnvelope;
+                EngineFuntions.m_AxMapControl.Map.MapScale = 2000;
+                pDisplayTransformation.VisibleBounds = EngineFuntions.m_AxMapControl.ActiveView.Extent;
+                EngineFuntions.m_AxMapControl.ActiveView.ScreenDisplay.Invalidate(null, true, (short)esriScreenCache.esriAllScreenCaches);
+                Application.DoEvents();
+                EngineFuntions.FlashShape(pFeature.ShapeCopy);
             }
         }
     }

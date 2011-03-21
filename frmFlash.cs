@@ -21,7 +21,7 @@ namespace Businfo
         [STAThread]
         static void Main()
         {
-            Application.Run(new frmMainNew());
+            Application.Run(new frmFlash());
         }
 
         private void timer1_Tick(object sender, EventArgs e)

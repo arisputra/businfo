@@ -24,20 +24,7 @@ namespace Businfo
             InitializeComponent();
         }
 
-        private void fillByStationNameToolStripButton_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                this.公交站点TableAdapter.FillByStationName(this.stationDataSet.公交站点, stationNameToolStripTextBox.Text);
-            }
-            catch (System.Exception ex)
-            {
-                System.Windows.Forms.MessageBox.Show(ex.Message);
-            }
-
-        }
-
-        private void Button1_Click(object sender, EventArgs e)
+         private void Button1_Click(object sender, EventArgs e)
         {
             checkBox1.Checked = false;
             if (String.IsNullOrEmpty(TextBox1.Text))
@@ -67,6 +54,8 @@ namespace Businfo
                 EngineFuntions.m_AxMapControl.Map.MapScale = 2000;
                 pDisplayTransformation.VisibleBounds = EngineFuntions.m_AxMapControl.ActiveView.Extent;
                 EngineFuntions.m_AxMapControl.ActiveView.ScreenDisplay.Invalidate(null, true, (short)esriScreenCache.esriAllScreenCaches);
+                Application.DoEvents();
+                EngineFuntions.FlashShape(m_pCurFeature.ShapeCopy);
             }
         }
 

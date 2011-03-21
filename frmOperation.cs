@@ -25,13 +25,13 @@ namespace Businfo
                 //String sConn = "provider=Microsoft.Jet.OLEDB.4.0;data source=" + ForBusInfo.GetProfileString("Businfo", "DataPos", Application.StartupPath + "\\Businfo.ini") + "\\data\\公交.mdb";
                 OleDbConnection mycon = new OleDbConnection(sConn);
                 mycon.Open();
-                OleDbDataAdapter da = ForBusInfo.CreateCustomerAdapter(mycon, "select * from sde.OPERATIONLOG", "", "");
+                OleDbDataAdapter da = ForBusInfo.CreateCustomerAdapter(mycon,"select * from sde.OPERATIONLOG ORDER BY OBJECTID DESC", "", "");
                 da.SelectCommand.ExecuteNonQuery();
                 DataSet ds = new DataSet();
                 int nQueryCount = da.Fill(ds);
                 foreach (DataRow eDataRow in ds.Tables[0].Rows)
                 {
-                    listBox1.Items.Add(string.Format("{0}与{1}进行了{2}操作：{3}", eDataRow[1], eDataRow[2], eDataRow[4], eDataRow[3]));
+                    listBox1.Items.Add(string.Format("{0}于{1}进行了{2}操作：{3}", eDataRow[1], eDataRow[2], eDataRow[4], eDataRow[3]));
                 }
                 maskedTextBox1.Text = DateTime.Now.AddMonths(-1).ToShortDateString();
                 maskedTextBox2.Text = DateTime.Now.ToShortDateString();
@@ -41,7 +41,6 @@ namespace Businfo
             {
                 MessageBox.Show(ex.ToString(), "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            
             //Sunisoft.IrisSkin.SkinEngine se = null;
             //se = new Sunisoft.IrisSkin.SkinEngine();
             //se.SkinFile = Application.StartupPath + @"\Data\Diamond\DiamondBlue.ssk";
@@ -53,14 +52,14 @@ namespace Businfo
             //String sConn = "provider=Microsoft.Jet.OLEDB.4.0;data source=" + ForBusInfo.GetProfileString("Businfo", "DataPos", Application.StartupPath + "\\Businfo.ini") + "\\data\\公交.mdb";
             OleDbConnection mycon = new OleDbConnection(sConn);
             mycon.Open();
-            OleDbDataAdapter da = ForBusInfo.CreateCustomerAdapter(mycon, string.Format("select * from  sde.OperationLog where (name = '{0}' and LogTime > '{1}' and LogTime < '{2}')", textBox1.Text, maskedTextBox1.Text + " 00:00:00", maskedTextBox2.Text + " 24:00:00"), "", "");
+            OleDbDataAdapter da = ForBusInfo.CreateCustomerAdapter(mycon, string.Format("select * from  sde.OperationLog where (name = '{0}' and LogTime > '{1}' and LogTime < '{2}') ORDER BY OBJECTID DESC", textBox1.Text, maskedTextBox1.Text + " 00:00:00", maskedTextBox2.Text + " 24:00:00"), "", "");
             da.SelectCommand.ExecuteNonQuery();
             DataSet ds = new DataSet();
             int nQueryCount = da.Fill(ds);
             listBox1.Items.Clear();
             foreach (DataRow eDataRow in ds.Tables[0].Rows)
             {
-                listBox1.Items.Add(string.Format("{0}与{1}进行了{2}操作：{3}", eDataRow[1], eDataRow[2], eDataRow[4], eDataRow[3]));
+                listBox1.Items.Add(string.Format("{0}于{1}进行了{2}操作：{3}", eDataRow[1], eDataRow[2], eDataRow[4], eDataRow[3]));
             }
             mycon.Close();
         }

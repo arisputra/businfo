@@ -35,6 +35,7 @@
             this.axCommandBars1 = new AxXtremeCommandBars.AxCommandBars();
             this.axDockingPane1 = new AxXtremeDockingPane.AxDockingPane();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.helpProvider2 = new System.Windows.Forms.HelpProvider();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.axLicenseControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axMapControl1)).BeginInit();
@@ -117,7 +118,9 @@
             this.ClientSize = new System.Drawing.Size(700, 503);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.pictureBox1);
+            this.helpProvider2.SetHelpNavigator(this, System.Windows.Forms.HelpNavigator.Topic);
             this.Name = "frmMainNew";
+            this.helpProvider2.SetShowHelp(this, true);
             this.Text = "公交业务管理信息系统";
             this.Load += new System.EventHandler(this.frmMainNew_Load);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmMainNew_FormClosed);
@@ -140,6 +143,7 @@
         internal System.Windows.Forms.Panel panel1;
         public  AxXtremeCommandBars.AxCommandBars axCommandBars1;
         internal ESRI.ArcGIS.Controls.AxMapControl axMapControl1;
+        private System.Windows.Forms.HelpProvider helpProvider2;
 
     }
 }

@@ -81,6 +81,8 @@ namespace Businfo
             //    this.Close();
             //}
             
+
+
             EngineFuntions.m_AxMapControl = axMapControl1;//传递Map控件
 
             axCommandBars1.LoadDesignerBars(null, null);
@@ -159,6 +161,9 @@ namespace Businfo
                     }
                 }
             }
+
+            // Set what the Help file will be for the HelpProvider.
+            this.helpProvider2.HelpNamespace = Winapp.StartupPath + @"\用户手册.doc";
         }
 
         private void axCommandBars1_Execute(object sender, AxXtremeCommandBars._DCommandBarsEvents_ExecuteEvent e)
@@ -166,6 +171,12 @@ namespace Businfo
             EngineFuntions.SetToolNull();
             switch (e.control.Id)
             {
+                case ForBusInfo.BusInfo_Help:
+                    System.Diagnostics.Process.Start(Winapp.StartupPath + @"\用户手册.doc");
+                    break;
+                case ForBusInfo.BusInfo_ParaSet:
+                    System.Diagnostics.Process.Start(Winapp.StartupPath + @"\Businfo.ini");
+                    break;
                 case ForBusInfo.Map3D_ZoomIn:
                     m_ToolStatus = ForBusInfo.Map3D_ZoomIn;
                     if(axMapControl1.Visible == true)
@@ -371,17 +382,21 @@ namespace Businfo
                     //m_ToolStatus = ForBusInfo.Road_Reversed;
                     if (m_ToolStatus == ForBusInfo.Road_End && m_CurFeature.Shape.GeometryType == esriGeometryType.esriGeometryPolyline)
                     {
+                        string strDirect;
+                        if (m_CurFeature.get_Value(m_CurFeature.Fields.FindField("RoadTravel")).ToString() == "去行")
+                            strDirect = "回行";
+                        else
+                            strDirect = "去行";
+                        IFeature pFeature = EngineFuntions.GetOneSeartchFeature(EngineFuntions.m_Layer_BusRoad, string.Format("Roadname = '{0}' AND RoadTravel = '{1}'", m_CurFeature.get_Value(m_CurFeature.Fields.FindField("Roadname")).ToString(), strDirect));
+                        if (pFeature != null)
+                        {
+                            MessageBox.Show("线路图层已经存在反向线路\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            return;
+                        }
                         IPolyline pPLine = m_CurFeature.ShapeCopy as IPolyline;
                         pPLine.ReverseOrientation();
                         m_CurFeature.Shape = pPLine;
-                        if (m_CurFeature.get_Value(m_CurFeature.Fields.FindField("RoadTravel")).ToString() == "去行")
-                        {
-                            m_CurFeature.set_Value(m_CurFeature.Fields.FindField("RoadTravel"), "回行");
-                        }
-                        else
-                        {
-                            m_CurFeature.set_Value(m_CurFeature.Fields.FindField("RoadTravel"), "去行");
-                        }
+                        m_CurFeature.set_Value(m_CurFeature.Fields.FindField("RoadTravel"), strDirect);
                         EngineFuntions.CopyFeature(EngineFuntions.m_Layer_BusRoad, m_CurFeature);
                         System.Threading.Thread.Sleep(1000);
                         m_frmRoadPane.RefreshGrid();
@@ -464,10 +479,11 @@ namespace Businfo
                                  if (MessageBox.Show(string.Format("确认删除站点：{0}!", strName), "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Information) == DialogResult.OK)
                                  {
                                      m_CurFeature.Delete();
-                                     EngineFuntions.PartialRefresh(EngineFuntions.m_Layer_BusStation);
+                                     EngineFuntions.m_AxMapControl.ActiveView.Refresh();
                                      System.Threading.Thread.Sleep(1000);
                                      m_frmStationPane.RefreshGrid();
                                      ForBusInfo.Add_Log(ForBusInfo.Login_name, "删除站点", strName, "");
+
                                  }
                              }
                          }
