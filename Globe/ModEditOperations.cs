@@ -58,7 +58,7 @@ namespace Businfo.Globe
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show("GetAllFeatureLayers函数存在以下问题\n" + ex.ToString(), "应用程序错误", MessageBoxButtons.OK);
+                MessageBox.Show("GetAllFeatureLayers函数存在以下问题\n" + ex.ToString(), "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
             } 
             return colLayers;
         }
@@ -79,7 +79,7 @@ namespace Businfo.Globe
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show("GetLayerByName函数存在以下问题\n" + ex.ToString(), "应用程序错误", MessageBoxButtons.OK);
+                MessageBox.Show("GetLayerByName函数存在以下问题\n" + ex.ToString(), "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             return pLayer;
         }
@@ -146,7 +146,7 @@ namespace Businfo.Globe
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show("GoBack函数存在以下问题\n" + ex.ToString(), "应用程序错误", MessageBoxButtons.OK);
+                MessageBox.Show("GoBack函数存在以下问题\n" + ex.ToString(), "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -163,7 +163,7 @@ namespace Businfo.Globe
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show("GoNext函数存在以下问题\n" + ex.ToString(), "应用程序错误", MessageBoxButtons.OK);
+                MessageBox.Show("GoNext函数存在以下问题\n" + ex.ToString(), "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
       
@@ -232,7 +232,7 @@ namespace Businfo.Globe
                 }
                 catch (System.Exception ex)
                 {
-                    MessageBox.Show("ClickSel函数存在以下问题\n" + ex.ToString(), "应用程序错误", MessageBoxButtons.OK);
+                    MessageBox.Show("ClickSel函数存在以下问题\n" + ex.ToString(), "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             return pBuffer;
         }
@@ -311,7 +311,7 @@ namespace Businfo.Globe
             }
             catch (System.Exception ex)
             {
-            	MessageBox.Show("ConvertPixelsToMapUnits函数存在以下问题\n" + ex.ToString() , "应用程序错误", MessageBoxButtons.OK);
+                MessageBox.Show("ConvertPixelsToMapUnits函数存在以下问题\n" + ex.ToString(), "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             return 0;
         }
@@ -555,7 +555,7 @@ namespace Businfo.Globe
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show("GetAllFeatureLayers函数存在以下问题\n" + ex.ToString(), "应用程序错误", MessageBoxButtons.OK);
+                MessageBox.Show("GetAllFeatureLayers函数存在以下问题\n" + ex.ToString(), "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -850,12 +850,37 @@ namespace Businfo.Globe
               pColor.Red = 0;
               pColor.Green = 0;
               pColor.Blue = 255;
-              ISimpleMarkerSymbol pSimpleMarkerSymbol;
-              pSimpleMarkerSymbol = new SimpleMarkerSymbolClass();
-              pSimpleMarkerSymbol.Color = pColor;
-              pSimpleMarkerSymbol.Style = esriSimpleMarkerStyle.esriSMSCircle;
-              pSimpleMarkerSymbol.Size = 10;
-              m_AxMapControl.FlashShape(pGeo, 3, 500, pSimpleMarkerSymbol as ISymbol);
+            switch (pGeo.GeometryType)
+            {
+                case esriGeometryType.esriGeometryPoint:
+                    ISimpleMarkerSymbol pSimpleMarkerSymbol;
+                    pSimpleMarkerSymbol = new SimpleMarkerSymbolClass();
+                    pSimpleMarkerSymbol.Color = pColor;
+                    pSimpleMarkerSymbol.Style = esriSimpleMarkerStyle.esriSMSCircle;
+                    pSimpleMarkerSymbol.Size = 10;
+                    m_AxMapControl.FlashShape(pGeo, 3, 500, pSimpleMarkerSymbol as ISymbol);
+            	break;
+                case esriGeometryType.esriGeometryPolyline:
+                    ISimpleLineSymbol iLineSymbol = new SimpleLineSymbolClass();
+                    ISymbol iSymbol;
+                    iLineSymbol.Width = 4;
+                    iLineSymbol.Color = pColor;
+                    iSymbol = (ISymbol)iLineSymbol;
+                    iSymbol.ROP2 = esriRasterOpCode.esriROPNotXOrPen;
+                    m_AxMapControl.FlashShape(pGeo, 3, 500, iSymbol);
+                break;
+                case esriGeometryType.esriGeometryPolygon:
+                    ISimpleFillSymbol iFillSymbol;
+                    iFillSymbol = new SimpleFillSymbol();
+                    iFillSymbol.Style = esriSimpleFillStyle.esriSFSSolid;
+                    iFillSymbol.Outline.Width = 12;
+                    iFillSymbol.Color = pColor;
+                    iSymbol = (ISymbol)iFillSymbol;
+                    iSymbol.ROP2 = esriRasterOpCode.esriROPNotXOrPen;
+                    //iScreenDisplay.SetSymbol(iSymbol);
+                    m_AxMapControl.FlashShape(pGeo, 3, 500, iSymbol);
+                break;
+            }
           }
         
         //public static List<IFeature> SortByDist(IFeature pFeature, List<IFeature> pFeatureCol)
