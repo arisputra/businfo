@@ -27,19 +27,6 @@ namespace Businfo
             InitializeComponent();
         }
 
-        private void fillByRoadNameToolStripButton_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                this.公交站线TableAdapter.FillByRoadName(this.roadDataSet.公交站线, "%" + roadNameToolStripTextBox.Text + "%");
-            }
-            catch (System.Exception ex)
-            {
-                System.Windows.Forms.MessageBox.Show(ex.Message);
-            }
-
-        }
-
         private void Button1_Click(object sender, EventArgs e)
         {
             checkBox1.Checked = false;
@@ -128,6 +115,8 @@ namespace Businfo
                 pEnvelope.Expand(2, 2, true);
                 EngineFuntions.m_AxMapControl.ActiveView.Extent = pEnvelope;
                 EngineFuntions.m_AxMapControl.ActiveView.ScreenDisplay.Invalidate(null, true, (short)esriScreenCache.esriAllScreenCaches);
+                System.Windows.Forms.Application.DoEvents();
+                EngineFuntions.FlashShape(m_pCurFeature.ShapeCopy);
             }
         }
 
@@ -140,7 +129,7 @@ namespace Businfo
             {
                 if (DataGridView1.Rows[i].Cells[0].Value != null && (bool)DataGridView1.Rows[i].Cells[0].Value == true)
                 {
-                    if (MessageBox.Show(string.Format("确认删除线路：{0}!", DataGridView1.Rows[i].Cells[4].Value.ToString()), "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Information) == DialogResult.OK)
+                    if (MessageBox.Show(string.Format("确认删除线路：{0}!", DataGridView1.Rows[i].Cells[3].Value.ToString()), "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Information) == DialogResult.OK)
                     {
                         String sConn = "Provider=sqloledb;Data Source = 172.16.34.120;Initial Catalog=sde;User Id = sa;Password = sa";
                         //String sConn = "provider=Microsoft.Jet.OLEDB.4.0;data source=" + ForBusInfo.GetProfileString("Businfo", "DataPos", Winapp.StartupPath + "\\Businfo.ini") + "\\data\\公交.mdb";
@@ -160,7 +149,7 @@ namespace Businfo
             }
             if (!bCheck & m_pCurFeature != null)
             {
-                if (MessageBox.Show(string.Format("确认删除线路：{0}!", DataGridView1.Rows[m_nCurRowIndex].Cells[4].Value.ToString()), "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Information) == DialogResult.OK)
+                if (MessageBox.Show(string.Format("确认删除线路：{0}!", DataGridView1.Rows[m_nCurRowIndex].Cells[3].Value.ToString()), "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Information) == DialogResult.OK)
                 {
                     String sConn = "Provider=sqloledb;Data Source = 172.16.34.120;Initial Catalog=sde;User Id = sa;Password = sa";
                     //String sConn = "provider=Microsoft.Jet.OLEDB.4.0;data source=" + ForBusInfo.GetProfileString("Businfo", "DataPos", Winapp.StartupPath + "\\Businfo.ini") + "\\data\\公交.mdb";
@@ -175,7 +164,7 @@ namespace Businfo
                     mycon.Close();
                 }
             }
-            EngineFuntions.PartialRefresh(EngineFuntions.m_Layer_BusRoad);
+            EngineFuntions.m_AxMapControl.ActiveView.Refresh();
         }
 
         private void 属性编辑ToolStripMenuItem_Click(object sender, EventArgs e)

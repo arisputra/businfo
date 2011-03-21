@@ -40,19 +40,6 @@ namespace Businfo
             
         }
 
-        private void fillByOBJECTIDToolStripButton_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                this.公交站点TableAdapter.FillByOBJECTID(this.stationDataSet.公交站点, ((int)(System.Convert.ChangeType(oBJECTIDToolStripTextBox.Text, typeof(int)))));
-            }
-            catch (System.Exception ex)
-            {
-                System.Windows.Forms.MessageBox.Show(ex.Message);
-            }
-
-        }
-
         private void DataGridView1_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             if ( e.ColumnIndex == -1 && e.RowIndex > -1)
@@ -135,12 +122,7 @@ namespace Businfo
             }
         }
 
-        private void DataGridView1_Sorted(object sender, EventArgs e)
-        {
-           
-        }
-
-        public void RefreshSelectGrid()
+         public void RefreshSelectGrid()
         {
             String strInPara = "";
             if (m_featureCollection.Count > 0)
@@ -154,21 +136,7 @@ namespace Businfo
             }
         }
 
-        private void fillByINOBJECTIDToolStripButton_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                this.公交站点TableAdapter.FillByINOBJECTID(this.stationDataSet.公交站点, ((string)(System.Convert.ChangeType(param1ToolStripTextBox.Text, typeof(int)))));
-            }
-            catch (System.Exception ex)
-            {
-                System.Windows.Forms.MessageBox.Show(ex.Message);
-            }
-
-        }
-
-        
-        public void RefreshStationGrid(string strInPara)
+         public void RefreshStationGrid(string strInPara)
         {
             ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Station_FillByOBJECTID, string.Format(" WHERE (OBJECTID IN ({0}))", strInPara.Substring(0, strInPara.Length - 1)));
             //this.公交站点TableAdapter.FillByINOBJECTID(this.stationDataSet.公交站点, strInPara);
@@ -219,6 +187,8 @@ namespace Businfo
                 EngineFuntions.m_AxMapControl.Map.MapScale = 2000;
                 pDisplayTransformation.VisibleBounds = EngineFuntions.m_AxMapControl.ActiveView.Extent;
                 EngineFuntions.m_AxMapControl.ActiveView.ScreenDisplay.Invalidate(null, true, (short)esriScreenCache.esriAllScreenCaches);
+                Application.DoEvents();
+                EngineFuntions.FlashShape(m_pCurFeature.ShapeCopy);
             }
         }
 
@@ -243,6 +213,31 @@ namespace Businfo
 
         private void button2_Click(object sender, EventArgs e)
         {
+            if (m_bEdit)
+            {
+                foreach (DataGridViewCell eCell in DataGridView1.Rows[m_nCurRowIndex].Cells)
+                {
+                    eCell.ReadOnly = true;
+                }
+                DataGridView1.EndEdit();
+                m_nObjectId = (int)DataGridView1.Rows[m_nCurRowIndex].Cells[1].Value;
+                m_pCurFeature = EngineFuntions.GetFeatureByFieldAndValue(EngineFuntions.m_Layer_BusStation, "OBJECTID", m_nObjectId.ToString());
+                if (m_pCurFeature != null)
+                {
+                    for (int i = 3; i < m_pCurFeature.Fields.FieldCount; i++)
+                    {
+                        m_pCurFeature.set_Value(i - 1, DataGridView1.Rows[m_nCurRowIndex].Cells[i].Value);
+                    }
+                    m_pCurFeature.Store();
+                }
+                string strName = m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("StationName")).ToString();
+                ForBusInfo.Add_Log(ForBusInfo.Login_name, "修改站点属性", strName, "");
+                m_bEdit = false;
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
             if (String.IsNullOrEmpty(TextBox1.Text))
             {
                 //this.公交站点TableAdapter.Fill(this.stationDataSet.公交站点);
@@ -259,11 +254,6 @@ namespace Businfo
                 eColumn.ReadOnly = true;
             }
             DataGridView1.Columns[0].ReadOnly = false;
-        }
-
-        private void DataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
         }
     }
 }

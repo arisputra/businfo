@@ -34,19 +34,6 @@ namespace Businfo
             m_bEdit = false;
         }
 
-        private void fillByINOBJECTIDToolStripButton_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                this.公交站线TableAdapter.FillByINOBJECTID(this.roadDataSet.公交站线, ((string)(System.Convert.ChangeType(param1ToolStripTextBox.Text, typeof(int)))));
-            }
-            catch (System.Exception ex)
-            {
-                System.Windows.Forms.MessageBox.Show(ex.Message);
-            }
-
-        }
-
         private void Button1_Click(object sender, EventArgs e)
         {
             ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Road_FillAll, "");
@@ -149,9 +136,28 @@ namespace Businfo
             }
         }
 
-        private void DataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void button2_Click(object sender, EventArgs e)
         {
-
+            if (m_bEdit)
+            {
+                foreach (DataGridViewCell eCell in DataGridView1.Rows[m_nCurRowIndex].Cells)
+                {
+                    eCell.ReadOnly = true;
+                }
+                DataGridView1.EndEdit();
+                m_nObjectId = (int)DataGridView1.Rows[m_nCurRowIndex].Cells[1].Value;
+                m_pCurFeature = EngineFuntions.GetFeatureByFieldAndValue(EngineFuntions.m_Layer_BusRoad, "OBJECTID", m_nObjectId.ToString());
+                if (m_pCurFeature != null)
+                {
+                    for (int i = 3; i < m_pCurFeature.Fields.FieldCount - 1; i++)
+                    {
+                        m_pCurFeature.set_Value(i - 1, DataGridView1.Rows[m_nCurRowIndex].Cells[i].Value);
+                    }
+                    m_pCurFeature.Store();
+                    ForBusInfo.Add_Log(ForBusInfo.Login_name, "编辑站线属性", DataGridView1.Rows[m_nCurRowIndex].Cells[4].Value.ToString(), "");
+                }
+                m_bEdit = false;
+            }
         }
 
     }
