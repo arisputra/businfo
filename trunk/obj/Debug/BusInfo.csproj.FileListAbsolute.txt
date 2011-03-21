@@ -28,3 +28,4 @@ E:\Code For Working\BusInfo\obj\Debug\Businfo.exe
 E:\Code For Working\BusInfo\obj\Debug\Businfo.pdb
 E:\Code For Working\BusInfo\obj\Debug\Businfo.frmRoadRecover.resources
 E:\Code For Working\BusInfo\obj\Debug\Businfo.frmOperation.resources
+E:\Code For Working\BusInfo\obj\Debug\Businfo.frmEditRoadAndStation.resources

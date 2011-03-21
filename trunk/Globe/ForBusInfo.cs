@@ -44,6 +44,9 @@ namespace Businfo.Globe
         public const int Road_End = 1063; //完成线路添加
         public const int Road_Reversed = 1064; //线路反向
         public const int Map3D_Select = 1065; //拉框选择
+        public const int BusInfo_Help = 1066;//帮助
+        public const int Bus_Select = 1067;//多变形选择
+        public const int BusInfo_ParaSet = 1068;//参数设置
 
         public const int Map3D_ZoomIn = 10211; //放大
         public const int Map3D_ZoomOut = 10212; //缩小
