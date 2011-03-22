@@ -7,6 +7,8 @@ using System.Text;
 using System.Windows.Forms;
 using System.Data.OleDb;
 using Businfo.Globe;
+using ESRI.ArcGIS.Geodatabase;
+using ESRI.ArcGIS.Carto;
 
 namespace Businfo
 {
@@ -62,6 +64,28 @@ namespace Businfo
                 listBox1.Items.Add(string.Format("{0}于{1}进行了{2}操作：{3}", eDataRow[1], eDataRow[2], eDataRow[4], eDataRow[3]));
             }
             mycon.Close();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            List<IFeature> pFeatureList = new List<IFeature>();
+            List<IFeature> pCurFeatureList = EngineFuntions.GetSeartchFeatures(EngineFuntions.m_Layer_BusStation,"OBJECTID > -1");
+            foreach (IFeature pfeature in pCurFeatureList)
+            {
+                IFeatureLayer CurFeatureLayer = EngineFuntions.SetCanSelLay("道路中心线");
+                EngineFuntions.ClickSel(pfeature.ShapeCopy, false, true, 26);
+
+                if (EngineFuntions.GetSeledFeatures(CurFeatureLayer, ref  pFeatureList))
+                {
+                    foreach (IFeature pfea in pFeatureList)
+                    {
+                        int nIndex = pfeature.Fields.FindField("StationCharacter");
+                        pfeature.set_Value(nIndex, pfea.get_Value(pfea.Fields.FindField("道路名称")) as string);
+                    }
+                }
+                pfeature.Store();
+            }
+            MessageBox.Show("xxxxxx\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }
