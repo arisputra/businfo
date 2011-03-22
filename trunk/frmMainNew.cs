@@ -93,7 +93,7 @@ namespace Businfo
             axCommandBars1.SetSpecialColor((XtremeCommandBars.XTPColorManagerColor)15, pColor);
 
             m_pMapDocument = new MapDocumentClass();
-            m_pMapDocument.Open(ForBusInfo.GetProfileString("Businfo", "DataPos", Winapp.StartupPath + "\\Businfo.ini") + "\\data\\JianCe.mxd", string.Empty);
+            m_pMapDocument.Open(ForBusInfo.GetProfileString("Businfo", "DataPos", Winapp.StartupPath + "\\Businfo.ini") + "\\data\\DataSDE.mxd", string.Empty);
             axMapControl1.Map = m_pMapDocument.get_Map(0);
             axMapControl1.Map.Name = "≤È—Ø";
             axMapControl1.Extent = axMapControl1.FullExtent;
@@ -135,7 +135,7 @@ namespace Businfo
 
             //'”•—€Õº£∫
             String sHawkEyeFileName;
-            sHawkEyeFileName = ForBusInfo.GetProfileString("Businfo", "DataPos", Winapp.StartupPath + "\\Businfo.ini") + "\\data\\JianCe.mxd";
+            sHawkEyeFileName = ForBusInfo.GetProfileString("Businfo", "DataPos", Winapp.StartupPath + "\\Businfo.ini") + "\\data\\DataSDE.mxd";
             m_frmlayerToc.MapHawkEye.LoadMxFile(sHawkEyeFileName);
             m_frmlayerToc.MapHawkEye.Extent = m_frmlayerToc.MapHawkEye.FullExtent;
             //m_frmlayerToc.m_MapControl = axMapControl1.Object;
