@@ -255,5 +255,13 @@ namespace Businfo
             }
             DataGridView1.Columns[0].ReadOnly = false;
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            for (int i = 1; i < DataGridView1.Columns.Count;i++ )
+            {
+                DataGridView1.Columns[i].Visible = true;
+            }
+        }
     }
 }

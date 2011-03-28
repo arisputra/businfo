@@ -190,25 +190,34 @@ namespace Businfo.Globe
                            {
                                eCol.ReadOnly = true;
                                eCol.Resizable = DataGridViewTriState.False;
+                               eCol.Visible = false;
                            }
                            grid.Columns[0].ReadOnly = false;
                            grid.Columns[0].HeaderText = "";
-                           grid.Columns[1].Visible = false;
-                           grid.Columns[2].Visible = false;
+                           //grid.Columns[1].Visible = false;
+                           //grid.Columns[2].Visible = false;
 
                            grid.Columns[3].HeaderText = "站点名称";
+                           grid.Columns[3].Visible = true;
                            grid.Columns[4].HeaderText = "行向";
+                           grid.Columns[4].Visible = true;
                            grid.Columns[5].HeaderText = "副站名";
+                           grid.Columns[5].Visible = true;
                            grid.Columns[5].Frozen = true;
                            grid.Columns[6].HeaderText = "主要标识物";
                            grid.Columns[7].HeaderText = "站点所在道路";
+                           grid.Columns[7].Visible = true;
                            grid.Columns[8].HeaderText = "GPS经度";
+                           grid.Columns[8].Visible = true;
                            grid.Columns[9].HeaderText = "GPS纬度";
+                           grid.Columns[9].Visible = true;
                            grid.Columns[10].HeaderText = "GPS高度";
+                           grid.Columns[10].Visible = true;
                            grid.Columns[11].HeaderText = "站杆材质";
                            grid.Columns[12].HeaderText = "站杆式样";
                            grid.Columns[13].HeaderText = "站牌材质";
                            grid.Columns[14].HeaderText = "站牌规格";
+                           grid.Columns[14].Visible = true;
                            grid.Columns[15].HeaderText = "有无板凳";
                            grid.Columns[16].HeaderText = "站点类型";
                            grid.Columns[17].HeaderText = "候车亭样式";
@@ -262,25 +271,34 @@ namespace Businfo.Globe
                         {
                             eCol.ReadOnly = true;
                             eCol.Resizable = DataGridViewTriState.False;
+                            eCol.Visible = false;
                         }
                         grid.Columns[0].ReadOnly = false;
                         grid.Columns[0].HeaderText = "";
-                        grid.Columns[1].Visible = false;
-                        grid.Columns[2].Visible = false;
+                        //grid.Columns[1].Visible = false;
+                        //grid.Columns[2].Visible = false;
 
                         grid.Columns[3].HeaderText = "站点名称";
+                        grid.Columns[3].Visible = true;
                         grid.Columns[4].HeaderText = "行向";
+                        grid.Columns[4].Visible = true;
                         grid.Columns[5].HeaderText = "副站名";
+                        grid.Columns[5].Visible = true;
                         grid.Columns[5].Frozen = true;
                         grid.Columns[6].HeaderText = "主要标识物";
                         grid.Columns[7].HeaderText = "站点所在道路";
+                        grid.Columns[7].Visible = true;
                         grid.Columns[8].HeaderText = "GPS经度";
+                        grid.Columns[8].Visible = true;
                         grid.Columns[9].HeaderText = "GPS纬度";
+                        grid.Columns[9].Visible = true;
                         grid.Columns[10].HeaderText = "GPS高度";
+                        grid.Columns[10].Visible = true;
                         grid.Columns[11].HeaderText = "站杆材质";
                         grid.Columns[12].HeaderText = "站杆式样";
                         grid.Columns[13].HeaderText = "站牌材质";
                         grid.Columns[14].HeaderText = "站牌规格";
+                        grid.Columns[14].Visible = true;
                         grid.Columns[15].HeaderText = "有无板凳";
                         grid.Columns[16].HeaderText = "站点类型";
                         grid.Columns[17].HeaderText = "候车亭样式";

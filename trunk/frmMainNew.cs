@@ -80,8 +80,6 @@ namespace Businfo
             //{
             //    this.Close();
             //}
-            
-
 
             EngineFuntions.m_AxMapControl = axMapControl1;//´«µÝMap¿Ø¼þ
 
