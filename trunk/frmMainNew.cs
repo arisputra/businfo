@@ -34,6 +34,7 @@ namespace Businfo
         public frmlayerToc m_frmlayerToc = new frmlayerToc();
         public frmStationPane m_frmStationPane = new frmStationPane();
         public frmRoadPane m_frmRoadPane = new frmRoadPane();
+        public frmFacilitiesPane m_frmFacilityPane = new frmFacilitiesPane();
         public int m_ToolStatus;
         public GISPoint m_mapPoint;//鼠标点击查询处得坐标
         public GISPoint m_FormPoint;//添加线路的顺序节点
@@ -116,20 +117,50 @@ namespace Businfo
             axDockingPane1.TabPaintManager.Appearance = XtremeDockingPane.XTPTabAppearanceStyle.xtpTabAppearanceVisualStudio;
 
             XtremeDockingPane.Pane ThePane = axDockingPane1.CreatePane(ForBusInfo.Pan_Layer, 200, 200, DockingDirection.DockLeftOf, null);
-            ThePane.Title = "图层配置";
+            ThePane.Title = "图 层";
             axDockingPane1.FindPane(ForBusInfo.Pan_Layer).Handle = m_frmlayerToc.Handle.ToInt32();
 
             ThePane = axDockingPane1.CreatePane(ForBusInfo.Pan_Station, 200, 200, DockingDirection.DockLeftOf, null);
-            ThePane.Title = "公交站点";
+            ThePane.Title = "站 点";
             axDockingPane1.FindPane(ForBusInfo.Pan_Station).Handle = m_frmStationPane.Handle.ToInt32();
 
             ThePane = axDockingPane1.CreatePane(ForBusInfo.Pan_Road, 200, 200, DockingDirection.DockLeftOf, null);
-            ThePane.Title = "公交线路";
+            ThePane.Title = "线 路";
             axDockingPane1.FindPane(ForBusInfo.Pan_Road).Handle = m_frmRoadPane.Handle.ToInt32();
+
+            ThePane = axDockingPane1.CreatePane(ForBusInfo.Pan_Facility, 200, 200, DockingDirection.DockLeftOf, null);
+            ThePane.Title = "设 备";
+            axDockingPane1.FindPane(ForBusInfo.Pan_Facility).Handle = m_frmFacilityPane.Handle.ToInt32();
+
 
             axDockingPane1.AttachPane(axDockingPane1.FindPane(ForBusInfo.Pan_Road), axDockingPane1.FindPane(ForBusInfo.Pan_Station));
             axDockingPane1.AttachPane(axDockingPane1.FindPane(ForBusInfo.Pan_Layer), axDockingPane1.FindPane(ForBusInfo.Pan_Station));
+            axDockingPane1.AttachPane(axDockingPane1.FindPane(ForBusInfo.Pan_Facility), axDockingPane1.FindPane(ForBusInfo.Pan_Station));
             axDockingPane1.FindPane(ForBusInfo.Pan_Layer).Select();
+            axDockingPane1.FindPane(ForBusInfo.Pan_Road).Options = PaneOptions.PaneNoCloseable;
+            axDockingPane1.FindPane(ForBusInfo.Pan_Layer).Options = PaneOptions.PaneNoCloseable;
+            axDockingPane1.FindPane(ForBusInfo.Pan_Facility).Options = PaneOptions.PaneNoCloseable;
+            axDockingPane1.FindPane(ForBusInfo.Pan_Station).Options = PaneOptions.PaneNoCloseable;
+            switch (ForBusInfo.Login_name)
+            {
+            case "站点管理":
+                    axDockingPane1.FindPane(ForBusInfo.Pan_Road).Closed = true;
+                    axDockingPane1.FindPane(ForBusInfo.Pan_Facility).Closed = true;
+            	break;
+            case "线路管理":
+                axDockingPane1.FindPane(ForBusInfo.Pan_Station).Closed = true;
+                axDockingPane1.FindPane(ForBusInfo.Pan_Facility).Closed = true;
+                break;
+            case "设备管理":
+                axDockingPane1.FindPane(ForBusInfo.Pan_Road).Closed = true;
+                axDockingPane1.FindPane(ForBusInfo.Pan_Station).Closed = true;
+                break;
+            case "浏览":
+                axDockingPane1.FindPane(ForBusInfo.Pan_Road).Closed = true;
+                axDockingPane1.FindPane(ForBusInfo.Pan_Facility).Closed = true;
+                axDockingPane1.FindPane(ForBusInfo.Pan_Station).Closed = true;
+                break;
+            }
 
             //'鹰眼图：
             String sHawkEyeFileName;

@@ -33,7 +33,7 @@ namespace Businfo
             } 
             else
             {
-                ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Station_FillByStationName,string.Format(" WHERE (StationName LIKE '%{0}%')",TextBox1.Text));
+                ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Station_FillByStationName, string.Format(" WHERE (StationName LIKE '%{0}%')", TextBox1.Text), new string[] { "" });
                 //this.公交站点TableAdapter.FillByStationName(this.stationDataSet.公交站点, "%" + TextBox1.Text + "%");
             }
         }
@@ -153,7 +153,7 @@ namespace Businfo
 
         public void RefreshGrid()
         {
-            ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Station_FillPan, "");
+            ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Station_FillPan, "", new string[] { "" });
             //this.公交站点TableAdapter.Fill(this.stationDataSet.公交站点);
         }
 
@@ -166,7 +166,7 @@ namespace Businfo
                 {
                     eRow.Cells[0].Value = true;
                 }
-            } 
+            }
             else
             {
                 foreach (DataGridViewRow eRow in DataGridView1.Rows)

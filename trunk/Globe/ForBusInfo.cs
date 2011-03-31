@@ -17,7 +17,8 @@ namespace Businfo.Globe
         #region "常量定义"
         public const int Pan_Layer = 1; //图层可停靠面板
         public const int Pan_Station = 10; //站点可停靠面板
-        public const int Pan_Road = 11; //站线可停靠面板
+        public const int Pan_Road = 11; //线路可停靠面板
+        public const int Pan_Facility = 12; //站点设施可停靠面板
 
 
         public const int Bus_Add = 1041; //站点添加
@@ -126,7 +127,7 @@ namespace Businfo.Globe
             return adapter;
         }
 
-        public static void StationFill(DataGridView grid, GridSetType emunType,string strQuery)
+        public static void StationFill(DataGridView grid, GridSetType emunType, string strQuery, string[] strShow)
         {
             String sConn = "Provider=sqloledb;Data Source = 172.16.34.120;Initial Catalog = sde;User Id = sa;Password = sa";
             OleDbConnection mycon = new OleDbConnection(sConn);
@@ -197,27 +198,44 @@ namespace Businfo.Globe
                            //grid.Columns[1].Visible = false;
                            //grid.Columns[2].Visible = false;
 
+                           if (strShow[0] == "")
+                           {
+                               grid.Columns[3].Visible = true;
+                               grid.Columns[4].Visible = true;
+                               grid.Columns[5].Visible = true;
+                               grid.Columns[7].Visible = true;
+                               grid.Columns[8].Visible = true;
+                               grid.Columns[9].Visible = true;
+                               grid.Columns[10].Visible = true;
+                               grid.Columns[13].Visible = true;
+                               grid.Columns[14].Visible = true;
+                           }
+                           else
+                           {
+                               grid.Columns[3].Visible = true;
+                               grid.Columns[4].Visible = true;
+                               grid.Columns[5].Visible = true;
+                               grid.Columns[6].Visible = true;
+                               grid.Columns[11].Visible = true;
+                               grid.Columns[12].Visible = true;
+                               for (int i = 14; i < 53;i++ )
+                               {
+                                   grid.Columns[i].Visible = true;
+                               }
+                           }
                            grid.Columns[3].HeaderText = "站点名称";
-                           grid.Columns[3].Visible = true;
                            grid.Columns[4].HeaderText = "行向";
-                           grid.Columns[4].Visible = true;
                            grid.Columns[5].HeaderText = "副站名";
-                           grid.Columns[5].Visible = true;
                            grid.Columns[5].Frozen = true;
                            grid.Columns[6].HeaderText = "主要标识物";
                            grid.Columns[7].HeaderText = "站点所在道路";
-                           grid.Columns[7].Visible = true;
                            grid.Columns[8].HeaderText = "GPS经度";
-                           grid.Columns[8].Visible = true;
                            grid.Columns[9].HeaderText = "GPS纬度";
-                           grid.Columns[9].Visible = true;
                            grid.Columns[10].HeaderText = "GPS高度";
-                           grid.Columns[10].Visible = true;
                            grid.Columns[11].HeaderText = "站杆材质";
                            grid.Columns[12].HeaderText = "站杆式样";
-                           grid.Columns[13].HeaderText = "站牌材质";
+                           grid.Columns[13].HeaderText = "邻近标识物";
                            grid.Columns[14].HeaderText = "站牌规格";
-                           grid.Columns[14].Visible = true;
                            grid.Columns[15].HeaderText = "有无板凳";
                            grid.Columns[16].HeaderText = "站点类型";
                            grid.Columns[17].HeaderText = "候车亭样式";
@@ -278,27 +296,44 @@ namespace Businfo.Globe
                         //grid.Columns[1].Visible = false;
                         //grid.Columns[2].Visible = false;
 
+                        if (strShow[0] == "")
+                        {
+                            grid.Columns[3].Visible = true;
+                            grid.Columns[4].Visible = true;
+                            grid.Columns[5].Visible = true;
+                            grid.Columns[7].Visible = true;
+                            grid.Columns[8].Visible = true;
+                            grid.Columns[9].Visible = true;
+                            grid.Columns[10].Visible = true;
+                            grid.Columns[13].Visible = true;
+                            grid.Columns[14].Visible = true;
+                        }
+                        else
+                        {
+                            grid.Columns[3].Visible = true;
+                            grid.Columns[4].Visible = true;
+                            grid.Columns[5].Visible = true;
+                            grid.Columns[6].Visible = true;
+                            grid.Columns[11].Visible = true;
+                            grid.Columns[12].Visible = true;
+                            for (int i = 14; i < 53; i++)
+                            {
+                                grid.Columns[i].Visible = true;
+                            }
+                        }
                         grid.Columns[3].HeaderText = "站点名称";
-                        grid.Columns[3].Visible = true;
                         grid.Columns[4].HeaderText = "行向";
-                        grid.Columns[4].Visible = true;
                         grid.Columns[5].HeaderText = "副站名";
-                        grid.Columns[5].Visible = true;
                         grid.Columns[5].Frozen = true;
                         grid.Columns[6].HeaderText = "主要标识物";
                         grid.Columns[7].HeaderText = "站点所在道路";
-                        grid.Columns[7].Visible = true;
                         grid.Columns[8].HeaderText = "GPS经度";
-                        grid.Columns[8].Visible = true;
                         grid.Columns[9].HeaderText = "GPS纬度";
-                        grid.Columns[9].Visible = true;
                         grid.Columns[10].HeaderText = "GPS高度";
-                        grid.Columns[10].Visible = true;
                         grid.Columns[11].HeaderText = "站杆材质";
                         grid.Columns[12].HeaderText = "站杆式样";
-                        grid.Columns[13].HeaderText = "站牌材质";
+                        grid.Columns[13].HeaderText = "邻近标识物";
                         grid.Columns[14].HeaderText = "站牌规格";
-                        grid.Columns[14].Visible = true;
                         grid.Columns[15].HeaderText = "有无板凳";
                         grid.Columns[16].HeaderText = "站点类型";
                         grid.Columns[17].HeaderText = "候车亭样式";
@@ -594,6 +629,7 @@ namespace Businfo.Globe
             //必须设定0（系统默认的代码页）的编码方式，否则无法支持中文
             string s = Encoding.GetEncoding(0).GetString(Buffer);
             s = s.Substring(0, bufLen);
+
             return s.Trim();
         }
     }

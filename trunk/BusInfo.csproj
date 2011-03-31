@@ -137,7 +137,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\Program Files\ArcGIS\DotNet\ESRI.ArcGIS.Utility.dll</HintPath>
     </Reference>
-    <Reference Include="IrisSkin, Version=2006.3.22.45, Culture=neutral" />
     <Reference Include="Microsoft.Office.Interop.Excel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" />
     <Reference Include="Office, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" />
     <Reference Include="System">
@@ -262,6 +261,12 @@
     <Compile Include="frmEditRoadAndStation.Designer.cs">
       <DependentUpon>frmEditRoadAndStation.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmFacilitiesPane.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="frmFacilitiesPane.Designer.cs">
+      <DependentUpon>frmFacilitiesPane.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmFlash.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -367,6 +372,9 @@
     <None Include="app.config" />
     <EmbeddedResource Include="frmEditRoadAndStation.resx">
       <DependentUpon>frmEditRoadAndStation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmFacilitiesPane.resx">
+      <DependentUpon>frmFacilitiesPane.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

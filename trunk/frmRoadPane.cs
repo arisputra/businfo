@@ -37,7 +37,7 @@ namespace Businfo
             }
             else
             {
-                ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Road_FillByStationName, string.Format(" WHERE (RoadName LIKE '%{0}%')", TextBox1.Text));
+                ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Road_FillByStationName, string.Format(" WHERE (RoadName LIKE '%{0}%')", TextBox1.Text), new string[] { "" });
                 //this.公交站线TableAdapter.FillByRoadName(this.roadDataSet.公交站线, "%" + TextBox1.Text + "%");
             }
         }
@@ -57,14 +57,14 @@ namespace Businfo
                 {
                     strInPara = String.Format("{0}{1},", strInPara, pFeature.get_Value(pFeature.Fields.FindField("OBJECTID")).ToString());
                 }
-                ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Road_FillByOBJECTID, string.Format(" WHERE (OBJECTID IN ({0}))", strInPara.Substring(0, strInPara.Length - 1)));
+                ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Road_FillByOBJECTID, string.Format(" WHERE (OBJECTID IN ({0}))", strInPara.Substring(0, strInPara.Length - 1)), new string[] { "" });
                 //this.公交站线TableAdapter.FillByINOBJECTID(this.roadDataSet.公交站线, strInPara);
             }
         }
 
         public void RefreshGrid()
         {
-            ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Road_FillPan, "");
+            ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Road_FillPan, "", new string[] { "" });
             //this.公交站线TableAdapter.Fill(this.roadDataSet.公交站线);
         }
 
@@ -422,6 +422,8 @@ namespace Businfo
                             {
                                 worksheet.PageSetup.PrintArea = string.Format("$A$1:$G${0}", j * 2 + 7);
                             }
+                            workbook.SaveAs("D:\\制作单\\" + pCurFeatureList[0].get_Value(pCurFeatureList[0].Fields.FindField("RoadName")), Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookNormal, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlNoChange, Type.Missing, Type.Missing, Type.Missing, Type.Missing, null);
+
                         }
                         mycon.Close();
                     }
@@ -529,6 +531,7 @@ namespace Businfo
                                     }
 
                                 }
+
                             }
                             if (i > j)
                             {
@@ -538,6 +541,7 @@ namespace Businfo
                             {
                                 worksheet.PageSetup.PrintArea = string.Format("$A$1:$G${0}", j * 2 + 7);
                             }
+                            workbook.SaveAs("D:\\制作单\\" + pCurFeatureList[0].get_Value(pCurFeatureList[0].Fields.FindField("RoadName")), Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookNormal, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlNoChange, Type.Missing, Type.Missing, Type.Missing, Type.Missing, null);
                         }
 
                         mycon.Close();
