@@ -774,9 +774,6 @@ namespace Businfo.Globe
             }
         }
 
-       
-
-
         /// <summary>¿½±´ÔªËØ
         /// 
         /// </summary>
@@ -798,7 +795,6 @@ namespace Businfo.Globe
             pFeature.Store();
             return pFeature;
         }
-
 
         public static void ZoomPoint(IPoint pPoint, double nMapScale)
         {
@@ -882,20 +878,6 @@ namespace Businfo.Globe
                 break;
             }
           }
-        
-        //public static List<IFeature> SortByDist(IFeature pFeature, List<IFeature> pFeatureCol)
-        //{
-        //    IPolyline pPolyline = (IPolyline)pFeature.Shape;
-        //    IPoint pFormPoint = pPolyline.FromPoint;
-        //    List<Double> rDistance = new List<double>();
-        //    IPoint pToPoint;
-        //    foreach (IFeature pfea in pFeatureCol)
-        //    {
-        //        pToPoint = (IPoint)pfea.Shape;
-        //        rDistance.Add(System.Math.Sqrt((pFormPoint.X - pToPoint.X) * (pFormPoint.X - pToPoint.X) + (pFormPoint.Y - pToPoint.Y) * (pFormPoint.Y - pToPoint.Y)));
-        //    }
-        //    rDistance[0].Equals(rDistance[0]);
-        //}
      }
     /*
     class ModEditOperations

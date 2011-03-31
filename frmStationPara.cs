@@ -57,9 +57,8 @@ namespace Businfo
             nIndex = fields.FindField("GPSHigh");
             if (double.TryParse(textBox6.Text, out  rNumber))
                 m_pFeature.set_Value(nIndex, rNumber);
-            //没有显示，不是必填了
-            //nIndex = fields.FindField("StationMaterial");
-            //m_pFeature.set_Value(nIndex, textBox7.Text);
+            nIndex = fields.FindField("StationMaterial");//改成了邻近标识物
+            m_pFeature.set_Value(nIndex, textBox2.Text);
             nIndex = fields.FindField("StationStyle");//为StationCharacter、StationMaterial、StationStyle结合内容
             m_pFeature.set_Value(nIndex, comboBox3.Text);
             nIndex = fields.FindField("StationAlias");

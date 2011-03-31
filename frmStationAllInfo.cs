@@ -18,6 +18,7 @@ namespace Businfo
         Boolean m_bEdit;
         public IFeature m_pCurFeature;
         public List<IFeature> m_featureCollection = new List<IFeature>();
+        public string m_strField = "";
 
         public frmStationAllInfo()
         {
@@ -28,7 +29,7 @@ namespace Businfo
         {
             // TODO: 这行代码将数据加载到表“stationDataSet.公交站点”中。您可以根据需要移动或移除它。
             if (m_featureCollection.Count < 1)
-                ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Station_FillAll, "");
+                ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Station_FillAll, "", new string[] { m_strField });
             else
                 RefreshSelectGrid();
             foreach (DataGridViewColumn eColumn in DataGridView1.Columns)
@@ -52,6 +53,12 @@ namespace Businfo
                         {
                             eCell.ReadOnly = false;
                         }
+                        if (ForBusInfo.Login_name == "设备管理")
+                        {
+                            DataGridView1.Columns["StationName"].ReadOnly = true;
+                            DataGridView1.Columns["Direct"].ReadOnly = true;
+                            DataGridView1.Columns["StationAlias"].ReadOnly = true;
+                        }
                         m_bEdit = true;
                         m_nCurRowIndex = e.RowIndex;
                     }
@@ -71,7 +78,10 @@ namespace Businfo
                         {
                             for (int i = 3; i < m_pCurFeature.Fields.FieldCount; i++)
                             {
-                                DataGridView1.Rows[m_nCurRowIndex].Cells[i].Value = m_pCurFeature.get_Value(i-1);
+                                if (DataGridView1.Rows[m_nCurRowIndex].Cells[i].Visible)
+                                {
+                                    DataGridView1.Rows[m_nCurRowIndex].Cells[i].Value = m_pCurFeature.get_Value(i - 1);
+                                }
                             }
                             foreach (DataGridViewCell eCell in DataGridView1.Rows[m_nCurRowIndex].Cells)
                             {
@@ -103,7 +113,10 @@ namespace Businfo
                 {
                      for (int i = 3; i < m_pCurFeature.Fields.FieldCount; i++)
                      {
-                         m_pCurFeature.set_Value(i-1,DataGridView1.Rows[m_nCurRowIndex].Cells[i].Value) ;
+                         if (DataGridView1.Rows[m_nCurRowIndex].Cells[i].Visible)
+                         {
+                             m_pCurFeature.set_Value(i - 1, DataGridView1.Rows[m_nCurRowIndex].Cells[i].Value);
+                         }
                      }
                      m_pCurFeature.Store();   
                 }
@@ -131,14 +144,14 @@ namespace Businfo
                 {
                     strInPara = String.Format("{0}{1},", strInPara, pFeature.get_Value(pFeature.Fields.FindField("OBJECTID")).ToString());
                 }
-                ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Station_FillByOBJECTID, string.Format(" WHERE (OBJECTID IN ({0}))", strInPara.Substring(0, strInPara.Length-1)));
+                ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Station_FillByOBJECTID, string.Format(" WHERE (OBJECTID IN ({0}))", strInPara.Substring(0, strInPara.Length - 1)), new string[] { m_strField });
                 //this.公交站点TableAdapter.FillByINOBJECTID(this.stationDataSet.公交站点, strInPara);
             }
         }
 
          public void RefreshStationGrid(string strInPara)
         {
-            ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Station_FillByOBJECTID, string.Format(" WHERE (OBJECTID IN ({0}))", strInPara.Substring(0, strInPara.Length - 1)));
+            ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Station_FillByOBJECTID, string.Format(" WHERE (OBJECTID IN ({0}))", strInPara.Substring(0, strInPara.Length - 1)), new string[] { m_strField });
             //this.公交站点TableAdapter.FillByINOBJECTID(this.stationDataSet.公交站点, strInPara);
         }
 
@@ -224,9 +237,13 @@ namespace Businfo
                 m_pCurFeature = EngineFuntions.GetFeatureByFieldAndValue(EngineFuntions.m_Layer_BusStation, "OBJECTID", m_nObjectId.ToString());
                 if (m_pCurFeature != null)
                 {
+                     
                     for (int i = 3; i < m_pCurFeature.Fields.FieldCount; i++)
                     {
-                        m_pCurFeature.set_Value(i - 1, DataGridView1.Rows[m_nCurRowIndex].Cells[i].Value);
+                        if (DataGridView1.Rows[m_nCurRowIndex].Cells[i].Visible)
+                        {
+                            m_pCurFeature.set_Value(i - 1, DataGridView1.Rows[m_nCurRowIndex].Cells[i].Value);
+                        }
                     }
                     m_pCurFeature.Store();
                 }
@@ -241,11 +258,11 @@ namespace Businfo
             if (String.IsNullOrEmpty(TextBox1.Text))
             {
                 //this.公交站点TableAdapter.Fill(this.stationDataSet.公交站点);
-                ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Station_FillAll, "");
+                ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Station_FillAll, "", new string[] { m_strField });
             }
             else
             {
-                ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Station_FillByStationName, string.Format(" WHERE (StationName LIKE '%{0}%')", TextBox1.Text));
+                ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Station_FillByStationName, string.Format(" WHERE (StationName LIKE '%{0}%')", TextBox1.Text), new string[] { m_strField });
                 //this.公交站点TableAdapter.FillByStationName(this.stationDataSet.公交站点, "%" + TextBox1.Text + "%");
             }
 
@@ -256,6 +273,7 @@ namespace Businfo
             DataGridView1.Columns[0].ReadOnly = false;
         }
 
+        //按钮设为不可见了
         private void button3_Click(object sender, EventArgs e)
         {
             for (int i = 1; i < DataGridView1.Columns.Count;i++ )

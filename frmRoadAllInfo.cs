@@ -36,7 +36,7 @@ namespace Businfo
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Road_FillAll, "");
+            ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Road_FillAll, "", new string[] { "" });
             //this.公交站线TableAdapter.Fill(this.roadDataSet.公交站线);
             foreach (DataGridViewColumn eColumn in DataGridView1.Columns)
             {
@@ -59,7 +59,7 @@ namespace Businfo
                 {
                     strInPara = String.Format("{0}{1},", strInPara, pFeature.get_Value(pFeature.Fields.FindField("OBJECTID")).ToString());
                 }
-                ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Road_FillByOBJECTID, string.Format(" WHERE (OBJECTID IN ({0}))", strInPara.Substring(0, strInPara.Length - 1)));
+                ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Road_FillByOBJECTID, string.Format(" WHERE (OBJECTID IN ({0}))", strInPara.Substring(0, strInPara.Length - 1)), new string[] { "" });
                 //this.公交站线TableAdapter.FillByINOBJECTID(this.roadDataSet.公交站线, strInPara);
             }
         }
@@ -79,7 +79,10 @@ namespace Businfo
                 {
                     for (int i = 3; i < m_pCurFeature.Fields.FieldCount-1; i++)
                     {
-                        m_pCurFeature.set_Value(i-1, DataGridView1.Rows[m_nCurRowIndex].Cells[i].Value);
+                        if (DataGridView1.Rows[m_nCurRowIndex].Cells[i].Visible)
+                        {
+                            m_pCurFeature.set_Value(i - 1, DataGridView1.Rows[m_nCurRowIndex].Cells[i].Value);
+                        }
                     }
                     m_pCurFeature.Store();
                     ForBusInfo.Add_Log(ForBusInfo.Login_name, "编辑站线属性", DataGridView1.Rows[m_nCurRowIndex].Cells[4].Value.ToString(), "");
@@ -119,7 +122,10 @@ namespace Businfo
                         {
                             for (int i = 3; i < m_pCurFeature.Fields.FieldCount-1; i++)
                             {
-                                DataGridView1.Rows[m_nCurRowIndex].Cells[i].Value = m_pCurFeature.get_Value(i-1);
+                                if (DataGridView1.Rows[m_nCurRowIndex].Cells[i].Visible)
+                                {
+                                  DataGridView1.Rows[m_nCurRowIndex].Cells[i].Value = m_pCurFeature.get_Value(i - 1);
+                                }
                             }
                             foreach (DataGridViewCell eCell in DataGridView1.Rows[m_nCurRowIndex].Cells)
                             {
@@ -151,7 +157,10 @@ namespace Businfo
                 {
                     for (int i = 3; i < m_pCurFeature.Fields.FieldCount - 1; i++)
                     {
-                        m_pCurFeature.set_Value(i - 1, DataGridView1.Rows[m_nCurRowIndex].Cells[i].Value);
+                        if (DataGridView1.Rows[m_nCurRowIndex].Cells[i].Visible)
+                        {
+                            m_pCurFeature.set_Value(i - 1, DataGridView1.Rows[m_nCurRowIndex].Cells[i].Value);
+                        }
                     }
                     m_pCurFeature.Store();
                     ForBusInfo.Add_Log(ForBusInfo.Login_name, "编辑站线属性", DataGridView1.Rows[m_nCurRowIndex].Cells[4].Value.ToString(), "");
