@@ -333,7 +333,7 @@ namespace Businfo
                         MessageBox.Show("创建Excel服务失败!\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     app.Visible = true;
-
+                    app.DisplayAlerts = false;
                     Workbooks workbooks = app.Workbooks;
                     _Workbook workbook = workbooks.Open(ForBusInfo.GetProfileString("Businfo", "DataPos", Winapp.StartupPath + "\\Businfo.ini") + "\\data\\制作单.xls", Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
         Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
@@ -411,7 +411,6 @@ namespace Businfo
                                         range1 = worksheet.get_Range(string.Format("G{0}", 8 + (2 * j)), string.Format("G{0}", 9 + (2 * j++)));
                                         range1.Value2 = eTableRow[6];
                                     }
-
                                 }
                             }
                             if (i > j)
@@ -423,7 +422,6 @@ namespace Businfo
                                 worksheet.PageSetup.PrintArea = string.Format("$A$1:$G${0}", j * 2 + 7);
                             }
                             workbook.SaveAs("D:\\制作单\\" + pCurFeatureList[0].get_Value(pCurFeatureList[0].Fields.FindField("RoadName")), Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookNormal, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlNoChange, Type.Missing, Type.Missing, Type.Missing, Type.Missing, null);
-
                         }
                         mycon.Close();
                     }
@@ -447,7 +445,7 @@ namespace Businfo
                         MessageBox.Show("创建Excel服务失败!\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     app.Visible = true;
-
+                    app.DisplayAlerts = false;
                     Workbooks workbooks = app.Workbooks;
                     _Workbook workbook = workbooks.Open(ForBusInfo.GetProfileString("Businfo", "DataPos", Winapp.StartupPath + "\\Businfo.ini") + "\\data\\制作单.xls", Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
         Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
@@ -542,6 +540,8 @@ namespace Businfo
                                 worksheet.PageSetup.PrintArea = string.Format("$A$1:$G${0}", j * 2 + 7);
                             }
                             workbook.SaveAs("D:\\制作单\\" + pCurFeatureList[0].get_Value(pCurFeatureList[0].Fields.FindField("RoadName")), Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookNormal, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlNoChange, Type.Missing, Type.Missing, Type.Missing, Type.Missing, null);
+                            
+                            
                         }
 
                         mycon.Close();
