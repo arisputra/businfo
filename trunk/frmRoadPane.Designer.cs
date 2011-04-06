@@ -109,61 +109,64 @@
             this.备份线路ToolStripMenuItem,
             this.生成反向线路ToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(143, 180);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 202);
             // 
             // 定位到ToolStripMenuItem
             // 
             this.定位到ToolStripMenuItem.Name = "定位到ToolStripMenuItem";
-            this.定位到ToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.定位到ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.定位到ToolStripMenuItem.Text = "定位到";
             this.定位到ToolStripMenuItem.Click += new System.EventHandler(this.定位到ToolStripMenuItem_Click);
             // 
             // 删除线路ToolStripMenuItem
             // 
             this.删除线路ToolStripMenuItem.Name = "删除线路ToolStripMenuItem";
-            this.删除线路ToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.删除线路ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.删除线路ToolStripMenuItem.Text = "删除线路";
             this.删除线路ToolStripMenuItem.Click += new System.EventHandler(this.删除线路ToolStripMenuItem_Click);
             // 
             // 属性编辑ToolStripMenuItem
             // 
             this.属性编辑ToolStripMenuItem.Name = "属性编辑ToolStripMenuItem";
-            this.属性编辑ToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.属性编辑ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.属性编辑ToolStripMenuItem.Text = "属性编辑";
             this.属性编辑ToolStripMenuItem.Click += new System.EventHandler(this.属性编辑ToolStripMenuItem_Click);
             // 
             // 关联站点ToolStripMenuItem
             // 
             this.关联站点ToolStripMenuItem.Name = "关联站点ToolStripMenuItem";
-            this.关联站点ToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.关联站点ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.关联站点ToolStripMenuItem.Text = "关联站点";
+            this.关联站点ToolStripMenuItem.Visible = false;
             this.关联站点ToolStripMenuItem.Click += new System.EventHandler(this.关联站点ToolStripMenuItem_Click);
             // 
             // 显示站点ToolStripMenuItem
             // 
             this.显示站点ToolStripMenuItem.Name = "显示站点ToolStripMenuItem";
-            this.显示站点ToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.显示站点ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.显示站点ToolStripMenuItem.Text = "显示站点";
+            this.显示站点ToolStripMenuItem.Visible = false;
             this.显示站点ToolStripMenuItem.Click += new System.EventHandler(this.显示站点ToolStripMenuItem_Click);
             // 
             // 制作单ToolStripMenuItem
             // 
             this.制作单ToolStripMenuItem.Name = "制作单ToolStripMenuItem";
-            this.制作单ToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.制作单ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.制作单ToolStripMenuItem.Text = "报表输出";
+            this.制作单ToolStripMenuItem.Visible = false;
             this.制作单ToolStripMenuItem.Click += new System.EventHandler(this.制作单ToolStripMenuItem_Click);
             // 
             // 备份线路ToolStripMenuItem
             // 
             this.备份线路ToolStripMenuItem.Name = "备份线路ToolStripMenuItem";
-            this.备份线路ToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.备份线路ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.备份线路ToolStripMenuItem.Text = "备份线路";
             this.备份线路ToolStripMenuItem.Click += new System.EventHandler(this.备份线路ToolStripMenuItem_Click);
             // 
             // 生成反向线路ToolStripMenuItem
             // 
             this.生成反向线路ToolStripMenuItem.Name = "生成反向线路ToolStripMenuItem";
-            this.生成反向线路ToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.生成反向线路ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.生成反向线路ToolStripMenuItem.Text = "生成反向线路";
             this.生成反向线路ToolStripMenuItem.Click += new System.EventHandler(this.生成反向线路ToolStripMenuItem_Click);
             // 
