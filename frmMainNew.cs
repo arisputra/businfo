@@ -144,7 +144,7 @@ namespace Businfo
             switch (ForBusInfo.Login_name)
             {
             case "站点管理":
-                    axDockingPane1.FindPane(ForBusInfo.Pan_Road).Closed = true;
+                    
                     axDockingPane1.FindPane(ForBusInfo.Pan_Facility).Closed = true;
             	break;
             case "线路管理":

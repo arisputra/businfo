@@ -45,6 +45,23 @@ namespace Businfo
         private void frmRoadPane_Load(object sender, EventArgs e)
         {
             RefreshGrid();
+            switch (ForBusInfo.Login_name)
+            {
+                case "站点管理":
+                    contextMenuStrip1.Items.Find("删除线路ToolStripMenuItem", false)[0].Visible = false;
+                    contextMenuStrip1.Items.Find("属性编辑ToolStripMenuItem", false)[0].Visible = false;
+                    contextMenuStrip1.Items.Find("备份线路ToolStripMenuItem", false)[0].Visible = false;
+                    contextMenuStrip1.Items.Find("生成反向线路ToolStripMenuItem", false)[0].Visible = false;
+                    contextMenuStrip1.Items.Find("关联站点ToolStripMenuItem", false)[0].Visible = true;
+                    contextMenuStrip1.Items.Find("显示站点ToolStripMenuItem", false)[0].Visible = true;
+                    contextMenuStrip1.Items.Find("制作单ToolStripMenuItem", false)[0].Visible = true;
+                    break;
+                case "admin":
+                    contextMenuStrip1.Items.Find("关联站点ToolStripMenuItem", false)[0].Visible = true;
+                    contextMenuStrip1.Items.Find("显示站点ToolStripMenuItem", false)[0].Visible = true;
+                    contextMenuStrip1.Items.Find("制作单ToolStripMenuItem", false)[0].Visible = true;
+                    break;
+            }
             //this.公交站线TableAdapter.Fill(this.roadDataSet.公交站线);
         }
 
