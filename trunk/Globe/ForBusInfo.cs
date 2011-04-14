@@ -64,7 +64,17 @@ namespace Businfo.Globe
         public static string Login_name = "admin"; //登录名
         public static string Login_Operation = "" ;//允许操作
         public static frmMainNew Frm_Main; //主窗体类
+        public static Microsoft.Office.Interop.Excel.Application Excel_app = new Microsoft.Office.Interop.Excel.Application();//由于老是有Excel进程关不了，全局一个。
         public enum GridSetType {Station_FillPan = 1, Station_FillAll, Station_FillByOBJECTID, Station_FillByStationName, Road_FillPan, Road_FillAll, Road_FillByOBJECTID, Road_FillByStationName};
+
+        //判断文件是否打开
+        [DllImport("kernel32.dll")]
+        public static extern IntPtr _lopen(string lpPathName, int iReadWrite);
+        [DllImport("kernel32.dll")]
+        public static extern bool CloseHandle(IntPtr hObject);
+        public const int OF_READWRITE = 2;
+        public const int OF_SHARE_DENY_NONE = 0x40;
+        public static readonly IntPtr HFILE_ERROR = new IntPtr(-1);
 
          #endregion
 
@@ -130,15 +140,16 @@ namespace Businfo.Globe
         public static void StationFill(DataGridView grid, GridSetType emunType, string strQuery, string[] strShow)
         {
             String sConn = "Provider=sqloledb;Data Source = 172.16.34.120;Initial Catalog = sde;User Id = sa;Password = sa";
+            //String sConn = "provider=Microsoft.Jet.OLEDB.4.0;data source=" + ForBusInfo.GetProfileString("Businfo", "DataPos", Application.StartupPath + "\\Businfo.ini") + "\\data\\公交.mdb";
             OleDbConnection mycon = new OleDbConnection(sConn);
-            //sConn = "provider=Microsoft.Jet.OLEDB.4.0;data source=" + ForBusInfo.GetProfileString("Businfo", "DataPos", Application.StartupPath + "\\Businfo.ini") + "\\data\\公交.mdb";
+            
             mycon.Open();
             string strStationSQL = @"SELECT  OBJECTID,StationNo,StationName,Direct,StationAlias,  MainSymbol, StationCharacter, GPSLongtitude, GPSLatitude, GPSHigh,
                       RodMaterialFirst, RodStyleFirst, StationMaterial, StationStyle, Chair, StationType, BusShelter, Constructor, ConstructionTime, StationLand, 
                       TrafficVolume, PictureFirst, PictureSecond, PictureThird, StationArea, ServiceArea, DayTrafficVolume, PassSum, PassRode, HourMass, HourEvacuate, 
                       DayMass, DayEvacuate, RouteSum, MoveTime, RebuildTime, RemoveTime, StationLong, RodMaterialSecond, RodMaterialThird, RodStyleSecond, 
                       RodStyleThird, DispatchCompanyFirst, DispatchRouteFirst, DispatchStationFirst, DispatchCompanySecond, DispatchRouteSecond, 
-                      DispatchStationSecond, DispatchCompanyThird, DispatchRouteThird, DispatchStationThird, Classify FROM sde.公交站点";
+                      DispatchStationSecond, DispatchCompanyThird, DispatchRouteThird, DispatchStationThird, Classify FROM sde.公交站点";//sde.公交站点";
 
             string strRoadSQL = @"SELECT OBJECTID,RoadID,RoadName,RoadTravel, Company,  RoadType,FirstStartTime, FirstCloseTime, EndStartTime, EndCloseTim, TicketPrice1, 
                       TicketPrice2, TicketPrice3, RoadNo, Length, AverageLoadFactor, BusNumber, 
@@ -146,7 +157,7 @@ namespace Businfo.Globe
                       NulineCoefficient2, Picture1, Picture2, Picture3, Picture4, Picture5, Unit, ServeArea, 
                       AverageLength, HigeLoadFactor, RoadLoad, DirectImbalance, AlternatelyCoefficient, 
                       TimeCoefficient, DayCoefficient, HighHourSect, HighHourArea, HighHourMass, 
-                      HighPassengerMass FROM sde.公交站线";
+                      HighPassengerMass FROM sde.公交站线";//sde.公交站线";
             try
             {
                switch (emunType)
@@ -632,6 +643,109 @@ namespace Businfo.Globe
 
             return s.Trim();
         }
+
+        #region 将DataGridView中的数据导入到Excel中，DataGridView无需绑定数据源
+        /// <summary>
+        /// 将DataGridView中的数据导入到Excel中，DataGridView无需绑定数据源
+        /// </summary>
+        /// <param name="datagridview">DataGridView</param>
+        /// <param name="SheetName">Excel sheet title</param>
+        /// <param name="bVisble">是否输出不可见列</param>
+        /// <param name="nBegin">准备输出的起始列号，从零开始计数</param>
+        public static void DataGridView2Excel(System.Windows.Forms.DataGridView datagridview, string SheetName,bool bVisble,int nBegin)
+        {
+            int iRows = 0;
+            int iCols = 0;
+            int iTrueCols = 0;
+            int nStarCol = 0;
+            if (Excel_app == null)
+            {
+                Excel_app = new Microsoft.Office.Interop.Excel.Application();
+            }
+            Microsoft.Office.Interop.Excel.Workbook wb = Excel_app.Workbooks.Add(System.Reflection.Missing.Value);
+            Microsoft.Office.Interop.Excel.Worksheet ws = null;
+            if (wb.Worksheets.Count > 0)
+            {
+                ws = (Microsoft.Office.Interop.Excel.Worksheet)wb.Worksheets.get_Item(1);
+            }
+            else
+            {
+                wb.Worksheets.Add(System.Reflection.Missing.Value, System.Reflection.Missing.Value, System.Reflection.Missing.Value,
+            System.Reflection.Missing.Value);
+                ws = (Microsoft.Office.Interop.Excel.Worksheet)wb.Worksheets.get_Item(1);
+            }
+            if (ws != null)
+            {
+                if (SheetName.Trim() != "")
+                {
+                    ws.Name = SheetName;
+                }
+                iRows = datagridview.Rows.Count + 1;　　　//加上列头行
+                iTrueCols = datagridview.Columns.Count;　 //包含隐藏的列，一共有多少列
+                //求列数，省略Visible = false的列
+                for (int i = 0; i < datagridview.Columns.Count; i++)
+                {
+                    if (bVisble && datagridview.Columns[i].Visible == false)
+                        continue;
+                    iCols++;
+                    if (iCols == nBegin)
+                    {
+                        nStarCol = i + 1;//判断当bVisble==true时，准备输出的可见列起始的列号，要加一来排除当前可见列。
+                    }
+                }
+                iCols = iCols - nBegin;//真正输出的列数
+                //string[,] dimArray = new string[iRows + 1, iCols];    // 需要修改string[iRows + 1, iCols]为string[iRows, iCols]
+                string[,] dimArray = new string[iRows, iCols];// 修改后
+
+                for (int j = nStarCol, k = 0; j < iTrueCols; j++)
+                {
+                    //判断省略Visible = false的列
+                    if (bVisble && datagridview.Columns[j].Visible == false)
+                        continue;
+
+                    dimArray[0, k] = datagridview.Columns[j].HeaderText;//得到列名
+                    k++;
+
+                }
+               
+                               
+                // for (int i = 0; i < iRows; i++) 修改前
+                for (int i = 0; i < iRows - 1; i++) // 修改后
+                {
+                    for (int j = nStarCol, k = 0; j < iTrueCols; j++)
+                    {
+                        //省略Visible = false的列
+                        if (bVisble && datagridview.Columns[j].Visible == false)
+                            continue;
+
+                            dimArray[i + 1, k] = datagridview.Rows[i].Cells[j].Value.ToString();//得到所有内容
+                            k++;
+                    }
+                }
+                /* 修改前
+                ws.get_Range(ws.Cells[1, 1], ws.Cells[iRows + 1, iCols]).Value2 = dimArray;
+                ws.get_Range(ws.Cells[1, 1], ws.Cells[1, iCols]).Font.Bold = true;
+                ws.get_Range(ws.Cells[1, 1], ws.Cells[iRows + 1, iCols]).Font.Size = 10.0;
+                ws.get_Range(ws.Cells[1, 1], ws.Cells[iRows + 1, iCols]).RowHeight = 14.25;
+                 * */
+                ws.get_Range(ws.Cells[1, 1], ws.Cells[iRows, iCols]).Value2 = dimArray;//全部内容赋值
+                ws.get_Range(ws.Cells[1, 1], ws.Cells[1, iCols]).Font.Bold = true;//表头
+                ws.get_Range(ws.Cells[1, 1], ws.Cells[iRows, iCols]).Font.Size = 10.0;
+                ws.get_Range(ws.Cells[1, 1], ws.Cells[iRows, iCols]).RowHeight = 14.25;
+                //for (int j = 0, k = 0; j < iTrueCols; j++)
+                //{
+                //    //省略Visible = false的列
+                //    if (datagridview.Columns[j].Visible)
+                //    {
+                //        ws.get_Range(ws.Cells[1, k + 1], ws.Cells[1, k + 1]).ColumnWidth =
+                //            (datagridview.Columns[j].Width / 8.4) > 255 ? 255 : (datagridview.Columns[j].Width / 8.4);
+                //        k++;
+                //    }
+                //}
+            }
+            Excel_app.Visible = true;
+        }
+        #endregion
     }
 
     public class BusStation : IComparable<BusStation>
@@ -670,6 +784,8 @@ namespace Businfo.Globe
          #endregion
 
     }
+
+  
 
     // public class IniFiles
     //{

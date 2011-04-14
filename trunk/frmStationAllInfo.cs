@@ -224,6 +224,7 @@ namespace Businfo
             }
         }
 
+        //保存站点属性
         private void button2_Click(object sender, EventArgs e)
         {
             if (m_bEdit)
@@ -253,6 +254,7 @@ namespace Businfo
             }
         }
 
+        //查询
         private void button1_Click(object sender, EventArgs e)
         {
             if (String.IsNullOrEmpty(TextBox1.Text))
@@ -280,6 +282,12 @@ namespace Businfo
             {
                 DataGridView1.Columns[i].Visible = true;
             }
+        }
+
+        //输出到excel
+        private void button4_Click(object sender, EventArgs e)
+        {
+            ForBusInfo.DataGridView2Excel(DataGridView1, "站点",true,0);
         }
     }
 }
