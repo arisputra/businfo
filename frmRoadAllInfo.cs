@@ -169,5 +169,10 @@ namespace Businfo
             }
         }
 
+        private void button3_Click(object sender, EventArgs e)
+        {
+            ForBusInfo.DataGridView2Excel(DataGridView1, "线路",true,1);//0是checkbox，跳过
+        }
+
     }
 }

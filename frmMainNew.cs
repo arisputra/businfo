@@ -187,6 +187,7 @@ namespace Businfo
                     foreach (string eStrRows in strRows)
                     {
                         axCommandBars1[nCol].Controls[Convert.ToInt32(eStrRows)].Enabled = false;
+                        
                     }
                 }
             }
@@ -198,6 +199,10 @@ namespace Businfo
         private void axCommandBars1_Execute(object sender, AxXtremeCommandBars._DCommandBarsEvents_ExecuteEvent e)
         {
             EngineFuntions.SetToolNull();
+            foreach (XtremeCommandBars.CommandBarControl eControl in axCommandBars1[2].Controls)
+            {
+                eControl.Checked = false;
+            }
             switch (e.control.Id)
             {
                 case ForBusInfo.BusInfo_Help:
@@ -281,6 +286,15 @@ namespace Businfo
                     }
                     break;
                 case ForBusInfo.Bus_Add:
+                    if(e.control.Checked)
+                    {
+                        e.control.Checked = false;
+                    }
+                    else
+                    {
+                        e.control.Checked = true;
+                    }
+
                     m_ToolStatus = ForBusInfo.Bus_Add;
                     axMapControl1.MousePointer = esriControlsMousePointer.esriPointerPencil;
                     break;
@@ -288,18 +302,50 @@ namespace Businfo
 
 
                 case ForBusInfo.Bus_Dele:
+                    if (e.control.Checked)
+                    {
+                        e.control.Checked = false;
+                    }
+                    else
+                    {
+                        e.control.Checked = true;
+                    }
                     m_ToolStatus = ForBusInfo.Bus_Dele;
                     axMapControl1.MousePointer = esriControlsMousePointer.esriPointerIdentify;
                     break;
                 case ForBusInfo.Bus_Edit:
+                    if (e.control.Checked)
+                    {
+                        e.control.Checked = false;
+                    }
+                    else
+                    {
+                        e.control.Checked = true;
+                    }
                     m_ToolStatus = ForBusInfo.Bus_Edit;
                     axMapControl1.MousePointer = esriControlsMousePointer.esriPointerHotLink;
                     break;
                 case ForBusInfo.Bus_Move:
+                    if (e.control.Checked)
+                    {
+                        e.control.Checked = false;
+                    }
+                    else
+                    {
+                        e.control.Checked = true;
+                    }
                     m_ToolStatus = ForBusInfo.Bus_Move;
                     axMapControl1.MousePointer = esriControlsMousePointer.esriPointerIdentify;
                     break;
                 case ForBusInfo.Bus_Pano:
+                    if (e.control.Checked)
+                    {
+                        e.control.Checked = false;
+                    }
+                    else
+                    {
+                        e.control.Checked = true;
+                    }
                     m_ToolStatus = ForBusInfo.Bus_Pano;
                     axMapControl1.MousePointer = esriControlsMousePointer.esriPointerIdentify;
                     break;
@@ -456,7 +502,7 @@ namespace Businfo
                          if (axMapControl1.Visible == true)
                          {
                             IGeometry pGeo;
-                            pGeo = axMapControl1.TrackRectangle();
+                            pGeo = axMapControl1.TrackPolygon();
                             List<IFeature> pSelFea = EngineFuntions.GetSeartchFeatures(EngineFuntions.m_Layer_BusStation,pGeo);
                             if (pSelFea.Count > 0)
                             {
@@ -465,14 +511,22 @@ namespace Businfo
                                 frmPopup.m_featureCollection = pSelFea;
                                 frmPopup.ShowDialog();
                                 
-                            }    
+                            }
+                            pSelFea.Clear();
+                            pSelFea = EngineFuntions.GetSeartchFeatures(EngineFuntions.m_Layer_BusRoad, pGeo);
+                            if (pSelFea.Count > 0)
+                            {
+                                frmRoadAllInfo frmPopup = new frmRoadAllInfo();
+                                frmPopup.m_featureCollection = pSelFea;
+                                frmPopup.ShowDialog();
+
+                            }
                          }
                          break;
                      case ForBusInfo.Bus_Add:
                          {
                              frmStationPara frmPopup = new frmStationPara();
                              frmPopup.m_mapPoint = m_mapPoint;
-
                              m_CurFeatureLayer = EngineFuntions.SetCanSelLay("道路中心线");
                              EngineFuntions.ClickSel(m_mapPoint, false, false, 26);
                              if (EngineFuntions.GetSeledFeatures(m_CurFeatureLayer, ref  m_featureCollection))
@@ -491,8 +545,11 @@ namespace Businfo
                                  System.Threading.Thread.Sleep(1000);
                                  m_frmStationPane.RefreshGrid();
                              }
-                             m_ToolStatus = -1;
-                             axMapControl1.MousePointer = esriControlsMousePointer.esriPointerDefault;
+                             axMapControl1.Map.ClearSelection();
+                             axMapControl1.ActiveView.GraphicsContainer.DeleteAllElements();
+                             axMapControl1.Refresh();
+                             //m_ToolStatus = -1;
+                             //axMapControl1.MousePointer = esriControlsMousePointer.esriPointerDefault;
                              break;
                          }
                      case ForBusInfo.Bus_Dele:
@@ -516,8 +573,8 @@ namespace Businfo
                                  }
                              }
                          }
-                        m_ToolStatus = -1;
-                        axMapControl1.MousePointer = esriControlsMousePointer.esriPointerDefault;
+                        //m_ToolStatus = -1;
+                        //axMapControl1.MousePointer = esriControlsMousePointer.esriPointerDefault;
                         break;
                     case ForBusInfo.Bus_Move:
                         {
@@ -554,8 +611,8 @@ namespace Businfo
                                  }
                              }
 
-                             m_ToolStatus = -1;
-                             axMapControl1.MousePointer = esriControlsMousePointer.esriPointerDefault;
+                             //m_ToolStatus = -1;
+                             //axMapControl1.MousePointer = esriControlsMousePointer.esriPointerDefault;
                              break;
                          }
                      case ForBusInfo.Bus_Edit:
@@ -577,8 +634,8 @@ namespace Businfo
                                  }
                              }
 
-                             m_ToolStatus = -1;
-                             axMapControl1.MousePointer = esriControlsMousePointer.esriPointerDefault;
+                             //m_ToolStatus = -1;
+                             //axMapControl1.MousePointer = esriControlsMousePointer.esriPointerDefault;
                              break;
                          }
                      case ForBusInfo.Road_Dele:
@@ -773,8 +830,8 @@ namespace Businfo
                             m_FeedBack = null;
                         }
                        
-                    m_ToolStatus = -1;
-                    axMapControl1.MousePointer = esriControlsMousePointer.esriPointerDefault;
+                    //m_ToolStatus = -1;
+                    //axMapControl1.MousePointer = esriControlsMousePointer.esriPointerDefault;
                         break;
                     default:
                         break;

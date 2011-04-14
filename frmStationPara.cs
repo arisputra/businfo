@@ -65,8 +65,7 @@ namespace Businfo
             m_pFeature.set_Value(nIndex, textBox9.Text);
             m_pFeature.Store();
 
-            EngineFuntions.m_AxMapControl.Map.ClearSelection();
-            EngineFuntions.m_AxMapControl.ActiveView.GraphicsContainer.DeleteAllElements();
+            
         }
 
         private void frmStationPara_Load(object sender, EventArgs e)

@@ -14,6 +14,7 @@ using Microsoft.Office.Interop.Excel;
 using Winapp = System.Windows.Forms.Application;
 using Excelapp = Microsoft.Office.Interop.Excel.Application;
 using ExcelPoint = Microsoft.Office.Interop.Excel.IPoint;
+using System.IO;
 
 namespace Businfo
 {
@@ -334,6 +335,11 @@ namespace Businfo
 
         private void 制作单ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //foreach (string d in Directory.GetFileSystemEntries("D:\\制作单\\"))
+            //{
+            //    if (File.Exists(d))
+            //      File.Delete(d);    //直接删除其中的文件  
+            //}
             m_featureCollection.Clear();
             DataGridView1.EndEdit();
             List<IFeature> pCurFeatureList;
@@ -343,6 +349,10 @@ namespace Businfo
                 if (eRow.Cells[0].Value != null && (bool)eRow.Cells[0].Value == true)
                 {
                     pCurFeatureList = EngineFuntions.GetSeartchFeatures(EngineFuntions.m_Layer_BusRoad, string.Format("RoadName = '{0}'", eRow.Cells[3].Value));
+                    //if (File.Exists("D:\\制作单\\" + pCurFeatureList[0].get_Value(pCurFeatureList[0].Fields.FindField("RoadName")) + ".xls"))
+                    //{
+                    //    continue;
+                    //}
                     int i = 0, j = 0;
                     Excelapp app = new Excelapp();
                     if (app == null)
@@ -430,13 +440,25 @@ namespace Businfo
                                     }
                                 }
                             }
-                            if (i > j)
+                            if (i > j)//设置打印区域
                             {
                                 worksheet.PageSetup.PrintArea = string.Format("$A$1:$G${0}", i * 2 + 7);
                             }
                             else
                             {
                                 worksheet.PageSetup.PrintArea = string.Format("$A$1:$G${0}", j * 2 + 7);
+                            }
+                             string vFileName = "D:\\制作单\\" + pCurFeatureList[0].get_Value(pCurFeatureList[0].Fields.FindField("RoadName")) + ".xls";
+
+                            if (File.Exists(vFileName))
+                            {
+                                IntPtr vHandle = ForBusInfo._lopen(vFileName, ForBusInfo.OF_READWRITE | ForBusInfo.OF_SHARE_DENY_NONE);
+                                if (vHandle == ForBusInfo.HFILE_ERROR)
+                                {
+                                    ForBusInfo.CloseHandle(vHandle);
+                                    continue;
+                                }
+                                ForBusInfo.CloseHandle(vHandle);
                             }
                             workbook.SaveAs("D:\\制作单\\" + pCurFeatureList[0].get_Value(pCurFeatureList[0].Fields.FindField("RoadName")), Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookNormal, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlNoChange, Type.Missing, Type.Missing, Type.Missing, Type.Missing, null);
                         }
@@ -557,12 +579,11 @@ namespace Businfo
                                 worksheet.PageSetup.PrintArea = string.Format("$A$1:$G${0}", j * 2 + 7);
                             }
                             workbook.SaveAs("D:\\制作单\\" + pCurFeatureList[0].get_Value(pCurFeatureList[0].Fields.FindField("RoadName")), Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookNormal, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlNoChange, Type.Missing, Type.Missing, Type.Missing, Type.Missing, null);
-                            
-                            
                         }
 
                         mycon.Close();
                     }
+                        
                     catch (System.Exception ex)
                     {
                         MessageBox.Show("生成关联表出错\n" + ex.ToString(), "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
