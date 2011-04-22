@@ -23,11 +23,13 @@ namespace Businfo
         {
             try
             {
-                String sConn = "Provider=sqloledb;Data Source = 172.16.34.120;Initial Catalog=sde;User Id = sa;Password = sa";
-                //String sConn = "provider=Microsoft.Jet.OLEDB.4.0;data source=" + ForBusInfo.GetProfileString("Businfo", "DataPos", Application.StartupPath + "\\Businfo.ini") + "\\data\\公交.mdb";
-                OleDbConnection mycon = new OleDbConnection(sConn);
+                OleDbConnection mycon = new OleDbConnection(ForBusInfo.Connect_Sql);
                 mycon.Open();
-                OleDbDataAdapter da = ForBusInfo.CreateCustomerAdapter(mycon,"select * from sde.OPERATIONLOG ORDER BY OBJECTID DESC", "", "");
+                OleDbDataAdapter da;
+                if(ForBusInfo.Connect_Type == 1)
+                    da = ForBusInfo.CreateCustomerAdapter(mycon, "select * from sde.OPERATIONLOG ORDER BY OBJECTID DESC", "", "");
+                else
+                    da = ForBusInfo.CreateCustomerAdapter(mycon, "select * from OPERATIONLOG ORDER BY OBJECTID DESC", "", "");
                 da.SelectCommand.ExecuteNonQuery();
                 DataSet ds = new DataSet();
                 int nQueryCount = da.Fill(ds);
@@ -50,11 +52,13 @@ namespace Businfo
 
         private void button1_Click(object sender, EventArgs e)
         {
-            String sConn = "Provider=sqloledb;Data Source = 172.16.34.120;Initial Catalog=sde;User Id = sa;Password = sa";
-            //String sConn = "provider=Microsoft.Jet.OLEDB.4.0;data source=" + ForBusInfo.GetProfileString("Businfo", "DataPos", Application.StartupPath + "\\Businfo.ini") + "\\data\\公交.mdb";
-            OleDbConnection mycon = new OleDbConnection(sConn);
+            OleDbConnection mycon = new OleDbConnection(ForBusInfo.Connect_Sql);
             mycon.Open();
-            OleDbDataAdapter da = ForBusInfo.CreateCustomerAdapter(mycon, string.Format("select * from  sde.OperationLog where (name = '{0}' and LogTime > '{1}' and LogTime < '{2}') ORDER BY OBJECTID DESC", textBox1.Text, maskedTextBox1.Text + " 00:00:00", maskedTextBox2.Text + " 24:00:00"), "", "");
+            OleDbDataAdapter da;
+            if(ForBusInfo.Connect_Type == 1)
+                da = ForBusInfo.CreateCustomerAdapter(mycon, string.Format("select * from  sde.OperationLog where (name = '{0}' and LogTime > '{1}' and LogTime < '{2}') ORDER BY OBJECTID DESC", textBox1.Text, maskedTextBox1.Text + " 00:00:00", maskedTextBox2.Text + " 24:00:00"), "", "");
+            else
+                da = ForBusInfo.CreateCustomerAdapter(mycon, string.Format("select * from  OperationLog where (name = '{0}' and LogTime > '{1}' and LogTime < '{2}') ORDER BY OBJECTID DESC", textBox1.Text, maskedTextBox1.Text + " 00:00:00", maskedTextBox2.Text + " 24:00:00"), "", "");
             da.SelectCommand.ExecuteNonQuery();
             DataSet ds = new DataSet();
             int nQueryCount = da.Fill(ds);

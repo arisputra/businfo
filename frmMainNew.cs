@@ -81,6 +81,8 @@ namespace Businfo
             //{
             //    this.Close();
             //}
+            //ForBusInfo.Connect_Type = 2;//初始化连接类型
+            //ForBusInfo.AppIni();
 
             EngineFuntions.m_AxMapControl = axMapControl1;//传递Map控件
 
@@ -92,7 +94,7 @@ namespace Businfo
             axCommandBars1.SetSpecialColor((XtremeCommandBars.XTPColorManagerColor)15, pColor);
 
             m_pMapDocument = new MapDocumentClass();
-            m_pMapDocument.Open(ForBusInfo.GetProfileString("Businfo", "DataPos", Winapp.StartupPath + "\\Businfo.ini") + "\\data\\DataSDE.mxd", string.Empty);
+            m_pMapDocument.Open(ForBusInfo.Mxd_Name, string.Empty);
             axMapControl1.Map = m_pMapDocument.get_Map(0);
             axMapControl1.Map.Name = "查询";
             axMapControl1.Extent = axMapControl1.FullExtent;
@@ -129,7 +131,7 @@ namespace Businfo
             axDockingPane1.FindPane(ForBusInfo.Pan_Road).Handle = m_frmRoadPane.Handle.ToInt32();
 
             ThePane = axDockingPane1.CreatePane(ForBusInfo.Pan_Facility, 200, 200, DockingDirection.DockLeftOf, null);
-            ThePane.Title = "设 备";
+            ThePane.Title = "设 施";
             axDockingPane1.FindPane(ForBusInfo.Pan_Facility).Handle = m_frmFacilityPane.Handle.ToInt32();
 
 
@@ -144,14 +146,13 @@ namespace Businfo
             switch (ForBusInfo.Login_name)
             {
             case "站点管理":
-                    
-                    axDockingPane1.FindPane(ForBusInfo.Pan_Facility).Closed = true;
+                axDockingPane1.FindPane(ForBusInfo.Pan_Facility).Closed = true;
             	break;
             case "线路管理":
                 axDockingPane1.FindPane(ForBusInfo.Pan_Station).Closed = true;
                 axDockingPane1.FindPane(ForBusInfo.Pan_Facility).Closed = true;
                 break;
-            case "设备管理":
+            case "设施管理":
                 axDockingPane1.FindPane(ForBusInfo.Pan_Road).Closed = true;
                 axDockingPane1.FindPane(ForBusInfo.Pan_Station).Closed = true;
                 break;
@@ -164,7 +165,7 @@ namespace Businfo
 
             //'鹰眼图：
             String sHawkEyeFileName;
-            sHawkEyeFileName = ForBusInfo.GetProfileString("Businfo", "DataPos", Winapp.StartupPath + "\\Businfo.ini") + "\\data\\DataSDE.mxd";
+            sHawkEyeFileName = ForBusInfo.Mxd_Name;
             m_frmlayerToc.MapHawkEye.LoadMxFile(sHawkEyeFileName);
             m_frmlayerToc.MapHawkEye.Extent = m_frmlayerToc.MapHawkEye.FullExtent;
             //m_frmlayerToc.m_MapControl = axMapControl1.Object;
@@ -199,9 +200,12 @@ namespace Businfo
         private void axCommandBars1_Execute(object sender, AxXtremeCommandBars._DCommandBarsEvents_ExecuteEvent e)
         {
             EngineFuntions.SetToolNull();
-            foreach (XtremeCommandBars.CommandBarControl eControl in axCommandBars1[2].Controls)
+            if (m_ToolStatus != e.control.Id)
             {
-                eControl.Checked = false;
+                foreach (XtremeCommandBars.CommandBarControl eControl in axCommandBars1[2].Controls)
+                {
+                    eControl.Checked = false;
+                }
             }
             switch (e.control.Id)
             {

@@ -41,14 +41,17 @@ namespace Businfo
                 }
                 pBusRoad = EngineFuntions.GetOneSeartchFeature(EngineFuntions.m_Layer_BackRoad , "OBJECTID = " + pBusStation.ID);
                 IFeature pFeature = EngineFuntions.CopyFeature(EngineFuntions.m_Layer_BusRoad, pBusRoad);
-                String sConn = "Provider=sqloledb;Data Source = 172.16.34.120;Initial Catalog=sde;User Id = sa;Password = sa";
-                //String sConn = "provider=Microsoft.Jet.OLEDB.4.0;data source=" + ForBusInfo.GetProfileString("Businfo", "DataPos", Application.StartupPath + "\\Businfo.ini") + "\\data\\公交.mdb";
-                OleDbConnection mycon = new OleDbConnection(sConn);
+                OleDbConnection mycon = new OleDbConnection(ForBusInfo.Connect_Sql);
                 mycon.Open();
                 try
                 {
-                    OleDbDataAdapter da = ForBusInfo.CreateCustomerAdapter(mycon, String.Format("select * from  sde.BackRAndS where RoadID = {0}", pBusRoad.get_Value(pBusRoad.Fields.FindField("OBJECTID"))),
-                       "", String.Format("delete from  sde.BackRAndS where RoadID = {0}", pBusRoad.get_Value(pBusRoad.Fields.FindField("OBJECTID"))));
+                    OleDbDataAdapter da;
+                    if (ForBusInfo.Connect_Type == 1)
+                        da = ForBusInfo.CreateCustomerAdapter(mycon, String.Format("select * from  sde.BackRAndS where RoadID = {0}", pBusRoad.get_Value(pBusRoad.Fields.FindField("OBJECTID"))),
+                           "", String.Format("delete from  sde.BackRAndS where RoadID = {0}", pBusRoad.get_Value(pBusRoad.Fields.FindField("OBJECTID"))));
+                    else
+                        da = ForBusInfo.CreateCustomerAdapter(mycon, String.Format("select * from  BackRAndS where RoadID = {0}", pBusRoad.get_Value(pBusRoad.Fields.FindField("OBJECTID"))),
+                       "", String.Format("delete from  BackRAndS where RoadID = {0}", pBusRoad.get_Value(pBusRoad.Fields.FindField("OBJECTID"))));
                     da.SelectCommand.ExecuteNonQuery();
                     DataSet ds = new DataSet();
                     int nQueryCount = da.Fill(ds);
@@ -81,14 +84,17 @@ namespace Businfo
             foreach (BusStation pBusStation in checkedListBox1.CheckedItems)
             {
                 IFeature pBackRoad = EngineFuntions.GetOneSeartchFeature(EngineFuntions.m_Layer_BackRoad, "OBJECTID = " + pBusStation.ID);
-                String sConn = "Provider=sqloledb;Data Source = 172.16.34.120;Initial Catalog=sde;User Id = sa;Password = sa";
-                //String sConn = "provider=Microsoft.Jet.OLEDB.4.0;data source=" + ForBusInfo.GetProfileString("Businfo", "DataPos", Application.StartupPath + "\\Businfo.ini") + "\\data\\公交.mdb";
-                OleDbConnection mycon = new OleDbConnection(sConn);
+                OleDbConnection mycon = new OleDbConnection(ForBusInfo.Connect_Sql);
                 mycon.Open();
                 try
                 {
-                    OleDbDataAdapter da = ForBusInfo.CreateCustomerAdapter(mycon,"",
-                       "", String.Format("delete from sde.BackRAndS where RoadID = {0}", pBackRoad.get_Value(pBackRoad.Fields.FindField("OBJECTID"))));
+                    OleDbDataAdapter da;
+                    if (ForBusInfo.Connect_Type == 1)
+                        da = ForBusInfo.CreateCustomerAdapter(mycon, "",
+                           "", String.Format("delete from sde.BackRAndS where RoadID = {0}", pBackRoad.get_Value(pBackRoad.Fields.FindField("OBJECTID"))));
+                    else
+                        da = ForBusInfo.CreateCustomerAdapter(mycon, "",
+                       "", String.Format("delete from BackRAndS where RoadID = {0}", pBackRoad.get_Value(pBackRoad.Fields.FindField("OBJECTID"))));
                     da.DeleteCommand.ExecuteNonQuery();//删除备份站线关联站点数据
                     ForBusInfo.Add_Log(ForBusInfo.Login_name, "删除备份站线", pBackRoad.get_Value(pBackRoad.Fields.FindField("RoadName")).ToString(), "");
                     mycon.Close();

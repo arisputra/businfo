@@ -149,12 +149,15 @@ namespace Businfo
                 {
                     if (MessageBox.Show(string.Format("确认删除线路：{0}!", DataGridView1.Rows[i].Cells[3].Value.ToString()), "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Information) == DialogResult.OK)
                     {
-                        String sConn = "Provider=sqloledb;Data Source = 172.16.34.120;Initial Catalog=sde;User Id = sa;Password = sa";
-                        //String sConn = "provider=Microsoft.Jet.OLEDB.4.0;data source=" + ForBusInfo.GetProfileString("Businfo", "DataPos", Winapp.StartupPath + "\\Businfo.ini") + "\\data\\公交.mdb";
-                        OleDbConnection mycon = new OleDbConnection(sConn);
+                        OleDbConnection mycon = new OleDbConnection(ForBusInfo.Connect_Sql);
                         mycon.Open();
-                        OleDbDataAdapter da = ForBusInfo.CreateCustomerAdapter(mycon, "",
+                        OleDbDataAdapter da;
+                        if(ForBusInfo.Connect_Type == 1)
+                            da = ForBusInfo.CreateCustomerAdapter(mycon, "",
                            "", String.Format("delete from  sde.RoadAndStation where RoadID = {0}", DataGridView1.Rows[i].Cells[1].Value.ToString()));
+                        else
+                            da = ForBusInfo.CreateCustomerAdapter(mycon, "",
+                           "", String.Format("delete from  RoadAndStation where RoadID = {0}", DataGridView1.Rows[i].Cells[1].Value.ToString()));
                         da.DeleteCommand.ExecuteNonQuery();//删除关联站点
                         pCurFeature = EngineFuntions.GetFeatureByFieldAndValue(EngineFuntions.m_Layer_BusRoad, "OBJECTID", DataGridView1.Rows[i].Cells[1].Value.ToString());
                         pCurFeature.Delete();//删除线路对象
@@ -169,12 +172,15 @@ namespace Businfo
             {
                 if (MessageBox.Show(string.Format("确认删除线路：{0}!", DataGridView1.Rows[m_nCurRowIndex].Cells[3].Value.ToString()), "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Information) == DialogResult.OK)
                 {
-                    String sConn = "Provider=sqloledb;Data Source = 172.16.34.120;Initial Catalog=sde;User Id = sa;Password = sa";
-                    //String sConn = "provider=Microsoft.Jet.OLEDB.4.0;data source=" + ForBusInfo.GetProfileString("Businfo", "DataPos", Winapp.StartupPath + "\\Businfo.ini") + "\\data\\公交.mdb";
-                    OleDbConnection mycon = new OleDbConnection(sConn);
+                    OleDbConnection mycon = new OleDbConnection(ForBusInfo.Connect_Sql);
                     mycon.Open();
-                    OleDbDataAdapter da = ForBusInfo.CreateCustomerAdapter(mycon, "",
-                       "", String.Format("delete from  sde.RoadAndStation where RoadID = {0}", DataGridView1.Rows[m_nCurRowIndex].Cells[1].Value.ToString()));
+                    OleDbDataAdapter da;
+                    if (ForBusInfo.Connect_Type == 1)
+                        da = ForBusInfo.CreateCustomerAdapter(mycon, "",
+                           "", String.Format("delete from  sde.RoadAndStation where RoadID = {0}", DataGridView1.Rows[m_nCurRowIndex].Cells[1].Value.ToString()));
+                    else
+                        da = ForBusInfo.CreateCustomerAdapter(mycon, "",
+                       "", String.Format("delete from  RoadAndStation where RoadID = {0}", DataGridView1.Rows[m_nCurRowIndex].Cells[1].Value.ToString()));
                     da.DeleteCommand.ExecuteNonQuery();
                     m_pCurFeature.Delete();
                     ForBusInfo.Add_Log(ForBusInfo.Login_name, "删除线路", DataGridView1.Rows[m_nCurRowIndex].Cells[3].Value.ToString(), "");
@@ -222,14 +228,15 @@ namespace Businfo
         {
             if (m_pCurFeature != null)
             {
-                String sConn = "Provider=sqloledb;Data Source = 172.16.34.120;Initial Catalog=sde;User Id = sa;Password = sa";
-                //String sConn = "provider=Microsoft.Jet.OLEDB.4.0;data source=" + ForBusInfo.GetProfileString("Businfo", "DataPos", Winapp.StartupPath + "\\Businfo.ini") + "\\data\\公交.mdb";
-                OleDbConnection mycon = new OleDbConnection(sConn);
+                OleDbConnection mycon = new OleDbConnection(ForBusInfo.Connect_Sql);
                 mycon.Open();
                 try
                 {
-                    sConn = String.Format("select StationID,StationOrder,BufferLength from  sde.RoadAndStation where RoadID = {0} Order by StationOrder", m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("OBJECTID")));
-                    OleDbDataAdapter da = new OleDbDataAdapter(sConn, mycon);
+                    OleDbDataAdapter da;
+                    if (ForBusInfo.Connect_Type == 1)
+                        da = new OleDbDataAdapter(String.Format("select StationID,StationOrder,BufferLength from  sde.RoadAndStation where RoadID = {0} Order by StationOrder", m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("OBJECTID"))), mycon);
+                    else
+                        da = new OleDbDataAdapter(String.Format("select StationID,StationOrder,BufferLength from  RoadAndStation where RoadID = {0} Order by StationOrder", m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("OBJECTID"))), mycon);
                     DataSet ds = new DataSet();
                     int nQueryCount = da.Fill(ds);
                     if (nQueryCount > 0)
@@ -298,15 +305,15 @@ namespace Businfo
         {
             if (m_pCurFeature != null)
             {
-                String sConn = "Provider=sqloledb;Data Source = 172.16.34.120;Initial Catalog=sde;User Id = sa;Password = sa";
-                //String sConn = "provider=Microsoft.Jet.OLEDB.4.0;data source=" + ForBusInfo.GetProfileString("Businfo", "DataPos", Winapp.StartupPath + "\\Businfo.ini") + "\\data\\公交.mdb";
-                OleDbConnection mycon = new OleDbConnection(sConn);
+                OleDbConnection mycon = new OleDbConnection(ForBusInfo.Connect_Sql);
                 mycon.Open();
                 try
                 {
-                    //sConn = String.Format("select a.* from 公交站点 a inner join RoadAndStation b on (a.OBJECTID = b.StationID and b.RoadID = {0})", m_pCurFeature.Value(m_pCurFeature.Fields.FindField("OBJECTID")))
-                    sConn = String.Format("select StationID,StationOrder from  sde.RoadAndStation where RoadID = {0} Order by StationOrder", m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("OBJECTID")));
-                    OleDbDataAdapter da = new OleDbDataAdapter(sConn, mycon);
+                    OleDbDataAdapter da;
+                    if (ForBusInfo.Connect_Type == 1)
+                        da = new OleDbDataAdapter(String.Format("select StationID,StationOrder from  sde.RoadAndStation where RoadID = {0} Order by StationOrder", m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("OBJECTID"))), mycon);
+                    else
+                        da = new OleDbDataAdapter(String.Format("select StationID,StationOrder from  RoadAndStation where RoadID = {0} Order by StationOrder", m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("OBJECTID"))), mycon);
                     DataSet ds = new DataSet();
                     int nQueryCount = da.Fill(ds);
                     string strInPara = "";
@@ -383,9 +390,7 @@ namespace Businfo
                     range1 = worksheet.get_Range("G5", "G5");
                     range1.Value2 = "末站收班：" + pCurFeatureList[0].get_Value(pCurFeatureList[0].Fields.FindField("EndCloseTim"));
                     //开始遍历站点,去行、回行站点分别读取列表，去行、回行可能不一样。
-                    String sConn = "Provider=sqloledb;Data Source = 172.16.34.120;Initial Catalog=sde;User Id = sa;Password = sa";
-                    //String sConn = "provider=Microsoft.Jet.OLEDB.4.0;data source=" + ForBusInfo.GetProfileString("Businfo", "DataPos", Winapp.StartupPath + "\\Businfo.ini") + "\\data\\公交.mdb";
-                    OleDbConnection mycon = new OleDbConnection(sConn);
+                    OleDbConnection mycon = new OleDbConnection(ForBusInfo.Connect_Sql);
                     mycon.Open();
                     try
                     {
@@ -393,8 +398,11 @@ namespace Businfo
                         {
                             if (pCurFeature.get_Value(pCurFeature.Fields.FindField("RoadTravel")).ToString() == "去行")
                             {
-                                sConn = String.Format("select a.* from sde.公交站点 a inner join sde.RoadAndStation b on (a.OBJECTID = b.StationID and b.RoadID = {0}) Order by b.StationOrder", pCurFeature.get_Value(pCurFeature.Fields.FindField("OBJECTID")));
-                                OleDbDataAdapter da = new OleDbDataAdapter(sConn, mycon);
+                                OleDbDataAdapter da;
+                                if (ForBusInfo.Connect_Type == 1)
+                                    da = new OleDbDataAdapter(String.Format("select a.* from sde.公交站点 a inner join sde.RoadAndStation b on (a.OBJECTID = b.StationID and b.RoadID = {0}) Order by b.StationOrder", pCurFeature.get_Value(pCurFeature.Fields.FindField("OBJECTID"))), mycon);
+                                else
+                                    da = new OleDbDataAdapter(String.Format("select a.* from 公交站点 a inner join RoadAndStation b on (a.OBJECTID = b.StationID and b.RoadID = {0}) Order by b.StationOrder", pCurFeature.get_Value(pCurFeature.Fields.FindField("OBJECTID"))), mycon);
                                 DataSet ds = new DataSet();
                                 int nQueryCount = da.Fill(ds);
                                 if (nQueryCount > 0)
@@ -418,8 +426,11 @@ namespace Businfo
                             }
                             if (pCurFeature.get_Value(pCurFeature.Fields.FindField("RoadTravel")).ToString() == "回行")
                             {
-                                sConn = String.Format("select a.* from sde.公交站点 a inner join sde.RoadAndStation b on (a.OBJECTID = b.StationID and b.RoadID = {0}) Order by b.StationOrder", pCurFeature.get_Value(pCurFeature.Fields.FindField("OBJECTID")));
-                                OleDbDataAdapter da = new OleDbDataAdapter(sConn, mycon);
+                                OleDbDataAdapter da;
+                                if(ForBusInfo.Connect_Type == 1)
+                                    da = new OleDbDataAdapter(String.Format("select a.* from sde.公交站点 a inner join sde.RoadAndStation b on (a.OBJECTID = b.StationID and b.RoadID = {0}) Order by b.StationOrder", pCurFeature.get_Value(pCurFeature.Fields.FindField("OBJECTID"))), mycon);
+                                else
+                                    da = new OleDbDataAdapter(String.Format("select a.* from 公交站点 a inner join RoadAndStation b on (a.OBJECTID = b.StationID and b.RoadID = {0}) Order by b.StationOrder", pCurFeature.get_Value(pCurFeature.Fields.FindField("OBJECTID"))), mycon);
                                 DataSet ds = new DataSet();
                                 int nQueryCount = da.Fill(ds);
                                 if (nQueryCount > 0)
@@ -507,9 +518,7 @@ namespace Businfo
                     range1 = worksheet.get_Range("G5", "G5");
                     range1.Value2 = "末站收班：" + pCurFeatureList[0].get_Value(pCurFeatureList[0].Fields.FindField("EndCloseTim"));
                     //开始遍历站点,去行、回行站点分别读取列表，去行、回行可能不一样。
-                    String sConn = "Provider=sqloledb;Data Source = 172.16.34.120;Initial Catalog=sde;User Id = sa;Password = sa";
-                    OleDbConnection mycon = new OleDbConnection(sConn);
-                    //sConn = "provider=Microsoft.Jet.OLEDB.4.0;data source=" + ForBusInfo.GetProfileString("Businfo", "DataPos", Winapp.StartupPath + "\\Businfo.ini") + "\\data\\公交.mdb";
+                    OleDbConnection mycon = new OleDbConnection(ForBusInfo.Connect_Sql);
                     mycon.Open();
                     try
                     {
@@ -517,8 +526,11 @@ namespace Businfo
                         {
                             if (pCurFeature.get_Value(pCurFeature.Fields.FindField("RoadTravel")).ToString() == "去行")
                             {
-                                sConn = String.Format("select a.* from sde.公交站点 a inner join sde.RoadAndStation b on (a.OBJECTID = b.StationID and b.RoadID = {0}) Order by b.StationOrder", pCurFeature.get_Value(pCurFeature.Fields.FindField("OBJECTID")));
-                                OleDbDataAdapter da = new OleDbDataAdapter(sConn, mycon);
+                                OleDbDataAdapter da;
+                                if (ForBusInfo.Connect_Type == 1)
+                                    da = new OleDbDataAdapter(String.Format("select a.* from sde.公交站点 a inner join sde.RoadAndStation b on (a.OBJECTID = b.StationID and b.RoadID = {0}) Order by b.StationOrder", pCurFeature.get_Value(pCurFeature.Fields.FindField("OBJECTID"))), mycon);
+                                else
+                                    da = new OleDbDataAdapter(String.Format("select a.* from 公交站点 a inner join RoadAndStation b on (a.OBJECTID = b.StationID and b.RoadID = {0}) Order by b.StationOrder", pCurFeature.get_Value(pCurFeature.Fields.FindField("OBJECTID"))), mycon);
                                 DataSet ds = new DataSet();
                                 int nQueryCount = da.Fill(ds);
                                 if (nQueryCount > 0)
@@ -544,8 +556,11 @@ namespace Businfo
                             }
                             if (pCurFeature.get_Value(pCurFeature.Fields.FindField("RoadTravel")).ToString() == "回行")
                             {
-                                sConn = String.Format("select a.* from sde.公交站点 a inner join sde.RoadAndStation b on (a.OBJECTID = b.StationID and b.RoadID = {0}) Order by b.StationOrder", pCurFeature.get_Value(pCurFeature.Fields.FindField("OBJECTID")));
-                                OleDbDataAdapter da = new OleDbDataAdapter(sConn, mycon);
+                                OleDbDataAdapter da;
+                                if (ForBusInfo.Connect_Type == 1)
+                                    da = new OleDbDataAdapter(String.Format("select a.* from sde.公交站点 a inner join sde.RoadAndStation b on (a.OBJECTID = b.StationID and b.RoadID = {0}) Order by b.StationOrder", pCurFeature.get_Value(pCurFeature.Fields.FindField("OBJECTID"))), mycon);
+                                else
+                                    da = new OleDbDataAdapter(String.Format("select a.* from 公交站点 a inner join RoadAndStation b on (a.OBJECTID = b.StationID and b.RoadID = {0}) Order by b.StationOrder", pCurFeature.get_Value(pCurFeature.Fields.FindField("OBJECTID"))), mycon);
                                 DataSet ds = new DataSet();
                                 int nQueryCount = da.Fill(ds);
                                 if (nQueryCount > 0)
@@ -608,21 +623,28 @@ namespace Businfo
                     }
                     m_pCurFeature = EngineFuntions.GetOneSeartchFeature(EngineFuntions.m_Layer_BusRoad, "OBJECTID = " + eRow.Cells[1].Value.ToString());
                     IFeature pFeature = EngineFuntions.CopyFeature(EngineFuntions.m_Layer_BackRoad, m_pCurFeature);
-                    String sConn = "Provider=sqloledb;Data Source = 172.16.34.120;Initial Catalog=sde;User Id = sa;Password = sa";
-                    //String sConn = "provider=Microsoft.Jet.OLEDB.4.0;data source=" + ForBusInfo.GetProfileString("Businfo", "DataPos", Winapp.StartupPath + "\\Businfo.ini") + "\\data\\公交.mdb";
-                    OleDbConnection mycon = new OleDbConnection(sConn);
+                    OleDbConnection mycon = new OleDbConnection(ForBusInfo.Connect_Sql);
                     mycon.Open();
                     try
                     {
-                        OleDbDataAdapter da = ForBusInfo.CreateCustomerAdapter(mycon, String.Format("select * from  sde.RoadAndStation where RoadID = {0}", m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("OBJECTID"))),
-                           "", String.Format("delete from  sde.RoadAndStation where RoadID = {0}", m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("OBJECTID"))));
+                        OleDbDataAdapter da;
+                        if (ForBusInfo.Connect_Type == 1)
+                            da = ForBusInfo.CreateCustomerAdapter(mycon, String.Format("select * from  sde.RoadAndStation where RoadID = {0}", m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("OBJECTID"))),
+                               "", String.Format("delete from  sde.RoadAndStation where RoadID = {0}", m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("OBJECTID"))));
+                        else
+                            da = ForBusInfo.CreateCustomerAdapter(mycon, String.Format("select * from  RoadAndStation where RoadID = {0}", m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("OBJECTID"))),
+                           "", String.Format("delete from  RoadAndStation where RoadID = {0}", m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("OBJECTID"))));
                         da.SelectCommand.ExecuteNonQuery();
                         DataSet ds = new DataSet();
                         int nQueryCount = da.Fill(ds);
                         foreach (DataRow eDataRow in ds.Tables[0].Rows)
                         {
-                            da.InsertCommand.CommandText = String.Format("insert into sde.BackRAndS(RoadID,StationID,StationOrder,BufferLength) values({0},{1},{2},{3})"
-                           , pFeature.get_Value(pFeature.Fields.FindField("OBJECTID")), eDataRow[2], eDataRow[3], eDataRow[4]);
+                            if (ForBusInfo.Connect_Type == 1)
+                                da.InsertCommand.CommandText = String.Format("insert into sde.BackRAndS(RoadID,StationID,StationOrder,BufferLength) values({0},{1},{2},{3})"
+                               , pFeature.get_Value(pFeature.Fields.FindField("OBJECTID")), eDataRow[2], eDataRow[3], eDataRow[4]);
+                            else
+                                da.InsertCommand.CommandText = String.Format("insert into BackRAndS(RoadID,StationID,StationOrder,BufferLength) values({0},{1},{2},{3})"
+                               , pFeature.get_Value(pFeature.Fields.FindField("OBJECTID")), eDataRow[2], eDataRow[3], eDataRow[4]);
                             da.InsertCommand.ExecuteNonQuery();
                         }
                         da.DeleteCommand.ExecuteNonQuery();//删除原始站线关联站点数据
@@ -656,21 +678,28 @@ namespace Businfo
                     }
                     pFeature = EngineFuntions.CopyFeature(EngineFuntions.m_Layer_BackRoad, m_pCurFeature);//拷贝图形和属性到备份图层
                     //开始移动线路对应的站点数据
-                    String sConn = "Provider=sqloledb;Data Source = 172.16.34.120;Initial Catalog=sde;User Id = sa;Password = sa";
-                    //String sConn = "provider=Microsoft.Jet.OLEDB.4.0;data source=" + ForBusInfo.GetProfileString("Businfo", "DataPos", Winapp.StartupPath + "\\Businfo.ini") + "\\data\\公交.mdb";
-                    OleDbConnection mycon = new OleDbConnection(sConn);
+                    OleDbConnection mycon = new OleDbConnection(ForBusInfo.Connect_Sql);
                     mycon.Open();
                     try
                     {
-                        OleDbDataAdapter da = ForBusInfo.CreateCustomerAdapter(mycon, String.Format("select * from  sde.RoadAndStation where RoadID = {0}", m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("OBJECTID"))),
-                            "", String.Format("delete from  sde.RoadAndStation where RoadID = {0}", m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("OBJECTID"))));
+                        OleDbDataAdapter da;
+                        if (ForBusInfo.Connect_Type == 1)
+                            da = ForBusInfo.CreateCustomerAdapter(mycon, String.Format("select * from  sde.RoadAndStation where RoadID = {0}", m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("OBJECTID"))),
+                                "", String.Format("delete from  sde.RoadAndStation where RoadID = {0}", m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("OBJECTID"))));
+                        else
+                            da = ForBusInfo.CreateCustomerAdapter(mycon, String.Format("select * from  RoadAndStation where RoadID = {0}", m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("OBJECTID"))),
+                            "", String.Format("delete from  RoadAndStation where RoadID = {0}", m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("OBJECTID"))));
                         da.SelectCommand.ExecuteNonQuery();
                         DataSet ds = new DataSet();
                         int nQueryCount = da.Fill(ds);
                         foreach (DataRow eRow in ds.Tables[0].Rows)
                         {
-                            da.InsertCommand.CommandText = String.Format("insert into sde.BackRAndS(RoadID,StationID,StationOrder,BufferLength) values({0},{1},{2},{3})"
-                                , pFeature.get_Value(pFeature.Fields.FindField("OBJECTID")), eRow[2], eRow[3], eRow[4]);
+                            if (ForBusInfo.Connect_Type == 1)
+                                da.InsertCommand.CommandText = String.Format("insert into sde.BackRAndS(RoadID,StationID,StationOrder,BufferLength) values({0},{1},{2},{3})"
+                                    , pFeature.get_Value(pFeature.Fields.FindField("OBJECTID")), eRow[2], eRow[3], eRow[4]);
+                            else
+                                da.InsertCommand.CommandText = String.Format("insert into BackRAndS(RoadID,StationID,StationOrder,BufferLength) values({0},{1},{2},{3})"
+                               , pFeature.get_Value(pFeature.Fields.FindField("OBJECTID")), eRow[2], eRow[3], eRow[4]);
                             da.InsertCommand.ExecuteNonQuery();
                         }
                         da.DeleteCommand.ExecuteNonQuery();//删除原始站线关联站点数据
