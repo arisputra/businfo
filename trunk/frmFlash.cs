@@ -21,6 +21,8 @@ namespace Businfo
         [STAThread]
         static void Main()
         {
+            ForBusInfo.Connect_Type = 2;//初始化连接类型
+            ForBusInfo.AppIni();
             Application.Run(new frmFlash());
         }
 
@@ -42,31 +44,43 @@ namespace Businfo
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //String sConn = "Provider=sqloledb;Data Source = 172.16.34.120;Initial Catalog=sde;User Id = sa;Password = sa";
-            String sConn = "provider=Microsoft.Jet.OLEDB.4.0;data source=" + ForBusInfo.GetProfileString("Businfo", "DataPos", Application.StartupPath + "\\Businfo.ini") + "\\data\\公交.mdb";
-            OleDbConnection mycon = new OleDbConnection(sConn);
-            mycon.Open();
-            //OleDbDataAdapter da = ForBusInfo.CreateCustomerAdapter(mycon, string.Format("select * from sde.Login where Name = '{0}'", textBox1.Text), "", "");
-            OleDbDataAdapter da = ForBusInfo.CreateCustomerAdapter(mycon, string.Format("select * from Login where Name = '{0}'", textBox1.Text), "", "");
-            da.SelectCommand.ExecuteNonQuery();
-            DataSet ds = new DataSet();
-            int nQueryCount = da.Fill(ds);
-            if (nQueryCount < 1)
+            try
             {
-                MessageBox.Show("用户名不存在，请重新输入\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                OleDbConnection mycon = new OleDbConnection(ForBusInfo.Connect_Sql);
+
+                mycon.Open();
+                OleDbDataAdapter da;
+                if (ForBusInfo.Connect_Type == 1)
+                    da = ForBusInfo.CreateCustomerAdapter(mycon, string.Format("select * from sde.Login where Name = '{0}'", textBox1.Text), "", "");
+                else
+                    da = ForBusInfo.CreateCustomerAdapter(mycon, string.Format("select * from Login where Name = '{0}'", textBox1.Text), "", "");
+
+                da.SelectCommand.ExecuteNonQuery();
+                DataSet ds = new DataSet();
+                int nQueryCount = da.Fill(ds);
+                if (nQueryCount < 1)
+                {
+                    MessageBox.Show("用户名不存在，请重新输入\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else if (maskedTextBox1.Text.ToLower() == ds.Tables[0].Rows[0][2].ToString().ToLower())
+                {
+                    ForBusInfo.Login_name = textBox1.Text;
+                    ForBusInfo.Login_Operation = ds.Tables[0].Rows[0][3].ToString();
+                    timer1.Start();
+                    ForBusInfo.WritePrivateProfileString("Businfo", "LoginName", textBox1.Text, Application.StartupPath + "\\Businfo.ini");
+                }
+                else
+                {
+                    MessageBox.Show("密码错误，请重新输入\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                mycon.Close();
             }
-            else if (maskedTextBox1.Text.ToLower() == ds.Tables[0].Rows[0][2].ToString().ToLower())
+            catch (System.Exception ex)
             {
-                ForBusInfo.Login_name = textBox1.Text;
-                ForBusInfo.Login_Operation = ds.Tables[0].Rows[0][3].ToString();
-                timer1.Start();
-                ForBusInfo.WritePrivateProfileString("Businfo", "LoginName", textBox1.Text, Application.StartupPath + "\\Businfo.ini");
+            	
             }
-            else
-            {
-                MessageBox.Show("密码错误，请重新输入\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            mycon.Close();
+            
+            
            
         }
 

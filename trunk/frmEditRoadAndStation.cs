@@ -117,21 +117,26 @@ namespace Businfo
 
         private void button3_Click(object sender, EventArgs e)
         {
-            String sConn = "Provider=sqloledb;Data Source = 172.16.34.120;Initial Catalog=sde;User Id = sa;Password = sa";
-            //sConn = "provider=Microsoft.Jet.OLEDB.4.0;data source=" + ForBusInfo.GetProfileString("Businfo", "DataPos", Application.StartupPath + "\\Businfo.ini") + "\\data\\公交.mdb";
-            OleDbConnection mycon = new OleDbConnection(sConn);
+            OleDbConnection mycon = new OleDbConnection(ForBusInfo.Connect_Sql);
             mycon.Open();
             try
             {
                 int nOrder = 0;
                 string pStrSQL;
                 OleDbCommand pCom;
-                pStrSQL = String.Format("delete from  sde.RoadAndStation where RoadID = {0}", m_nRoadID);
+                if (ForBusInfo.Connect_Type == 1)
+                    pStrSQL = String.Format("delete from  sde.RoadAndStation where RoadID = {0}", m_nRoadID);
+                else
+                    pStrSQL = String.Format("delete from  RoadAndStation where RoadID = {0}", m_nRoadID);
                 pCom = new OleDbCommand(pStrSQL, mycon);
                 pCom.ExecuteNonQuery();
                 foreach (BusStation pBusStation in checkedListBox1.Items)
                 {
-                    pStrSQL = String.Format("insert into sde.RoadAndStation(RoadID,StationID,StationOrder,BufferLength) values({0},{1},{2},{3})"
+                    if (ForBusInfo.Connect_Type == 1)
+                        pStrSQL = String.Format("insert into sde.RoadAndStation(RoadID,StationID,StationOrder,BufferLength) values({0},{1},{2},{3})"
+                        , m_nRoadID, pBusStation.ID, nOrder++, n_nBufferLength);
+                    else
+                        pStrSQL = String.Format("insert into RoadAndStation(RoadID,StationID,StationOrder,BufferLength) values({0},{1},{2},{3})"
                         , m_nRoadID, pBusStation.ID, nOrder++, n_nBufferLength);
                     pCom = new OleDbCommand(pStrSQL, mycon);
                     pCom.ExecuteNonQuery();

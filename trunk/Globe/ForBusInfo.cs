@@ -66,6 +66,9 @@ namespace Businfo.Globe
         public static frmMainNew Frm_Main; //主窗体类
         public static Microsoft.Office.Interop.Excel.Application Excel_app = new Microsoft.Office.Interop.Excel.Application();//由于老是有Excel进程关不了，全局一个。
         public enum GridSetType {Station_FillPan = 1, Station_FillAll, Station_FillByOBJECTID, Station_FillByStationName, Road_FillPan, Road_FillAll, Road_FillByOBJECTID, Road_FillByStationName};
+        public static string Connect_Sql = "";//链接数据库字符串
+        public static string Mxd_Name = "";//加载mxd
+        public static int Connect_Type = 1;//链接数据库类型1sde,2本地
 
         //判断文件是否打开
         [DllImport("kernel32.dll")]
@@ -99,17 +102,18 @@ namespace Businfo.Globe
 
         public static void Add_Log(string strName,string strOperation,string strField,string Description)
         {
-            String sConn = "Provider=sqloledb;Data Source = 172.16.34.120;Initial Catalog=sde;User Id = sa;Password = sa";
-            OleDbConnection mycon = new OleDbConnection(sConn);
-            //sConn = "provider=Microsoft.Jet.OLEDB.4.0;data source=" + ForBusInfo.GetProfileString("Businfo", "DataPos", Application.StartupPath + "\\Businfo.ini") + "\\data\\公交.mdb";
+            OleDbConnection mycon = new OleDbConnection(ForBusInfo.Connect_Sql);
             mycon.Open();
             try
             {
                 OleDbCommand pCom;
-                sConn = String.Format("insert into sde.OperationLog(Name,LogTime,Field,Operation,LogScribe) values('{0}','{1}','{2}','{3}','{4}')"
-                      , strName, DateTime.Now.ToString(), strField,strOperation, Description);
-                pCom = new OleDbCommand(sConn, mycon);
-                pCom.ExecuteNonQuery();         
+                if(ForBusInfo.Connect_Type == 1)
+                    pCom = new OleDbCommand(String.Format("insert into sde.OperationLog(Name,LogTime,Field,Operation,LogScribe) values('{0}','{1}','{2}','{3}','{4}')"
+                          , strName, DateTime.Now.ToString(), strField, strOperation, Description), mycon);
+                else
+                    pCom = new OleDbCommand(String.Format("insert into OperationLog(Name,LogTime,Field,Operation,LogScribe) values('{0}','{1}','{2}','{3}','{4}')"
+                      , strName, DateTime.Now.ToString(), strField, strOperation, Description), mycon);
+                pCom.ExecuteNonQuery();
                 mycon.Close();
             }
             catch (System.Exception ex)
@@ -139,25 +143,44 @@ namespace Businfo.Globe
 
         public static void StationFill(DataGridView grid, GridSetType emunType, string strQuery, string[] strShow)
         {
-            String sConn = "Provider=sqloledb;Data Source = 172.16.34.120;Initial Catalog = sde;User Id = sa;Password = sa";
-            //String sConn = "provider=Microsoft.Jet.OLEDB.4.0;data source=" + ForBusInfo.GetProfileString("Businfo", "DataPos", Application.StartupPath + "\\Businfo.ini") + "\\data\\公交.mdb";
-            OleDbConnection mycon = new OleDbConnection(sConn);
+            OleDbConnection mycon = new OleDbConnection(ForBusInfo.Connect_Sql);
             
             mycon.Open();
-            string strStationSQL = @"SELECT  OBJECTID,StationNo,StationName,Direct,StationAlias,  MainSymbol, StationCharacter, GPSLongtitude, GPSLatitude, GPSHigh,
+            string strStationSQL, strRoadSQL;
+            if (ForBusInfo.Connect_Type == 1)
+            {
+                  strStationSQL = @"SELECT  OBJECTID,StationNo,StationName,Direct,StationAlias,  MainSymbol, StationCharacter, GPSLongtitude, GPSLatitude, GPSHigh,
                       RodMaterialFirst, RodStyleFirst, StationMaterial, StationStyle, Chair, StationType, BusShelter, Constructor, ConstructionTime, StationLand, 
                       TrafficVolume, PictureFirst, PictureSecond, PictureThird, StationArea, ServiceArea, DayTrafficVolume, PassSum, PassRode, HourMass, HourEvacuate, 
                       DayMass, DayEvacuate, RouteSum, MoveTime, RebuildTime, RemoveTime, StationLong, RodMaterialSecond, RodMaterialThird, RodStyleSecond, 
                       RodStyleThird, DispatchCompanyFirst, DispatchRouteFirst, DispatchStationFirst, DispatchCompanySecond, DispatchRouteSecond, 
                       DispatchStationSecond, DispatchCompanyThird, DispatchRouteThird, DispatchStationThird, Classify FROM sde.公交站点";//sde.公交站点";
 
-            string strRoadSQL = @"SELECT OBJECTID,RoadID,RoadName,RoadTravel, Company,  RoadType,FirstStartTime, FirstCloseTime, EndStartTime, EndCloseTim, TicketPrice1, 
+             strRoadSQL = @"SELECT OBJECTID,RoadID,RoadName,RoadTravel, Company,  RoadType,FirstStartTime, FirstCloseTime, EndStartTime, EndCloseTim, TicketPrice1, 
                       TicketPrice2, TicketPrice3, RoadNo, Length, AverageLoadFactor, BusNumber, 
                       Capacity, PassengerSum, PassengerWorkSum, AverageSpeed, NulineCoefficient, 
                       NulineCoefficient2, Picture1, Picture2, Picture3, Picture4, Picture5, Unit, ServeArea, 
                       AverageLength, HigeLoadFactor, RoadLoad, DirectImbalance, AlternatelyCoefficient, 
                       TimeCoefficient, DayCoefficient, HighHourSect, HighHourArea, HighHourMass, 
                       HighPassengerMass FROM sde.公交站线";//sde.公交站线";
+            }
+            else
+            {
+                 strStationSQL = @"SELECT  OBJECTID,StationNo,StationName,Direct,StationAlias,  MainSymbol, StationCharacter, GPSLongtitude, GPSLatitude, GPSHigh,
+                      RodMaterialFirst, RodStyleFirst, StationMaterial, StationStyle, Chair, StationType, BusShelter, Constructor, ConstructionTime, StationLand, 
+                      TrafficVolume, PictureFirst, PictureSecond, PictureThird, StationArea, ServiceArea, DayTrafficVolume, PassSum, PassRode, HourMass, HourEvacuate, 
+                      DayMass, DayEvacuate, RouteSum, MoveTime, RebuildTime, RemoveTime, StationLong, RodMaterialSecond, RodMaterialThird, RodStyleSecond, 
+                      RodStyleThird, DispatchCompanyFirst, DispatchRouteFirst, DispatchStationFirst, DispatchCompanySecond, DispatchRouteSecond, 
+                      DispatchStationSecond, DispatchCompanyThird, DispatchRouteThird, DispatchStationThird, Classify FROM 公交站点";//sde.公交站点";
+
+                 strRoadSQL = @"SELECT OBJECTID,RoadID,RoadName,RoadTravel, Company,  RoadType,FirstStartTime, FirstCloseTime, EndStartTime, EndCloseTim, TicketPrice1, 
+                      TicketPrice2, TicketPrice3, RoadNo, Length, AverageLoadFactor, BusNumber, 
+                      Capacity, PassengerSum, PassengerWorkSum, AverageSpeed, NulineCoefficient, 
+                      NulineCoefficient2, Picture1, Picture2, Picture3, Picture4, Picture5, Unit, ServeArea, 
+                      AverageLength, HigeLoadFactor, RoadLoad, DirectImbalance, AlternatelyCoefficient, 
+                      TimeCoefficient, DayCoefficient, HighHourSect, HighHourArea, HighHourMass, 
+                      HighPassengerMass FROM 公交站线";//sde.公交站线";
+            }
             try
             {
                switch (emunType)
@@ -746,6 +769,22 @@ namespace Businfo.Globe
             Excel_app.Visible = true;
         }
         #endregion
+
+        public static void AppIni()
+        {
+            string strType = GetProfileString("Businfo", "DataPos", Application.StartupPath + "\\Businfo.ini");
+            if (Connect_Type == 1)
+            {
+                Connect_Sql = "Provider=sqloledb;Data Source = 172.16.34.120;Initial Catalog=sde;User Id = sa;Password = sa";
+                Mxd_Name = strType + "\\data\\DataSDE.mxd";
+                    
+            }
+            else
+            {
+                Connect_Sql = "provider=Microsoft.Jet.OLEDB.4.0;data source=" + strType + "\\data\\公交.mdb";
+                Mxd_Name = strType + "\\data\\Data.mxd";
+            }
+        }
     }
 
     public class BusStation : IComparable<BusStation>
