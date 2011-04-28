@@ -102,12 +102,12 @@ namespace Businfo.Globe
 
         public static void Add_Log(string strName,string strOperation,string strField,string Description)
         {
-            OleDbConnection mycon = new OleDbConnection(ForBusInfo.Connect_Sql);
+            OleDbConnection mycon = new OleDbConnection(Connect_Sql);
             mycon.Open();
             try
             {
                 OleDbCommand pCom;
-                if(ForBusInfo.Connect_Type == 1)
+                if(Connect_Type == 1)
                     pCom = new OleDbCommand(String.Format("insert into sde.OperationLog(Name,LogTime,Field,Operation,LogScribe) values('{0}','{1}','{2}','{3}','{4}')"
                           , strName, DateTime.Now.ToString(), strField, strOperation, Description), mycon);
                 else
@@ -143,11 +143,11 @@ namespace Businfo.Globe
 
         public static void StationFill(DataGridView grid, GridSetType emunType, string strQuery, string[] strShow)
         {
-            OleDbConnection mycon = new OleDbConnection(ForBusInfo.Connect_Sql);
+            OleDbConnection mycon = new OleDbConnection(Connect_Sql);
             
             mycon.Open();
             string strStationSQL, strRoadSQL;
-            if (ForBusInfo.Connect_Type == 1)
+            if (Connect_Type == 1)
             {
                   strStationSQL = @"SELECT  OBJECTID,StationNo,StationName,Direct,StationAlias,  MainSymbol, StationCharacter, GPSLongtitude, GPSLatitude, GPSHigh,
                       RodMaterialFirst, RodStyleFirst, StationMaterial, StationStyle, Chair, StationType, BusShelter, Constructor, ConstructionTime, StationLand, 
