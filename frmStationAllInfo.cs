@@ -32,6 +32,12 @@ namespace Businfo
                 ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Station_FillAll, "", new string[] { m_strField });
             else
                 RefreshSelectGrid();
+            DataGridView1.RowHeadersWidth = 60;
+            int nNum = 1;
+            foreach (DataGridViewRow eRow in DataGridView1.Rows)
+            {
+                eRow.HeaderCell.Value = nNum++.ToString();
+            }
             foreach (DataGridViewColumn eColumn in DataGridView1.Columns)
             {
                 eColumn.ReadOnly = true;
@@ -43,87 +49,93 @@ namespace Businfo
 
         private void DataGridView1_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            if ( e.ColumnIndex == -1 && e.RowIndex > -1)
-            {
-                if (!m_bEdit)
-                {
-                    if(MessageBox.Show("是否要修改属性！" , "提示", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                    {
-                        foreach (DataGridViewCell eCell in DataGridView1.Rows[e.RowIndex].Cells)
-                        {
-                            eCell.ReadOnly = false;
-                        }
-                        if (ForBusInfo.Login_name == "设备管理")
-                        {
-                            DataGridView1.Columns["StationName"].ReadOnly = true;
-                            DataGridView1.Columns["Direct"].ReadOnly = true;
-                            DataGridView1.Columns["StationAlias"].ReadOnly = true;
-                        }
-                        m_bEdit = true;
-                        m_nCurRowIndex = e.RowIndex;
-                    }
-                    else
-                    {
-                        m_bEdit = false;
-                    }
-                }
-                else
-                {
-                    if(MessageBox.Show("取消修改！" , "提示", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                    {
-                        DataGridView1.EndEdit();
-                        m_nObjectId = (int)DataGridView1.Rows[m_nCurRowIndex].Cells[1].Value;
-                        m_pCurFeature = EngineFuntions.GetFeatureByFieldAndValue(EngineFuntions.m_Layer_BusStation, "OBJECTID",m_nObjectId.ToString());
-                        if (m_pCurFeature != null)
-                        {
-                            for (int i = 3; i < m_pCurFeature.Fields.FieldCount; i++)
-                            {
-                                if (DataGridView1.Rows[m_nCurRowIndex].Cells[i].Visible)
-                                {
-                                    DataGridView1.Rows[m_nCurRowIndex].Cells[i].Value = m_pCurFeature.get_Value(i - 1);
-                                }
-                            }
-                            foreach (DataGridViewCell eCell in DataGridView1.Rows[m_nCurRowIndex].Cells)
-                            {
-                                eCell.ReadOnly = true;
-                            }
-                        }
-                        m_bEdit = false;
-                    }
-                    else
-                    {
-                        m_bEdit = true;
-                    }
-                }
-            }
+#region 取消了双击修改，改成按钮进入全部编辑模式
+            //if (e.ColumnIndex == -1 && e.RowIndex > -1)
+            //{
+            //    if (!m_bEdit)
+            //    {
+            //        if (MessageBox.Show("是否要修改属性！", "提示", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            //        {
+            //            foreach (DataGridViewCell eCell in DataGridView1.Rows[e.RowIndex].Cells)
+            //            {
+            //                eCell.ReadOnly = false;
+            //            }
+            //            if (ForBusInfo.Login_name == "设施管理")
+            //            {
+            //                DataGridView1.Columns["StationName"].ReadOnly = true;
+            //                DataGridView1.Columns["Direct"].ReadOnly = true;
+            //                DataGridView1.Columns["StationAlias"].ReadOnly = true;
+            //            }
+            //            m_bEdit = true;
+            //            m_nCurRowIndex = e.RowIndex;
+            //        }
+            //        else
+            //        {
+            //            m_bEdit = false;
+            //        }
+            //    }
+            //    else
+            //    {
+            //        if (MessageBox.Show("取消修改！", "提示", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            //        {
+            //            DataGridView1.EndEdit();
+            //            m_nObjectId = (int)DataGridView1.Rows[m_nCurRowIndex].Cells[1].Value;
+            //            m_pCurFeature = EngineFuntions.GetFeatureByFieldAndValue(EngineFuntions.m_Layer_BusStation, "OBJECTID", m_nObjectId.ToString());
+            //            if (m_pCurFeature != null)
+            //            {
+            //                for (int i = 3; i < m_pCurFeature.Fields.FieldCount; i++)
+            //                {
+            //                    if (DataGridView1.Rows[m_nCurRowIndex].Cells[i].Visible)
+            //                    {
+            //                        DataGridView1.Rows[m_nCurRowIndex].Cells[i].Value = m_pCurFeature.get_Value(i - 1);
+            //                    }
+            //                }
+            //                foreach (DataGridViewCell eCell in DataGridView1.Rows[m_nCurRowIndex].Cells)
+            //                {
+            //                    eCell.ReadOnly = true;
+            //                }
+            //            }
+            //            m_bEdit = false;
+            //        }
+            //        else
+            //        {
+            //            m_bEdit = true;
+            //        }
+            //    }
+            //}
+#endregion
+            
         }
 
         private void DataGridView1_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
         {
-            if (e.RowIndex != m_nCurRowIndex && m_bEdit)
-            {
-                foreach (DataGridViewCell eCell in DataGridView1.Rows[m_nCurRowIndex].Cells)
-                {
-                    eCell.ReadOnly = true;
-                }
-                DataGridView1.EndEdit();
-                m_nObjectId = (int)DataGridView1.Rows[m_nCurRowIndex].Cells[1].Value;
-                m_pCurFeature = EngineFuntions.GetFeatureByFieldAndValue(EngineFuntions.m_Layer_BusStation, "OBJECTID",m_nObjectId.ToString());
-                if (m_pCurFeature != null)
-                {
-                     for (int i = 3; i < m_pCurFeature.Fields.FieldCount; i++)
-                     {
-                         if (DataGridView1.Rows[m_nCurRowIndex].Cells[i].Visible)
-                         {
-                             m_pCurFeature.set_Value(i - 1, DataGridView1.Rows[m_nCurRowIndex].Cells[i].Value);
-                         }
-                     }
-                     m_pCurFeature.Store();   
-                }
-                string strName = m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("StationName")).ToString();
-                ForBusInfo.Add_Log(ForBusInfo.Login_name, "修改站点属性", strName, "");
-                 m_bEdit = false;
-            }
+#region 取消了切换行保存数据，用户点击按钮全部保存.实际是cellchang时保存。
+            //if (e.RowIndex != m_nCurRowIndex && m_bEdit)
+            //{
+            //    foreach (DataGridViewCell eCell in DataGridView1.Rows[m_nCurRowIndex].Cells)
+            //    {
+            //        eCell.ReadOnly = true;
+            //    }
+            //    DataGridView1.EndEdit();
+            //    m_nObjectId = (int)DataGridView1.Rows[m_nCurRowIndex].Cells[1].Value;
+            //    m_pCurFeature = EngineFuntions.GetFeatureByFieldAndValue(EngineFuntions.m_Layer_BusStation, "OBJECTID", m_nObjectId.ToString());
+            //    if (m_pCurFeature != null)
+            //    {
+            //        for (int i = 3; i < m_pCurFeature.Fields.FieldCount; i++)
+            //        {
+            //            if (DataGridView1.Rows[m_nCurRowIndex].Cells[i].Visible)
+            //            {
+            //                m_pCurFeature.set_Value(i, DataGridView1.Rows[m_nCurRowIndex].Cells[i].Value);
+            //            }
+            //        }
+            //        m_pCurFeature.Store();
+            //    }
+            //    string strName = m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("StationName")).ToString();
+            //    ForBusInfo.Add_Log(ForBusInfo.Login_name, "修改站点属性", strName, "");
+            //    m_bEdit = false;
+            //}
+#endregion
+            
             //得到当前右键选中的feature
             m_pCurFeature = null;
             if (e.Button == MouseButtons.Right && e.RowIndex >= 0 && e.RowIndex <= DataGridView1.Rows.Count)
@@ -135,7 +147,7 @@ namespace Businfo
             }
         }
 
-         public void RefreshSelectGrid()
+        public void RefreshSelectGrid()
         {
             String strInPara = "";
             if (m_featureCollection.Count > 0)
@@ -149,39 +161,44 @@ namespace Businfo
             }
         }
 
-         public void RefreshStationGrid(string strInPara)
+        public void RefreshStationGrid(string strInPara)
         {
             ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Station_FillByOBJECTID, string.Format(" WHERE (OBJECTID IN ({0}))", strInPara.Substring(0, strInPara.Length - 1)), new string[] { m_strField });
             //this.公交站点TableAdapter.FillByINOBJECTID(this.stationDataSet.公交站点, strInPara);
         }
 
         public void SetStationOrderCell(List<String> nRowAndorder)
-        {  
+        {
             string strTemp;
             for (int i = 0; i < nRowAndorder.Count; i++)
             {
-               if (i < 10)
-               {
-                   strTemp = String.Format("0{0}", i);//不足两位的前面补零   
-               } 
-               else
-               {
-                   strTemp = i.ToString();
-               }
-               foreach (DataGridViewRow eRow in DataGridView1.Rows)
+                if (i < 10)
                 {
-                     if (eRow.Cells[1].Value.ToString() == nRowAndorder[i])
-                     {
-                         eRow.Cells[2].Value = strTemp;
-                         break;
-                     }
-                }             
+                    strTemp = String.Format("0{0}", i);//不足两位的前面补零   
+                }
+                else
+                {
+                    strTemp = i.ToString();
+                }
+                foreach (DataGridViewRow eRow in DataGridView1.Rows)
+                {
+                    if (eRow.Cells[1].Value.ToString() == nRowAndorder[i])
+                    {
+                        eRow.Cells[2].Value = strTemp;
+                        break;
+                    }
+                }
             }
         }
 
-        public void SetSortColumn(int  nSortColumn)
+        public void SetSortColumn(int nSortColumn)
         {
             DataGridView1.Sort(DataGridView1.Columns[nSortColumn], System.ComponentModel.ListSortDirection.Ascending);
+            int nNum = 1;
+            foreach (DataGridViewRow eRow in DataGridView1.Rows)
+            {
+                eRow.HeaderCell.Value = nNum++.ToString();
+            }
         }
 
         private void 定位到ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -224,33 +241,55 @@ namespace Businfo
             }
         }
 
-        //保存站点属性
+        //修改保存站点属性
         private void button2_Click(object sender, EventArgs e)
         {
             if (m_bEdit)
             {
-                foreach (DataGridViewCell eCell in DataGridView1.Rows[m_nCurRowIndex].Cells)
+                foreach (DataGridViewColumn eColumn in DataGridView1.Columns)
                 {
-                    eCell.ReadOnly = true;
+                    eColumn.ReadOnly = true;
                 }
-                DataGridView1.EndEdit();
-                m_nObjectId = (int)DataGridView1.Rows[m_nCurRowIndex].Cells[1].Value;
-                m_pCurFeature = EngineFuntions.GetFeatureByFieldAndValue(EngineFuntions.m_Layer_BusStation, "OBJECTID", m_nObjectId.ToString());
-                if (m_pCurFeature != null)
-                {
-                     
-                    for (int i = 3; i < m_pCurFeature.Fields.FieldCount; i++)
-                    {
-                        if (DataGridView1.Rows[m_nCurRowIndex].Cells[i].Visible)
-                        {
-                            m_pCurFeature.set_Value(i - 1, DataGridView1.Rows[m_nCurRowIndex].Cells[i].Value);
-                        }
-                    }
-                    m_pCurFeature.Store();
-                }
-                string strName = m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("StationName")).ToString();
-                ForBusInfo.Add_Log(ForBusInfo.Login_name, "修改站点属性", strName, "");
+                //DataGridView1.EndEdit();
+                //m_nObjectId = (int)DataGridView1.Rows[m_nCurRowIndex].Cells["OBJECTID"].Value;
+                //m_pCurFeature = EngineFuntions.GetFeatureByFieldAndValue(EngineFuntions.m_Layer_BusStation, "OBJECTID", m_nObjectId.ToString());
+                //if (m_pCurFeature != null)
+                //{
+                //    for (int i = 3; i < m_pCurFeature.Fields.FieldCount; i++)
+                //    {
+                //        if (DataGridView1.Rows[m_nCurRowIndex].Cells[i].Visible)
+                //        {
+                //            m_pCurFeature.set_Value(i , DataGridView1.Rows[m_nCurRowIndex].Cells[i].Value);
+                //        }
+                //    }
+                //    m_pCurFeature.Store();
+                //}
+                //string strName = m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("StationName")).ToString();
+                //ForBusInfo.Add_Log(ForBusInfo.Login_name, "修改站点属性", strName, "");
                 m_bEdit = false;
+                button2.Text = "开始编辑";
+            }
+            else
+            {
+                if (MessageBox.Show("是否要修改属性！", "提示", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    button2.Text = "保存修改";
+                    foreach (DataGridViewColumn eColumn in DataGridView1.Columns)
+                    {
+                        eColumn.ReadOnly = false;
+                    }
+                    if (ForBusInfo.Login_name == "设施管理")
+                    {
+                        DataGridView1.Columns["StationName"].ReadOnly = true;
+                        DataGridView1.Columns["Direct"].ReadOnly = true;
+                        DataGridView1.Columns["StationAlias"].ReadOnly = true;
+                    }
+                    m_bEdit = true;
+                }
+                else
+                {
+                    m_bEdit = false;
+                }
             }
         }
 
@@ -273,6 +312,11 @@ namespace Businfo
                 eColumn.ReadOnly = true;
             }
             DataGridView1.Columns[0].ReadOnly = false;
+            int nNum = 1;
+            foreach (DataGridViewRow eRow in DataGridView1.Rows)
+            {
+                eRow.HeaderCell.Value = nNum++.ToString();
+            }
         }
 
         //按钮设为不可见了
@@ -288,6 +332,36 @@ namespace Businfo
         private void button4_Click(object sender, EventArgs e)
         {
             ForBusInfo.DataGridView2Excel(DataGridView1, "站点",true,0);
+        }
+        //修改了cell就保存数据
+        private void DataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (m_bEdit)
+            {
+                m_nCurRowIndex = e.RowIndex;
+                DataGridView1.EndEdit();
+                m_nObjectId = (int)DataGridView1.Rows[m_nCurRowIndex].Cells["OBJECTID"].Value;
+                m_pCurFeature = EngineFuntions.GetFeatureByFieldAndValue(EngineFuntions.m_Layer_BusStation, "OBJECTID", m_nObjectId.ToString());
+                if (m_pCurFeature != null)
+                {
+                    for (int i = 3; i < m_pCurFeature.Fields.FieldCount; i++)
+                    {
+                        if (DataGridView1.Rows[m_nCurRowIndex].Cells[i].Visible)
+                        {
+                            m_pCurFeature.set_Value(i, DataGridView1.Rows[m_nCurRowIndex].Cells[i].Value);
+                        }
+                    }
+                    m_pCurFeature.Store();
+                }
+                string strName = m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("StationName")).ToString();
+                if (e.ColumnIndex > 0)
+                ForBusInfo.Add_Log(ForBusInfo.Login_name, "修改站点属性", strName, DataGridView1.Columns[e.ColumnIndex].HeaderText);
+            }
+        }
+        //处理gridview输入格式错误
+        private void DataGridView1_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            MessageBox.Show(e.Exception.Message, "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }
