@@ -227,6 +227,7 @@ namespace Businfo.Globe
                                eCol.Resizable = DataGridViewTriState.False;
                                eCol.Visible = false;
                            }
+                           grid.Columns[0].Visible = true;
                            grid.Columns[0].ReadOnly = false;
                            grid.Columns[0].HeaderText = "";
                            //grid.Columns[1].Visible = false;
@@ -325,6 +326,7 @@ namespace Businfo.Globe
                             eCol.Resizable = DataGridViewTriState.False;
                             eCol.Visible = false;
                         }
+                        grid.Columns[0].Visible = true;
                         grid.Columns[0].ReadOnly = false;
                         grid.Columns[0].HeaderText = "";
                         //grid.Columns[1].Visible = false;
@@ -424,7 +426,7 @@ namespace Businfo.Globe
                         }
                     }
                     break;
-                   case GridSetType.Road_FillPan :
+                   case GridSetType.Road_FillPan:
                     da = ForBusInfo.CreateCustomerAdapter(mycon, strRoadSQL, "", "");
                     da.SelectCommand.ExecuteNonQuery();
                     ds = new DataSet();

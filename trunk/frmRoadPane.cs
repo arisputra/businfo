@@ -413,13 +413,13 @@ namespace Businfo
                                     foreach (DataRow eTableRow in ds.Tables[0].Rows)
                                     {
                                         range1 = worksheet.get_Range(string.Format("B{0}", 8 + (2 * i)), string.Format("B{0}", 8 + (2 * i)));
-                                        range1.Value2 = eTableRow[2];
+                                        range1.Value2 = eTableRow["StationName"];
                                         range1 = worksheet.get_Range(string.Format("B{0}", 9 + (2 * i)), string.Format("B{0}", 9 + (2 * i)));
-                                        range1.Value2 = eTableRow[4];
+                                        range1.Value2 = eTableRow["StationAlias"];
                                         range1 = worksheet.get_Range(string.Format("C{0}", 8 + (2 * i)), string.Format("C{0}", 9 + (2 * i)));
-                                        range1.Value2 = eTableRow[13];
+                                        range1.Value2 = eTableRow["StationStyle"];
                                         range1 = worksheet.get_Range(string.Format("D{0}", 8 + (2 * i)), string.Format("D{0}", 9 + (2 * i++)));
-                                        range1.Value2 = eTableRow[6];
+                                        range1.Value2 = eTableRow["StationCharacter"];
                                     }
 
                                 }
@@ -441,13 +441,13 @@ namespace Businfo
                                     foreach (DataRow eTableRow in ds.Tables[0].Rows)
                                     {
                                         range1 = worksheet.get_Range(string.Format("E{0}", 8 + (2 * j)), string.Format("E{0}", 8 + (2 * j)));
-                                        range1.Value2 = eTableRow[2];
+                                        range1.Value2 = eTableRow["StationName"];
                                         range1 = worksheet.get_Range(string.Format("E{0}", 9 + (2 * j)), string.Format("E{0}", 9 + (2 * j)));
-                                        range1.Value2 = eTableRow[4];
+                                        range1.Value2 = eTableRow["StationAlias"];
                                         range1 = worksheet.get_Range(string.Format("F{0}", 8 + (2 * j)), string.Format("F{0}", 9 + (2 * j)));
-                                        range1.Value2 = eTableRow[13];
+                                        range1.Value2 = eTableRow["StationStyle"];
                                         range1 = worksheet.get_Range(string.Format("G{0}", 8 + (2 * j)), string.Format("G{0}", 9 + (2 * j++)));
-                                        range1.Value2 = eTableRow[6];
+                                        range1.Value2 = eTableRow["StationCharacter"];
                                     }
                                 }
                             }
@@ -543,13 +543,13 @@ namespace Businfo
                                     foreach (DataRow eTableRow in ds.Tables[0].Rows)
                                     {
                                         range1 = worksheet.get_Range(string.Format("B{0}", 8 + (2 * i)), string.Format("B{0}", 8 + (2 * i)));
-                                        range1.Value2 = eTableRow[2];
+                                        range1.Value2 = eTableRow["StationName"];
                                         range1 = worksheet.get_Range(string.Format("B{0}", 9 + (2 * i)), string.Format("B{0}", 9 + (2 * i)));
-                                        range1.Value2 = eTableRow[4];
+                                        range1.Value2 = eTableRow["StationAlias"];
                                         range1 = worksheet.get_Range(string.Format("C{0}", 8 + (2 * i)), string.Format("C{0}", 9 + (2 * i)));
-                                        range1.Value2 = eTableRow[13];
+                                        range1.Value2 = eTableRow["StationStyle"];
                                         range1 = worksheet.get_Range(string.Format("D{0}", 8 + (2 * i)), string.Format("D{0}", 9 + (2 * i++)));
-                                        range1.Value2 = eTableRow[6];
+                                        range1.Value2 = eTableRow["StationCharacter"];
                                     }
 
                                 }
@@ -573,13 +573,13 @@ namespace Businfo
                                     foreach (DataRow eTableRow in ds.Tables[0].Rows)
                                     {
                                         range1 = worksheet.get_Range(string.Format("E{0}", 8 + (2 * j)), string.Format("E{0}", 8 + (2 * j)));
-                                        range1.Value2 = eTableRow[2];
+                                        range1.Value2 = eTableRow["StationName"];
                                         range1 = worksheet.get_Range(string.Format("E{0}", 9 + (2 * j)), string.Format("E{0}", 9 + (2 * j)));
-                                        range1.Value2 = eTableRow[4];
+                                        range1.Value2 = eTableRow["StationAlias"];
                                         range1 = worksheet.get_Range(string.Format("F{0}", 8 + (2 * j)), string.Format("F{0}", 9 + (2 * j)));
-                                        range1.Value2 = eTableRow[13];
+                                        range1.Value2 = eTableRow["StationStyle"];
                                         range1 = worksheet.get_Range(string.Format("G{0}", 8 + (2 * j)), string.Format("G{0}", 9 + (2 * j++)));
-                                        range1.Value2 = eTableRow[6];
+                                        range1.Value2 = eTableRow["StationCharacter"];
                                     }
 
                                 }

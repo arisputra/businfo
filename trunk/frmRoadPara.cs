@@ -54,7 +54,6 @@ namespace Businfo
                 nIndex = fields.FindField("TicketPrice3");
                 if (double.TryParse(textBox6.Text, out  rNumber))
                     m_pFeature.set_Value(nIndex, rNumber);
-
                 nIndex = fields.FindField("FirstStartTime");
                 m_pFeature.set_Value(nIndex, textBox7.Text);
                 nIndex = fields.FindField("FirstCloseTime");
