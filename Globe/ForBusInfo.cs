@@ -772,12 +772,14 @@ namespace Businfo.Globe
         }
         #endregion
 
-        public static void AppIni()
+        public static void AppIni(int nType)
         {
-            string strType = GetProfileString("Businfo", "DataPos", Application.StartupPath + "\\Businfo.ini");
+            Connect_Type = nType;
+            string strType = Application.StartupPath;//GetProfileString("Businfo", "DataPos", Application.StartupPath + "\\Businfo.ini");
             if (Connect_Type == 1)
             {
-                Connect_Sql = "Provider=sqloledb;Data Source = 172.16.34.120;Initial Catalog=sde;User Id = sa;Password = sa";
+                Connect_Sql = "Provider=sqloledb;Data Source = 192.168.133.182;Initial Catalog=sde;User Id = sa;Password = 123";
+                //Connect_Sql = "Provider=sqloledb;Data Source = 172.16.34.120;Initial Catalog=sde;User Id = sa;Password = sa";
                 Mxd_Name = strType + "\\data\\DataSDE.mxd";
                     
             }

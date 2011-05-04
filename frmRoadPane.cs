@@ -369,7 +369,7 @@ namespace Businfo
                     app.Visible = true;
                     app.DisplayAlerts = false;
                     Workbooks workbooks = app.Workbooks;
-                    _Workbook workbook = workbooks.Open(ForBusInfo.GetProfileString("Businfo", "DataPos", Winapp.StartupPath + "\\Businfo.ini") + "\\data\\制作单.xls", Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+                    _Workbook workbook = workbooks.Open( Winapp.StartupPath + "\\data\\制作单.xls", Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
         Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
                     Sheets sheets = workbook.Worksheets;
                     _Worksheet worksheet = (_Worksheet)sheets.get_Item(1);
@@ -497,7 +497,7 @@ namespace Businfo
                     app.Visible = true;
                     app.DisplayAlerts = false;
                     Workbooks workbooks = app.Workbooks;
-                    _Workbook workbook = workbooks.Open(ForBusInfo.GetProfileString("Businfo", "DataPos", Winapp.StartupPath + "\\Businfo.ini") + "\\data\\制作单.xls", Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+                    _Workbook workbook = workbooks.Open(Winapp.StartupPath + "\\data\\制作单.xls", Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
         Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
                     Sheets sheets = workbook.Worksheets;
                     _Worksheet worksheet = (_Worksheet)sheets.get_Item(1);

@@ -21,8 +21,7 @@ namespace Businfo
         [STAThread]
         static void Main()
         {
-            ForBusInfo.Connect_Type = 2;//初始化连接类型
-            ForBusInfo.AppIni();
+            ForBusInfo.AppIni(1);//初始化连接类型
             Application.Run(new frmFlash());
         }
 
