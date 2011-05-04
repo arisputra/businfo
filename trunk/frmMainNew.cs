@@ -610,7 +610,7 @@ namespace Businfo
                                  if (m_CurFeature != null)
                                  {
                                      frmPano frmPopup = new frmPano();
-                                     frmPopup.m_strURL = "E:\\Code For Working\\BusInfo\\bin\\Debug\\Data\\A01\\pano1.html";
+                                     frmPopup.m_strURL =Winapp.StartupPath + "\\Data\\A01\\pano1.html";
                                      frmPopup.Show();
                                  }
                              }

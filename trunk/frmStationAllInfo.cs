@@ -331,7 +331,7 @@ namespace Businfo
         //输出到excel
         private void button4_Click(object sender, EventArgs e)
         {
-            ForBusInfo.DataGridView2Excel(DataGridView1, "站点",true,0);
+            ForBusInfo.DataGridView2Excel(DataGridView1, "站点",true,1);//0是checkbox
         }
         //修改了cell就保存数据
         private void DataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
