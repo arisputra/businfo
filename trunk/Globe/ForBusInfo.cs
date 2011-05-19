@@ -344,6 +344,13 @@ namespace Businfo.Globe
                             grid.Columns[13].Visible = true;
                             grid.Columns[14].Visible = true;
                         }
+                        else if (strShow[0] == "all")
+                        {
+                            for (int i = 3; i < 53; i++)
+                            {
+                                grid.Columns[i].Visible = true;
+                            }
+                        }
                         else
                         {
                             grid.Columns[3].Visible = true;
@@ -424,6 +431,7 @@ namespace Businfo.Globe
                             eCol.ReadOnly = true;
                             eCol.Resizable = DataGridViewTriState.False;
                         }
+                        grid.Columns[0].ReadOnly = false;
                     }
                     break;
                    case GridSetType.Road_FillPan:

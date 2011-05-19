@@ -10,6 +10,9 @@ using Businfo.Globe;
 using ESRI.ArcGIS.Geometry;
 using ESRI.ArcGIS.Display;
 using ESRI.ArcGIS.Carto;
+using Microsoft.Office.Interop.Excel;
+using System.Data.OleDb;
+using System.IO;
 
 
 namespace Businfo
@@ -36,13 +39,18 @@ namespace Businfo
                 ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Station_FillByStationName, string.Format(" WHERE (StationName LIKE '%{0}%')", TextBox1.Text), new string[] { "" });
                 //this.公交站点TableAdapter.FillByStationName(this.stationDataSet.公交站点, "%" + TextBox1.Text + "%");
             }
+            int nNum = 1;
+            foreach (DataGridViewRow eRow in DataGridView1.Rows)
+            {
+                eRow.HeaderCell.Value = nNum++.ToString();
+            }
         }
 
         private void 定位到ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (m_pCurFeature != null)
             {
-                IPoint pPoint;
+                ESRI.ArcGIS.Geometry.IPoint pPoint;
                 IEnvelope pEnvelope;
                 IDisplayTransformation pDisplayTransformation;
                 pDisplayTransformation = EngineFuntions.m_AxMapControl.ActiveView.ScreenDisplay.DisplayTransformation;
@@ -54,7 +62,7 @@ namespace Businfo
                 EngineFuntions.m_AxMapControl.Map.MapScale = 2000;
                 pDisplayTransformation.VisibleBounds = EngineFuntions.m_AxMapControl.ActiveView.Extent;
                 EngineFuntions.m_AxMapControl.ActiveView.ScreenDisplay.Invalidate(null, true, (short)esriScreenCache.esriAllScreenCaches);
-                Application.DoEvents();
+                System.Windows.Forms.Application.DoEvents();
                 EngineFuntions.FlashShape(m_pCurFeature.ShapeCopy);
             }
         }
@@ -96,14 +104,24 @@ namespace Businfo
             DataGridView1.EndEdit();
             IFeature pCurFeature;
             bool bCheck = false;
-            foreach (DataGridViewRow eRow in DataGridView1.Rows)
+            if (checkBox1.Checked == true && TextBox1.Text == "")
             {
-                if (eRow.Cells[0].Value != null && (bool)eRow.Cells[0].Value == true)
+                m_featureCollection = EngineFuntions.GetSeartchFeatures(EngineFuntions.m_Layer_BusStation, "OBJECTID > -1");//.GetFeatureByFieldAndValue(EngineFuntions.m_Layer_BusStation, "OBJECTID", eRow.Cells["OBJECTID"].Value.ToString());
+                //m_featureCollection.Add(pCurFeature);
+                bCheck = true;
+            }
+            else
+            {
+                foreach (DataGridViewRow eRow in DataGridView1.Rows)
                 {
-                    pCurFeature = EngineFuntions.GetFeatureByFieldAndValue(EngineFuntions.m_Layer_BusStation, "OBJECTID", eRow.Cells[1].Value.ToString());
-                    m_featureCollection.Add(pCurFeature);
-                    bCheck = true;
+                    if (eRow.Cells[0].Value != null && (bool)eRow.Cells[0].Value == true)
+                    {
+                        pCurFeature = EngineFuntions.GetFeatureByFieldAndValue(EngineFuntions.m_Layer_BusStation, "OBJECTID", eRow.Cells["OBJECTID"].Value.ToString());
+                        m_featureCollection.Add(pCurFeature);
+                        bCheck = true;
+                    }
                 }
+
             }
             frmStationAllInfo frmPopup = new frmStationAllInfo();
             if (!bCheck)
@@ -136,6 +154,11 @@ namespace Businfo
         private void frmStationPane_Load(object sender, EventArgs e)
         {
             RefreshGrid();
+            int nNum = 1;
+            foreach (DataGridViewRow eRow in DataGridView1.Rows)
+            {
+                eRow.HeaderCell.Value = nNum++.ToString();
+            }
            //this.公交站点TableAdapter.Fill(this.stationDataSet.公交站点);
         }
 
@@ -183,6 +206,128 @@ namespace Businfo
             if (e.Button == MouseButtons.Right)
             {
                 DataGridView1.EndEdit();
+            }
+        }
+
+        private void 站点表单ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            m_featureCollection.Clear();
+            DataGridView1.EndEdit();
+            List<IFeature> pCurFeatureList;
+            bool bCheck = false;
+            foreach (DataGridViewRow eRow in DataGridView1.Rows)//判断是否打钩进行多选择
+            {
+                if (eRow.Cells[0].Value != null && (bool)eRow.Cells[0].Value == true)
+                {
+                    if (ForBusInfo.Excel_app == null)
+                    {
+                        MessageBox.Show("创建Excel服务失败!\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    ForBusInfo.Excel_app.Visible = true;
+                    //ForBusInfo.Excel_app.DisplayAlerts = false;
+                    //Workbooks workbooks = ForBusInfo.Excel_app.Workbooks;
+                    _Workbook workbook = ForBusInfo.Excel_app.Workbooks.Add(System.Reflection.Missing.Value);
+                    _Worksheet worksheet = null;
+                    if (workbook.Worksheets.Count > 0)
+                    {
+                        worksheet = (Microsoft.Office.Interop.Excel.Worksheet)workbook.Worksheets.get_Item(1);
+                    }
+                    else
+                    {
+                        workbook.Worksheets.Add(System.Reflection.Missing.Value, System.Reflection.Missing.Value, System.Reflection.Missing.Value,
+                    System.Reflection.Missing.Value);
+                        worksheet = (Microsoft.Office.Interop.Excel.Worksheet)workbook.Worksheets.get_Item(1);
+                    }
+                    Range range1 = worksheet.get_Range("A1", "A1");
+                    range1.Value2 = string.Format("{0}({1})({2}:{3})", eRow.Cells["StationName"].Value, eRow.Cells["StationAlias"].Value, eRow.Cells["MainSymbol"].Value, eRow.Cells["Direct"].Value);
+                    range1 = worksheet.get_Range("A2", "A2");
+                    range1.Value2 = string.Format("{0}:{1}", eRow.Cells["StationStyle"].Value, eRow.Cells["RodStyleFirst"].Value);
+                    range1 = worksheet.get_Range("A3", "A3");
+                    range1.Value2 = eRow.Cells["BusShelter"].Value;
+
+
+                    OleDbConnection mycon = new OleDbConnection(ForBusInfo.Connect_Sql);
+                    mycon.Open();
+                    OleDbDataAdapter da;
+                    if (ForBusInfo.Connect_Type == 1)
+                        da = new OleDbDataAdapter(String.Format("select a.RoadName from sde.公交站线 a inner join sde.RoadAndStation b on (a.OBJECTID = b.RoadID and b.StationID = {0})", eRow.Cells["OBJECTID"].Value), mycon);
+                    else
+                        da = new OleDbDataAdapter(String.Format("select a.RoadName from 公交站线 a inner join RoadAndStation b on (a.OBJECTID = b.RoadID and b.StationID = {0})", eRow.Cells["OBJECTID"].Value), mycon);
+                    DataSet ds = new DataSet();
+                    int nQueryCount = da.Fill(ds,"Road");
+                    if (nQueryCount > 0)
+                    {
+                        string strRoad = "";
+                        foreach (DataRow eDataRow in ds.Tables["Road"].Rows)
+                        {
+                            strRoad = strRoad + eDataRow["RoadName"].ToString() + "、";
+                        }
+                        range1 = worksheet.get_Range("A4", "A4");
+                        range1.Value2 = strRoad;
+                    }
+                    range1 = worksheet.get_Range("A5", "A5");
+                    range1.Value2 = string.Format("总经过线路：{0}",nQueryCount);
+
+                    mycon.Close();
+                    bCheck = true;
+                }
+            }
+
+            if (!bCheck)//右键直接选择出表，单一的一个。
+            {
+                if (m_pCurFeature != null)
+                {
+                    if (ForBusInfo.Excel_app == null)
+                    {
+                        MessageBox.Show("创建Excel服务失败!\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    ForBusInfo.Excel_app.Visible = true;
+                    //ForBusInfo.Excel_app.DisplayAlerts = false;
+                    //Workbooks workbooks = ForBusInfo.Excel_app.Workbooks;
+                    _Workbook workbook = ForBusInfo.Excel_app.Workbooks.Add(System.Reflection.Missing.Value);
+                    _Worksheet worksheet = null;
+                    if (workbook.Worksheets.Count > 0)
+                    {
+                        worksheet = (Microsoft.Office.Interop.Excel.Worksheet)workbook.Worksheets.get_Item(1);
+                    }
+                    else
+                    {
+                        workbook.Worksheets.Add(System.Reflection.Missing.Value, System.Reflection.Missing.Value, System.Reflection.Missing.Value,
+                    System.Reflection.Missing.Value);
+                        worksheet = (Microsoft.Office.Interop.Excel.Worksheet)workbook.Worksheets.get_Item(1);
+                    }
+                    Range range1 = worksheet.get_Range("A1", "A1");
+                    range1.Value2 = string.Format("{0}({1})({2}:{3})", DataGridView1.Rows[m_nCurRowIndex].Cells["StationName"].Value, DataGridView1.Rows[m_nCurRowIndex].Cells["StationAlias"].Value, DataGridView1.Rows[m_nCurRowIndex].Cells["MainSymbol"].Value, DataGridView1.Rows[m_nCurRowIndex].Cells["Direct"].Value);
+                    range1 = worksheet.get_Range("A2", "A2");
+                    range1.Value2 = string.Format("{0}:{1}", DataGridView1.Rows[m_nCurRowIndex].Cells["StationStyle"].Value, DataGridView1.Rows[m_nCurRowIndex].Cells["RodStyleFirst"].Value);
+                    range1 = worksheet.get_Range("A3", "A3");
+                    range1.Value2 = DataGridView1.Rows[m_nCurRowIndex].Cells["BusShelter"].Value;
+
+
+                    OleDbConnection mycon = new OleDbConnection(ForBusInfo.Connect_Sql);
+                    mycon.Open();
+                    OleDbDataAdapter da;
+                    if (ForBusInfo.Connect_Type == 1)
+                        da = new OleDbDataAdapter(String.Format("select a.RoadName from sde.公交站线 a inner join sde.RoadAndStation b on (a.OBJECTID = b.RoadID and b.StationID = {0})", DataGridView1.Rows[m_nCurRowIndex].Cells["OBJECTID"].Value), mycon);
+                    else
+                        da = new OleDbDataAdapter(String.Format("select a.RoadName from 公交站线 a inner join RoadAndStation b on (a.OBJECTID = b.RoadID and b.StationID = {0})", DataGridView1.Rows[m_nCurRowIndex].Cells["OBJECTID"].Value), mycon);
+                    DataSet ds = new DataSet();
+                    int nQueryCount = da.Fill(ds, "Road");
+                    if (nQueryCount > 0)
+                    {
+                        string strRoad = "";
+                        foreach (DataRow eDataRow in ds.Tables["Road"].Rows)
+                        {
+                            strRoad = strRoad + eDataRow["RoadName"].ToString() + "、";
+                        }
+                        range1 = worksheet.get_Range("A4", "A4");
+                        range1.Value2 = strRoad;
+                    }
+                    range1 = worksheet.get_Range("A5", "A5");
+                    range1.Value2 = string.Format("总经过线路：{0}", nQueryCount);
+
+                    mycon.Close();
+                }
             }
         }
 

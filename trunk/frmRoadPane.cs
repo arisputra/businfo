@@ -41,6 +41,11 @@ namespace Businfo
                 ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Road_FillByStationName, string.Format(" WHERE (RoadName LIKE '%{0}%')", TextBox1.Text), new string[] { "" });
                 //this.公交站线TableAdapter.FillByRoadName(this.roadDataSet.公交站线, "%" + TextBox1.Text + "%");
             }
+            int nNum = 1;
+            foreach (DataGridViewRow eRow in DataGridView1.Rows)
+            {
+                eRow.HeaderCell.Value = nNum++.ToString();
+            }
         }
 
         private void frmRoadPane_Load(object sender, EventArgs e)
@@ -62,6 +67,11 @@ namespace Businfo
                     contextMenuStrip1.Items.Find("显示站点ToolStripMenuItem", false)[0].Visible = true;
                     contextMenuStrip1.Items.Find("制作单ToolStripMenuItem", false)[0].Visible = true;
                     break;
+            }
+            int nNum = 1;
+            foreach (DataGridViewRow eRow in DataGridView1.Rows)
+            {
+                eRow.HeaderCell.Value = nNum++.ToString();
             }
             //this.公交站线TableAdapter.Fill(this.roadDataSet.公交站线);
         }

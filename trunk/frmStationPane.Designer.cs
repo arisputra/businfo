@@ -40,6 +40,7 @@
             this.编辑属性ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.全景浏览ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.站点表单ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.DataGridView1)).BeginInit();
             this.ContextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -79,7 +80,7 @@
             this.DataGridView1.Location = new System.Drawing.Point(5, 59);
             this.DataGridView1.MultiSelect = false;
             this.DataGridView1.Name = "DataGridView1";
-            this.DataGridView1.RowHeadersWidth = 20;
+            this.DataGridView1.RowHeadersWidth = 65;
             this.DataGridView1.RowTemplate.Height = 23;
             this.DataGridView1.Size = new System.Drawing.Size(244, 419);
             this.DataGridView1.TabIndex = 3;
@@ -99,35 +100,36 @@
             this.定位到ToolStripMenuItem,
             this.删除站点ToolStripMenuItem,
             this.编辑属性ToolStripMenuItem,
-            this.全景浏览ToolStripMenuItem});
+            this.全景浏览ToolStripMenuItem,
+            this.站点表单ToolStripMenuItem});
             this.ContextMenuStrip1.Name = "ContextMenuStrip1";
-            this.ContextMenuStrip1.Size = new System.Drawing.Size(119, 92);
+            this.ContextMenuStrip1.Size = new System.Drawing.Size(153, 136);
             // 
             // 定位到ToolStripMenuItem
             // 
             this.定位到ToolStripMenuItem.Name = "定位到ToolStripMenuItem";
-            this.定位到ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.定位到ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.定位到ToolStripMenuItem.Text = "定位到";
             this.定位到ToolStripMenuItem.Click += new System.EventHandler(this.定位到ToolStripMenuItem_Click);
             // 
             // 删除站点ToolStripMenuItem
             // 
             this.删除站点ToolStripMenuItem.Name = "删除站点ToolStripMenuItem";
-            this.删除站点ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.删除站点ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.删除站点ToolStripMenuItem.Text = "删除站点";
             this.删除站点ToolStripMenuItem.Click += new System.EventHandler(this.删除站点ToolStripMenuItem_Click);
             // 
             // 编辑属性ToolStripMenuItem
             // 
             this.编辑属性ToolStripMenuItem.Name = "编辑属性ToolStripMenuItem";
-            this.编辑属性ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.编辑属性ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.编辑属性ToolStripMenuItem.Text = "编辑属性";
             this.编辑属性ToolStripMenuItem.Click += new System.EventHandler(this.编辑属性ToolStripMenuItem_Click);
             // 
             // 全景浏览ToolStripMenuItem
             // 
             this.全景浏览ToolStripMenuItem.Name = "全景浏览ToolStripMenuItem";
-            this.全景浏览ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.全景浏览ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.全景浏览ToolStripMenuItem.Text = "全景浏览";
             this.全景浏览ToolStripMenuItem.Click += new System.EventHandler(this.全景浏览ToolStripMenuItem_Click);
             // 
@@ -141,6 +143,13 @@
             this.checkBox1.Text = "全选";
             this.checkBox1.UseVisualStyleBackColor = true;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
+            // 站点表单ToolStripMenuItem
+            // 
+            this.站点表单ToolStripMenuItem.Name = "站点表单ToolStripMenuItem";
+            this.站点表单ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.站点表单ToolStripMenuItem.Text = "站点表单";
+            this.站点表单ToolStripMenuItem.Click += new System.EventHandler(this.站点表单ToolStripMenuItem_Click);
             // 
             // frmStationPane
             // 
@@ -171,5 +180,6 @@
         internal System.Windows.Forms.ToolStripMenuItem 全景浏览ToolStripMenuItem;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.DataGridViewCheckBoxColumn CheckBox;
+        private System.Windows.Forms.ToolStripMenuItem 站点表单ToolStripMenuItem;
     }
 }
