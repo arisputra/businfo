@@ -33,11 +33,21 @@ namespace Businfo
             {
                 ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Station_FillByStationName, string.Format(" WHERE (StationName LIKE '%{0}%')", TextBox1.Text), new string[] { "" });
             }
+            int nNum = 1;
+            foreach (DataGridViewRow eRow in DataGridView1.Rows)
+            {
+                eRow.HeaderCell.Value = nNum++.ToString();
+            }
         }
 
         private void frmFacilitiesPane_Load(object sender, EventArgs e)
         {
             RefreshGrid();
+            int nNum = 1;
+            foreach (DataGridViewRow eRow in DataGridView1.Rows)
+            {
+                eRow.HeaderCell.Value = nNum++.ToString();
+            }
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
@@ -85,15 +95,25 @@ namespace Businfo
             DataGridView1.EndEdit();
             IFeature pCurFeature;
             bool bCheck = false;
-            foreach (DataGridViewRow eRow in DataGridView1.Rows)
+            if (checkBox1.Checked == true && TextBox1.Text == "")
             {
-                if (eRow.Cells[0].Value != null && (bool)eRow.Cells[0].Value == true)
+                m_featureCollection = EngineFuntions.GetSeartchFeatures(EngineFuntions.m_Layer_BusStation, "OBJECTID > -1");//.GetFeatureByFieldAndValue(EngineFuntions.m_Layer_BusStation, "OBJECTID", eRow.Cells["OBJECTID"].Value.ToString());
+                //m_featureCollection.Add(pCurFeature);
+                bCheck = true;
+            }
+            else
+            {
+                foreach (DataGridViewRow eRow in DataGridView1.Rows)
                 {
-                    pCurFeature = EngineFuntions.GetFeatureByFieldAndValue(EngineFuntions.m_Layer_BusStation, "OBJECTID", eRow.Cells[1].Value.ToString());
-                    m_featureCollection.Add(pCurFeature);
-                    bCheck = true;
+                    if (eRow.Cells[0].Value != null && (bool)eRow.Cells[0].Value == true)
+                    {
+                        pCurFeature = EngineFuntions.GetFeatureByFieldAndValue(EngineFuntions.m_Layer_BusStation, "OBJECTID", eRow.Cells[1].Value.ToString());
+                        m_featureCollection.Add(pCurFeature);
+                        bCheck = true;
+                    }
                 }
             }
+            
             frmStationAllInfo frmPopup = new frmStationAllInfo();
             if (!bCheck)
             {

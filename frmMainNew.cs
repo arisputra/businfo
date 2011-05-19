@@ -60,10 +60,22 @@ namespace Businfo
             {
                 m_frmFlash.Close();
             }
+            if (ForBusInfo.Excel_app != null)
+            {
+                ForBusInfo.Excel_app.Quit();
+                int nGeneration = System.GC.GetGeneration(ForBusInfo.Excel_app);
+                ForBusInfo.Excel_app = null;
+                //虽然用了_xlApp.Quit()，但由于是COM，并不能清除驻留在内存在的进程，每实例一次Excel则Excell进程多一个。 
+                //因此用垃圾回收，建议不要用进程的KILL()方法，否则可能会错杀无辜啊:)。 
+                System.GC.Collect(nGeneration); 
+                
+            }
+
         }
 
         private void frmMainNew_Load(object sender, EventArgs e)
         {
+            
             ////Create a new AoInitialize object
             //if (m_pAoInitialize == null)
             //{
@@ -81,8 +93,6 @@ namespace Businfo
             //{
             //    this.Close();
             //}
-            //ForBusInfo.Connect_Type = 2;//初始化连接类型
-            //ForBusInfo.AppIni();
 
             EngineFuntions.m_AxMapControl = axMapControl1;//传递Map控件
 
@@ -118,19 +128,19 @@ namespace Businfo
             axDockingPane1.TabPaintManager.Position = XTPTabPosition.xtpTabPositionTop;
             axDockingPane1.TabPaintManager.Appearance = XtremeDockingPane.XTPTabAppearanceStyle.xtpTabAppearanceVisualStudio;
 
-            XtremeDockingPane.Pane ThePane = axDockingPane1.CreatePane(ForBusInfo.Pan_Layer, 200, 200, DockingDirection.DockLeftOf, null);
+            XtremeDockingPane.Pane ThePane = axDockingPane1.CreatePane(ForBusInfo.Pan_Layer, 260, 200, DockingDirection.DockLeftOf, null);
             ThePane.Title = "图 层";
             axDockingPane1.FindPane(ForBusInfo.Pan_Layer).Handle = m_frmlayerToc.Handle.ToInt32();
 
-            ThePane = axDockingPane1.CreatePane(ForBusInfo.Pan_Station, 200, 200, DockingDirection.DockLeftOf, null);
+            ThePane = axDockingPane1.CreatePane(ForBusInfo.Pan_Station, 260, 200, DockingDirection.DockLeftOf, null);
             ThePane.Title = "站 点";
             axDockingPane1.FindPane(ForBusInfo.Pan_Station).Handle = m_frmStationPane.Handle.ToInt32();
 
-            ThePane = axDockingPane1.CreatePane(ForBusInfo.Pan_Road, 200, 200, DockingDirection.DockLeftOf, null);
+            ThePane = axDockingPane1.CreatePane(ForBusInfo.Pan_Road, 260, 200, DockingDirection.DockLeftOf, null);
             ThePane.Title = "线 路";
             axDockingPane1.FindPane(ForBusInfo.Pan_Road).Handle = m_frmRoadPane.Handle.ToInt32();
 
-            ThePane = axDockingPane1.CreatePane(ForBusInfo.Pan_Facility, 200, 200, DockingDirection.DockLeftOf, null);
+            ThePane = axDockingPane1.CreatePane(ForBusInfo.Pan_Facility, 260, 200, DockingDirection.DockLeftOf, null);
             ThePane.Title = "设 施";
             axDockingPane1.FindPane(ForBusInfo.Pan_Facility).Handle = m_frmFacilityPane.Handle.ToInt32();
 
@@ -317,6 +327,7 @@ namespace Businfo
                     m_ToolStatus = ForBusInfo.Bus_Dele;
                     axMapControl1.MousePointer = esriControlsMousePointer.esriPointerIdentify;
                     break;
+
                 case ForBusInfo.Bus_Edit:
                     if (e.control.Checked)
                     {
@@ -329,6 +340,7 @@ namespace Businfo
                     m_ToolStatus = ForBusInfo.Bus_Edit;
                     axMapControl1.MousePointer = esriControlsMousePointer.esriPointerHotLink;
                     break;
+
                 case ForBusInfo.Bus_Move:
                     if (e.control.Checked)
                     {
@@ -341,6 +353,7 @@ namespace Businfo
                     m_ToolStatus = ForBusInfo.Bus_Move;
                     axMapControl1.MousePointer = esriControlsMousePointer.esriPointerIdentify;
                     break;
+
                 case ForBusInfo.Bus_Pano:
                     if (e.control.Checked)
                     {
@@ -353,10 +366,12 @@ namespace Businfo
                     m_ToolStatus = ForBusInfo.Bus_Pano;
                     axMapControl1.MousePointer = esriControlsMousePointer.esriPointerIdentify;
                     break;
+
                 case ForBusInfo.Bus_Query:
                     m_ToolStatus = ForBusInfo.Bus_Query;
                     axDockingPane1.FindPane(ForBusInfo.Pan_Station).Select();
                     break;
+
                 case ForBusInfo.Bus_Recover://站点不用恢复
 
 
@@ -364,6 +379,7 @@ namespace Businfo
                     m_ToolStatus = ForBusInfo.Road_Add;
                     axMapControl1.MousePointer = esriControlsMousePointer.esriPointerIdentify;
                     break;
+
                 case ForBusInfo.Road_Associate:
                     m_ToolStatus = ForBusInfo.Road_Associate;
                     axMapControl1.MousePointer = esriControlsMousePointer.esriPointerPencil;
@@ -457,6 +473,7 @@ namespace Businfo
                         EngineFuntions.m_AxMapControl.Refresh();
                     }
                     break;
+
                 case ForBusInfo.Road_Reversed://线路反向
                     //m_ToolStatus = ForBusInfo.Road_Reversed;
                     if (m_ToolStatus == ForBusInfo.Road_End && m_CurFeature.Shape.GeometryType == esriGeometryType.esriGeometryPolyline)
@@ -513,6 +530,7 @@ namespace Businfo
                                
                                 frmStationAllInfo frmPopup = new frmStationAllInfo();
                                 frmPopup.m_featureCollection = pSelFea;
+                                frmPopup.SetButtonVisable();
                                 frmPopup.ShowDialog();
                                 
                             }
@@ -522,6 +540,7 @@ namespace Businfo
                             {
                                 frmRoadAllInfo frmPopup = new frmRoadAllInfo();
                                 frmPopup.m_featureCollection = pSelFea;
+                                frmPopup.SetButtonVisable();
                                 frmPopup.ShowDialog();
 
                             }
@@ -614,7 +633,6 @@ namespace Businfo
                                      frmPopup.Show();
                                  }
                              }
-
                              //m_ToolStatus = -1;
                              //axMapControl1.MousePointer = esriControlsMousePointer.esriPointerDefault;
                              break;
@@ -623,7 +641,6 @@ namespace Businfo
                          {
                              //GetSeartchFeatures可以替代SetCanSelLay，ClickSel，GetSeledFeatures三个步骤。
                              //m_featureCollection = EngineEditOperations.GetSeartchFeatures(EngineEditOperations.m_Layer_BusStation, m_mapPoint);
-
                              m_CurFeatureLayer = EngineFuntions.SetCanSelLay("公交站点");
                              EngineFuntions.ClickSel(m_mapPoint, false, false, 6);
                              if (EngineFuntions.GetSeledFeatures(m_CurFeatureLayer, ref  m_featureCollection))

@@ -218,13 +218,15 @@ namespace Businfo
                 m_pCurFeature = EngineFuntions.GetFeatureByFieldAndValue(EngineFuntions.m_Layer_BusRoad, "OBJECTID", m_nObjectId.ToString());
                 if (m_pCurFeature != null)
                 {
-                    for (int i = 3; i < m_pCurFeature.Fields.FieldCount - 1; i++)
-                    {
-                        if (DataGridView1.Rows[m_nCurRowIndex].Cells[i].Visible)
-                        {
-                            m_pCurFeature.set_Value(i, DataGridView1.Rows[m_nCurRowIndex].Cells[i].Value);
-                        }
-                    }
+                    int nField = m_pCurFeature.Fields.FindField(DataGridView1.Columns[e.ColumnIndex].Name);
+                    m_pCurFeature.set_Value(nField, DataGridView1.Rows[m_nCurRowIndex].Cells[e.ColumnIndex].Value);
+                    //for (int i = 3; i < m_pCurFeature.Fields.FieldCount - 1; i++)
+                    //{
+                    //    if (DataGridView1.Rows[m_nCurRowIndex].Cells[i].Visible)
+                    //    {
+                    //        m_pCurFeature.set_Value(i-1, DataGridView1.Rows[m_nCurRowIndex].Cells[i].Value);
+                    //    }
+                    //}
                     m_pCurFeature.Store();
                 }
                 string strName = m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("RoadName")).ToString();
@@ -236,6 +238,11 @@ namespace Businfo
         private void DataGridView1_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
             MessageBox.Show(e.Exception.Message, "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        public void SetButtonVisable()
+        {
+            button2.Visible = false;
         }
 
     }

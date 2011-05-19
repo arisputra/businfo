@@ -28,6 +28,10 @@ namespace Businfo
         private void frmStationAllInfo_Load(object sender, EventArgs e)
         {
             // TODO: 这行代码将数据加载到表“stationDataSet.公交站点”中。您可以根据需要移动或移除它。
+            if(button2.Visible == false)
+            {
+                m_strField = "all";
+            }
             if (m_featureCollection.Count < 1)
                 ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Station_FillAll, "", new string[] { m_strField });
             else
@@ -333,6 +337,7 @@ namespace Businfo
         {
             ForBusInfo.DataGridView2Excel(DataGridView1, "站点",true,1);//0是checkbox
         }
+        
         //修改了cell就保存数据
         private void DataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
@@ -344,13 +349,15 @@ namespace Businfo
                 m_pCurFeature = EngineFuntions.GetFeatureByFieldAndValue(EngineFuntions.m_Layer_BusStation, "OBJECTID", m_nObjectId.ToString());
                 if (m_pCurFeature != null)
                 {
-                    for (int i = 3; i < m_pCurFeature.Fields.FieldCount; i++)
-                    {
-                        if (DataGridView1.Rows[m_nCurRowIndex].Cells[i].Visible)
-                        {
-                            m_pCurFeature.set_Value(i, DataGridView1.Rows[m_nCurRowIndex].Cells[i].Value);
-                        }
-                    }
+                    int nField = m_pCurFeature.Fields.FindField(DataGridView1.Columns[e.ColumnIndex].Name);
+                    m_pCurFeature.set_Value(nField, DataGridView1.Rows[m_nCurRowIndex].Cells[e.ColumnIndex].Value);
+                    //for (int i = 3; i < m_pCurFeature.Fields.FieldCount; i++)
+                    //{
+                    //    if (DataGridView1.Rows[m_nCurRowIndex].Cells[i].Visible)
+                    //    {
+                    //        m_pCurFeature.set_Value(i-1, DataGridView1.Rows[m_nCurRowIndex].Cells[i].Value);
+                    //    }
+                    //}
                     m_pCurFeature.Store();
                 }
                 string strName = m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("StationName")).ToString();
@@ -358,10 +365,16 @@ namespace Businfo
                 ForBusInfo.Add_Log(ForBusInfo.Login_name, "修改站点属性", strName, DataGridView1.Columns[e.ColumnIndex].HeaderText);
             }
         }
+
         //处理gridview输入格式错误
         private void DataGridView1_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
             MessageBox.Show(e.Exception.Message, "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        public void SetButtonVisable()
+        {
+            button2.Visible = false;
         }
     }
 }
