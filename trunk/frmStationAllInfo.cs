@@ -351,13 +351,23 @@ namespace Businfo
                 {
                     int nField = m_pCurFeature.Fields.FindField(DataGridView1.Columns[e.ColumnIndex].Name);
                     m_pCurFeature.set_Value(nField, DataGridView1.Rows[m_nCurRowIndex].Cells[e.ColumnIndex].Value);
-                    //for (int i = 3; i < m_pCurFeature.Fields.FieldCount; i++)
-                    //{
-                    //    if (DataGridView1.Rows[m_nCurRowIndex].Cells[i].Visible)
-                    //    {
-                    //        m_pCurFeature.set_Value(i-1, DataGridView1.Rows[m_nCurRowIndex].Cells[i].Value);
-                    //    }
-                    //}
+
+                    double B, L, H;
+                    if (double.TryParse(DataGridView1.Rows[m_nCurRowIndex].Cells["GPSLatitude"].Value.ToString(), out  B)
+                        && double.TryParse(DataGridView1.Rows[m_nCurRowIndex].Cells["GPSLongtitude"].Value.ToString(), out  L))
+                    //H = DataGridView1.Rows[m_nCurRowIndex].Cells["GPSHigh"].Value;
+                    {
+                        if (B > 30 && L > 114)
+                        {
+                            double x, y, z;
+                            x = y = z = 0;
+                            CoordTrans Coord = new CoordTrans(162.8998, 216.8504, 133.8944, 0.72814164, 2.73301875, -5.38285723, -9.06757729, 114, 3);
+                            Coord.BLHto84XYZ(B, L, 0, ref y, ref x, ref z);
+                            IPoint outPoint = new PointClass();
+                            outPoint.PutCoords(x, y - 3000000);
+                            m_pCurFeature.Shape = outPoint;
+                        }
+                    }
                     m_pCurFeature.Store();
                 }
                 string strName = m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("StationName")).ToString();

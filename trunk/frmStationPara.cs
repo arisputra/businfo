@@ -29,6 +29,7 @@ namespace Businfo
 
         private void button1_Click(object sender, EventArgs e)
         {
+            double B, L, H;
             m_strLog = textBox1.Text + comboBox2.Text;
             if (String.IsNullOrEmpty(textBox1.Text))
             {
@@ -47,22 +48,32 @@ namespace Businfo
             nIndex = fields.FindField("StationCharacter");//改成了站点所在道路
             m_pFeature.set_Value(nIndex, comboBox1.Text);
 
-            double rNumber;
             nIndex = fields.FindField("GPSLongtitude");
-            if (double.TryParse(textBox4.Text, out rNumber))
-                m_pFeature.set_Value(nIndex, rNumber);
+            if (double.TryParse(textBox4.Text, out L))
+                m_pFeature.set_Value(nIndex, L);
             nIndex = fields.FindField("GPSLatitude");
-            if (double.TryParse(textBox5.Text, out  rNumber))
-                m_pFeature.set_Value(nIndex, rNumber);
+            if (double.TryParse(textBox5.Text, out  B))
+                m_pFeature.set_Value(nIndex, B);
             nIndex = fields.FindField("GPSHigh");
-            if (double.TryParse(textBox6.Text, out  rNumber))
-                m_pFeature.set_Value(nIndex, rNumber);
+            if (double.TryParse(textBox6.Text, out  H))
+                m_pFeature.set_Value(nIndex, H);
             nIndex = fields.FindField("StationMaterial");//改成了邻近标识物
             m_pFeature.set_Value(nIndex, textBox2.Text);
             nIndex = fields.FindField("StationStyle");//为StationCharacter、StationMaterial、StationStyle结合内容
             m_pFeature.set_Value(nIndex, comboBox3.Text);
             nIndex = fields.FindField("StationAlias");
             m_pFeature.set_Value(nIndex, textBox9.Text);
+
+            if (B > 30 && L > 114)
+            {
+                double x, y, z;
+                x = y = z = 0;
+                CoordTrans Coord = new CoordTrans(162.8998, 216.8504, 133.8944, 0.72814164, 2.73301875, -5.38285723, -9.06757729, 114, 3);
+                Coord.BLHto84XYZ(B, L, 0, ref y, ref x, ref z);
+                IPoint outPoint = new PointClass();
+                outPoint.PutCoords(x, y-3000000);
+                m_pFeature.Shape = outPoint;
+            }
             m_pFeature.Store();
 
             
