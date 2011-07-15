@@ -349,6 +349,7 @@
     <Compile Include="frmRoadPara.Designer.cs">
       <DependentUpon>frmRoadPara.cs</DependentUpon>
     </Compile>
+    <Compile Include="Globe\CoordTrans.cs" />
     <Compile Include="Globe\ForBusInfo.cs" />
     <Compile Include="Globe\ModEditOperations.cs" />
     <Compile Include="Maps.cs">
