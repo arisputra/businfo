@@ -203,13 +203,16 @@ namespace Businfo.Globe
                            grid.Columns[0].Visible = true;
                            grid.Columns[0].ReadOnly = false;
                            grid.Columns[0].HeaderText = "";
-                           grid.Columns[0].Width = 35;
+                           grid.Columns[0].Width = 25;
                            grid.Columns[3].Visible = true;
                            grid.Columns[3].HeaderText = "站点名称";
-                           grid.Columns[3].Width = 78;
+                           grid.Columns[3].Width = 150;
                            grid.Columns[4].Visible = true;
                            grid.Columns[4].HeaderText = "行向";
                            grid.Columns[4].Width = 55;
+                           grid.Columns[51].Visible = true;
+                           grid.Columns[51].HeaderText = "站点说明";
+                           grid.Columns[51].Width = 55;
                        }
                        break;
                    case GridSetType.Station_FillAll:
@@ -244,6 +247,7 @@ namespace Businfo.Globe
                                grid.Columns[10].Visible = true;
                                grid.Columns[13].Visible = true;
                                grid.Columns[14].Visible = true;
+                               grid.Columns[51].Visible = true;
                            }
                            else
                            {
@@ -307,7 +311,7 @@ namespace Businfo.Globe
                            grid.Columns[48].HeaderText = "调度站道2";
                            grid.Columns[49].HeaderText = "调度公司3";
                            grid.Columns[50].HeaderText = "调度线路3";
-                           grid.Columns[51].HeaderText = "调度站道3";
+                           grid.Columns[51].HeaderText = "站点说明";//原来是 调度站道3
                            grid.Columns[52].HeaderText = "站点类别";
                         }
                        break;
@@ -343,6 +347,7 @@ namespace Businfo.Globe
                             grid.Columns[10].Visible = true;
                             grid.Columns[13].Visible = true;
                             grid.Columns[14].Visible = true;
+                            grid.Columns[51].Visible = true;
                         }
                         else if (strShow[0] == "all")
                         {
@@ -413,7 +418,7 @@ namespace Businfo.Globe
                         grid.Columns[48].HeaderText = "调度站道2";
                         grid.Columns[49].HeaderText = "调度公司3";
                         grid.Columns[50].HeaderText = "调度线路3";
-                        grid.Columns[51].HeaderText = "调度站道3";
+                        grid.Columns[51].HeaderText = "站点说明";//原来是 调度站道3
                         grid.Columns[52].HeaderText = "站点类别";
                     }
                     break;

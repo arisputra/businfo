@@ -47,7 +47,6 @@ namespace Businfo
             try
             {
                 OleDbConnection mycon = new OleDbConnection(ForBusInfo.Connect_Sql);
-
                 mycon.Open();
                 OleDbDataAdapter da;
                 if (ForBusInfo.Connect_Type == 1)
@@ -79,9 +78,6 @@ namespace Businfo
             {
             	
             }
-            
-            
-           
         }
 
         private void button2_Click(object sender, EventArgs e)
