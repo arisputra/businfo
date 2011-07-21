@@ -422,6 +422,7 @@ namespace Businfo
                                     range1.Value2 = ds.Tables[0].Rows[0][2];
                                     foreach (DataRow eTableRow in ds.Tables[0].Rows)
                                     {
+
                                         range1 = worksheet.get_Range(string.Format("B{0}", 8 + (2 * i)), string.Format("B{0}", 8 + (2 * i)));
                                         range1.Value2 = eTableRow["StationName"];
                                         range1 = worksheet.get_Range(string.Format("B{0}", 9 + (2 * i)), string.Format("B{0}", 9 + (2 * i)));
@@ -430,6 +431,7 @@ namespace Businfo
                                         range1.Value2 = eTableRow["StationStyle"];
                                         range1 = worksheet.get_Range(string.Format("D{0}", 8 + (2 * i)), string.Format("D{0}", 9 + (2 * i++)));
                                         range1.Value2 = eTableRow["StationCharacter"];
+
                                     }
 
                                 }

@@ -59,8 +59,8 @@ namespace Businfo
                 m_pFeature.set_Value(nIndex, H);
             nIndex = fields.FindField("StationMaterial");//改成了邻近标识物
             m_pFeature.set_Value(nIndex, textBox2.Text);
-            nIndex = fields.FindField("StationStyle");//为StationCharacter、StationMaterial、StationStyle结合内容
-            m_pFeature.set_Value(nIndex, comboBox3.Text);
+            nIndex = fields.FindField("DispatchStationThird");//改成站点说明
+            m_pFeature.set_Value(nIndex, textBox3.Text);
             nIndex = fields.FindField("StationAlias");
             m_pFeature.set_Value(nIndex, textBox9.Text);
 
@@ -101,11 +101,11 @@ namespace Businfo
             }
             comboBox2.SelectedIndex = 0;
             int.TryParse(ForBusInfo.GetProfileString("StationMaterial", "Num", Application.StartupPath + "\\Businfo.ini"), out nlen);
-            for (int i = 0; i < nlen; i++)
-            {
-                comboBox3.Items.Add(ForBusInfo.GetProfileString("StationMaterial", string.Format("编号{0}", i + 1), Application.StartupPath + "\\Businfo.ini"));
-            }
-            comboBox3.SelectedIndex = 0;
+            //for (int i = 0; i < nlen; i++)
+            //{
+            //    comboBox3.Items.Add(ForBusInfo.GetProfileString("StationMaterial", string.Format("编号{0}", i + 1), Application.StartupPath + "\\Businfo.ini"));
+            //}
+            //comboBox3.SelectedIndex = 0;
         }
     }
 }
