@@ -119,6 +119,7 @@
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.pictureBox1);
             this.helpProvider2.SetHelpNavigator(this, System.Windows.Forms.HelpNavigator.Topic);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmMainNew";
             this.helpProvider2.SetShowHelp(this, true);
             this.Text = "公交业务管理信息系统";
