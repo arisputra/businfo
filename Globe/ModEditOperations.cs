@@ -672,6 +672,50 @@ namespace Businfo.Globe
              return null;
         }
 
+        /// <summary>添加线Element
+        /// </summary>
+        /// <param name="pGeometry">线图形类</param>
+        /// <returns></returns>
+        public static IElement AddPLineElement(IGeometry pGeometry)
+        {
+            IGraphicsContainer pGraphicsContainer;
+            IFillShapeElement pPLineElement;
+            ISimpleFillSymbol Symbol;
+            IRgbColor pColor;
+            ISimpleLineSymbol pOutline;
+            IElement pElement;
+            if (null != pGeometry)
+            {
+                pGraphicsContainer = (IGraphicsContainer)m_AxMapControl.ActiveView;
+                //* ''*/Set the color properties
+                pColor = new RgbColor();
+                pColor.Red = 255;
+                pColor.Green = 0;
+                pColor.Blue = 0;
+                //Get the SimpleLineSymbol symbol interface
+                pOutline = new SimpleLineSymbol();
+                pOutline.Width = 1;
+                pOutline.Color = pColor;
+                //Get the ISimpleFillSymbol interface,  'Set the fill symbol properties
+                Symbol = new SimpleFillSymbol();
+                Symbol.Outline = pOutline;
+                Symbol.Color = pColor;
+                Symbol.Style = esriSimpleFillStyle.esriSFSForwardDiagonal;
+
+                pPLineElement = (IFillShapeElement)new LineElement();
+                pPLineElement.Symbol = Symbol;
+                pElement = (IElement)pPLineElement;
+                //将元素的图形转换成地图要素
+                pElement.Geometry = pGeometry;
+                //向Map 中添加元素
+                pGraphicsContainer.AddElement(pElement, 0);
+                //刷新
+                m_AxMapControl.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewGraphics, null, null);
+                return pElement;
+            }
+            return null;
+        }
+
         /// <summary>添加图片Element
         /// </summary>
         /// <param name="pGeometry">图片范围Geometry</param>
@@ -805,6 +849,18 @@ namespace Businfo.Globe
             pEnvelope.CenterAt(pPoint);
             pDisplayTransformation.VisibleBounds = pEnvelope;
             EngineFuntions.m_AxMapControl.Map.MapScale = nMapScale;
+            pDisplayTransformation.VisibleBounds = EngineFuntions.m_AxMapControl.ActiveView.Extent;
+            EngineFuntions.m_AxMapControl.ActiveView.ScreenDisplay.Invalidate(null, true, (short)esriScreenCache.esriAllScreenCaches);
+        }
+
+        public static void PanPoint(IPoint pPoint)
+        {
+            IEnvelope pEnvelope;
+            IDisplayTransformation pDisplayTransformation;
+            pDisplayTransformation = EngineFuntions.m_AxMapControl.ActiveView.ScreenDisplay.DisplayTransformation;
+            pEnvelope = pDisplayTransformation.VisibleBounds;
+            pEnvelope.CenterAt(pPoint);
+            pDisplayTransformation.VisibleBounds = pEnvelope;
             pDisplayTransformation.VisibleBounds = EngineFuntions.m_AxMapControl.ActiveView.Extent;
             EngineFuntions.m_AxMapControl.ActiveView.ScreenDisplay.Invalidate(null, true, (short)esriScreenCache.esriAllScreenCaches);
         }

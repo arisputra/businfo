@@ -431,7 +431,6 @@ namespace Businfo
                                         range1.Value2 = eTableRow["StationStyle"];
                                         range1 = worksheet.get_Range(string.Format("D{0}", 8 + (2 * i)), string.Format("D{0}", 9 + (2 * i++)));
                                         range1.Value2 = eTableRow["StationCharacter"];
-
                                     }
 
                                 }

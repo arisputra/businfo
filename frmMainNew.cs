@@ -22,6 +22,7 @@ using Microsoft.Office.Interop.Excel;
 using Winapp = System.Windows.Forms.Application;
 using GISPoint = ESRI.ArcGIS.Geometry.IPoint;
 using System.Data.OleDb;
+using System.IO;
 
 namespace Businfo
 {
@@ -41,6 +42,7 @@ namespace Businfo
         public IFeatureLayer m_CurFeatureLayer ;//当前FeatureLayer
         public IFeature m_CurFeature ;  //当前feature
         public List<IFeature> m_featureCollection = new List<IFeature>();   //得到所有选中的feature
+        public List<IFeature> m_featureColByOrder = new List<IFeature>();   //选择大于100时fea不是按照顺序排列的，这个人工排序。
         public List<IPolyline> m_PolylineCollection = new List<IPolyline>();   //得到所有选中的IPolyline
         public MovePointFeedbackClass m_FeedBack;
         public bool m_bShowLayer;
@@ -107,7 +109,7 @@ namespace Businfo
             m_pMapDocument.Open(ForBusInfo.Mxd_Name, string.Empty);
             axMapControl1.Map = m_pMapDocument.get_Map(0);
             axMapControl1.Map.Name = "查询";
-            axMapControl1.Extent = axMapControl1.FullExtent;
+            //axMapControl1.Extent = axMapControl1.FullExtent;
 
             List<IFeatureLayer> colLayers;
             colLayers = EngineFuntions.GetAllValidFeatureLayers(axMapControl1.Map);
@@ -697,12 +699,20 @@ namespace Businfo
                          }
                      case ForBusInfo.Road_Add:
                          {
+                             bool bHave = false;
                              GISPoint PointBefore1, PointBefore2, PointAfter1, PointAfter2;
                              m_CurFeatureLayer = EngineFuntions.SetCanSelLay("道路中心线");
                              //if (1 == e.shift)
                             EngineFuntions.ClickSel(m_mapPoint, true, true, 6);
                             if (EngineFuntions.GetSeledFeatures(m_CurFeatureLayer, ref  m_featureCollection))
-                             {
+                            {
+                               
+                                //System.IO.FileStream fst1 = new System.IO.FileStream("C:\\222.txt", FileMode.Append);//追加模式
+                                //StreamWriter stw1 = new StreamWriter(fst1, System.Text.Encoding.GetEncoding("utf-8"));//指定编码.否则将出错!
+                                //IPolyline pline1 = m_featureCollection[0].Shape as IPolyline;
+                                //stw1.WriteLine(string.Format("{0}:{1}-{2};;;;{3}-{4}", m_featureCollection.Count - 1, pline1.FromPoint.X, pline1.FromPoint.Y, pline1.ToPoint.X, pline1.ToPoint.Y));
+                                //stw1.Close();
+                                //fst1.Close();
                                 if (m_featureCollection.Count == 2)
                                 {
                                     IPolyline pline = m_featureCollection[m_featureCollection.Count - 2].Shape as IPolyline;
@@ -720,8 +730,50 @@ namespace Businfo
                                 else if (m_nPLineNum < m_featureCollection.Count)
                                 {
                                     IPolyline pline = m_featureCollection[m_featureCollection.Count - 1].Shape as IPolyline;
+                                    
+                                    if (m_featureCollection.Count == 99)
+                                    {
+                                        m_featureColByOrder.Clear();
+                                        m_featureColByOrder.AddRange(m_featureCollection);
+                                    }
+                                    else if (m_featureCollection.Count > 99)
+                                    {
+                                        foreach (IFeature pfea in m_featureCollection)
+                                        {
+                                            bHave = false;
+                                            foreach (IFeature pfeature in m_featureColByOrder)
+                                            {
+                                                if (pfea.OID == pfeature.OID)
+                                                {
+                                                    bHave = true;
+                                                    break;
+                                                }
+                                            }
+                                            if(bHave == false)
+                                            {
+                                                m_featureColByOrder.Add(pfea);
+                                                pline = pfea.Shape as IPolyline;
+                                                break;
+                                            }
+                                        }
+
+                                    }
+
+                                    
                                     PointAfter1 = pline.FromPoint;
                                     PointAfter2 = pline.ToPoint;
+                                    //System.IO.FileStream fst = new System.IO.FileStream("C:\\222.txt", FileMode.Append);//追加模式
+                                    //StreamWriter stw = new StreamWriter(fst, System.Text.Encoding.GetEncoding("utf-8"));//指定编码.否则将出错!
+                                    ////stw.WriteLine(string.Format("{0}:{1}-{2};;;;{3}-{4}", m_featureCollection.Count - 1,PointAfter1.X,PointAfter1.Y,PointAfter2.X,PointAfter2.Y));
+                                    
+                                    //foreach (IFeature pfea in m_featureCollection)
+                                    //{
+                                    //   stw.WriteLine(pfea.get_Value(pfea.Fields.FindField("OBJECTID")).ToString());
+                                    //}
+                                    //stw.WriteLine("");
+                                    //stw.Close();
+                                    //fst.Close();
+
                                      if (m_FormPoint.Compare(PointAfter1) == 0)
                                      {
                                          m_FormPoint = PointAfter2;
@@ -736,11 +788,13 @@ namespace Businfo
                                      }
                                      else
                                      {
+                                         if (m_featureColByOrder.Count>99)
+                                         m_featureColByOrder.RemoveAt(m_featureColByOrder.Count-1);
                                          MessageBox.Show("线路不连续！\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                          EngineFuntions.ClickSel(m_mapPoint, true, true, 6);//不连续再点击选择一次，取消不连续的线
                                      }
                                 }
-                                else if (2 < m_featureCollection.Count)
+                                else if (2 < m_featureCollection.Count)//反向点选了线，就是删除了线。
                                 {
                                     m_bShowLayer = true;
                                     foreach (IFeature pfea in m_featureCollection)
@@ -752,7 +806,7 @@ namespace Businfo
                                         {
                                             m_bShowLayer = false;
                                             MessageBox.Show("线路不连续\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                            EngineFuntions.ClickSel(m_mapPoint, true, true, 6);//不连续再点击选择一次，取消不连续的线
+                                            EngineFuntions.ClickSel(m_mapPoint, true, true, 6);//点击的不是最后的线，再点击一次重新选择加上
                                             break;
                                         }
                                     }
@@ -765,7 +819,9 @@ namespace Businfo
                                         }
                                         else
                                         {
-                                            m_PolylineCollection.RemoveAt(m_PolylineCollection.Count - 1);
+                                            m_PolylineCollection.RemoveAt(m_PolylineCollection.Count - 1);//是最后一条线，删除掉。
+                                            if (m_featureColByOrder.Count>99)
+                                                m_featureColByOrder.RemoveAt(m_featureColByOrder.Count - 1);
                                         }
                                     }
                                 }
@@ -773,7 +829,8 @@ namespace Businfo
                                 {
                                     m_FormPoint = m_mapPoint;
                                 }
-                                EngineFuntions.ZoomPoint(m_FormPoint, 3600);
+                                
+                                EngineFuntions.PanPoint(m_FormPoint);
                              }
                              break;
                          }
@@ -864,7 +921,7 @@ namespace Businfo
         {
             //Release COM objects and shut down the AoInitilaize object
             //m_pAoInitialize.Shutdown();
-            
+            m_pMapDocument.Save(m_pMapDocument.UsesRelativePaths, false);
         }
 
         private void axMapControl1_OnAfterScreenDraw(object sender, IMapControlEvents2_OnAfterScreenDrawEvent e)

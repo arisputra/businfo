@@ -163,6 +163,7 @@ namespace Businfo
         {
             if (m_bEdit)
             {
+                DataGridView1.EndEdit();
                 foreach (DataGridViewColumn eColumn in DataGridView1.Columns)
                 {
                     eColumn.ReadOnly = true;
@@ -213,7 +214,7 @@ namespace Businfo
             if (m_bEdit)
             {
                 m_nCurRowIndex = e.RowIndex;
-                DataGridView1.EndEdit();
+                //DataGridView1.EndEdit();
                 m_nObjectId = (int)DataGridView1.Rows[m_nCurRowIndex].Cells["OBJECTID"].Value;
                 m_pCurFeature = EngineFuntions.GetFeatureByFieldAndValue(EngineFuntions.m_Layer_BusRoad, "OBJECTID", m_nObjectId.ToString());
                 if (m_pCurFeature != null)
