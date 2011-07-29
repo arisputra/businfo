@@ -126,11 +126,11 @@ namespace Businfo.Globe
 
         public static void MapRefresh()
         {
-            if (m_AxMapControl.Map.SelectionCount > 0)
-            {
-                m_AxMapControl.Map.ClearSelection();
-            } 
-            m_AxMapControl.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewForeground, null, null);
+            //if (m_AxMapControl.Map.SelectionCount > 0)
+            //{
+            //    m_AxMapControl.Map.ClearSelection();
+            //} 
+            m_AxMapControl.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewGeoSelection, null, null);
         }
 
         public static void GoBack()
@@ -445,21 +445,20 @@ namespace Businfo.Globe
                     return false;
                 }
 
-                ITopologicalOperator pTopOp;
+                ITopologicalOperator3 pTopOp;
                 IGeometryCollection pGeometryCollection;
-                pTopOp = colFeatures[0].ShapeCopy as ITopologicalOperator;
+                pTopOp = colFeatures[0].ShapeCopy as ITopologicalOperator3;
                 for (int i = 1; i < colFeatures.Count; i++)
                 {
-                    pTopOp = pTopOp.Union(colFeatures[i].ShapeCopy) as ITopologicalOperator;
+                    pTopOp = pTopOp.Union(colFeatures[i].ShapeCopy) as ITopologicalOperator3;
                 }
-                pPolyline = pTopOp as IPolyline;
-
-                pGeometryCollection = (IGeometryCollection)pPolyline;
-                if (pGeometryCollection.GeometryCount > 1)
-                {
-                    pPolyline = null;
-                    return false;
-                }
+                //pPolyline = pTopOp as IPolyline;
+                //pGeometryCollection = (IGeometryCollection)pPolyline;
+                //if (pGeometryCollection.GeometryCount > 1)
+                //{
+                //    pPolyline = null;
+                //    return false;
+                //}
                 return true;
             }
             catch (Exception Err)
@@ -484,45 +483,35 @@ namespace Businfo.Globe
 
         }
 
-        /// <summary>合并PL线
-        /// 
-        /// </summary>
-        /// <param name="colPolylines">传入要合并PL线组</param>
-        /// <param name="pPolyline">返回合并后的PL线</param>
-        /// <returns>合并是否成功</returns>
-        public static bool MergeLines(List<IPolyline> colPolylines, ref IPolyline pPolyline)
+        public static bool LineIsSelfCross(IFeature pFeature)
         {
-            try
+
+            ITopologicalOperator3 pTopoOper3 = pFeature.ShapeCopy as ITopologicalOperator3;
+            esriNonSimpleReasonEnum outSimpleReason = esriNonSimpleReasonEnum.esriNonSimpleSelfIntersections;
+            pTopoOper3.IsKnownSimple_2 = false;
+            bool bol = pTopoOper3.get_IsSimpleEx(out outSimpleReason);
+            bol = pTopoOper3.get_IsSimpleEx(out outSimpleReason);
+            if (bol == false)
             {
-                if (colPolylines.Count < 2)
-                {
-                    MessageBox.Show("合并要素少于2个！\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    pPolyline = null;
-                    return false;
-                }
-
-                ITopologicalOperator pTopOp;
-                IGeometryCollection pGeometryCollection;
-                pTopOp = colPolylines[0] as ITopologicalOperator;
-                for (int i = 1; i < colPolylines.Count; i++)
-                {
-                    pTopOp = pTopOp.Union(colPolylines[i]) as ITopologicalOperator;
-                }
-                pPolyline = pTopOp as IPolyline;
-
-                pGeometryCollection = (IGeometryCollection)pPolyline;
-                if (pGeometryCollection.GeometryCount > 1)
-                {
-                    pPolyline = null;
-                    return false;
-                }
                 return true;
             }
-            catch (Exception Err)
-            {
-                MessageBox.Show(Err.Message, "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            else
                 return false;
+        }
+
+        public static bool LineIsSelfCross(IGeometry pGeometry)
+        {
+            esriNonSimpleReasonEnum outSimpleReason;
+            ITopologicalOperator3 pTopoOper3 = pGeometry as ITopologicalOperator3;     
+            pTopoOper3.IsKnownSimple_2 = false;
+            bool bol = pTopoOper3.get_IsSimpleEx(out outSimpleReason);
+            bol = pTopoOper3.get_IsSimpleEx(out outSimpleReason);
+            if (bol == false)
+            {
+                return true;
             }
+            else
+                return false;
         }
 
         /// <summary>设置图层可见性
@@ -933,7 +922,7 @@ namespace Businfo.Globe
                     m_AxMapControl.FlashShape(pGeo, 3, 500, iSymbol);
                 break;
             }
-          }
+          } 
      }
     /*
     class ModEditOperations

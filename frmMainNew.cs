@@ -261,6 +261,7 @@ namespace Businfo
                     m_ToolStatus = ForBusInfo.Map3D_Reflash;
                     if (axMapControl1.Visible == true)
                     {
+                       EngineFuntions.MapRefresh();
                        axMapControl1.Map.ClearSelection();
                        axMapControl1.ActiveView.GraphicsContainer.DeleteAllElements();
                        EngineFuntions.MapRefresh();
@@ -437,6 +438,69 @@ namespace Businfo
                     frmOperation frmPopup1 = new frmOperation();
                     frmPopup1.ShowDialog();
                     break;
+                case ForBusInfo.Road_Pause://保存临时的线路
+                    m_ToolStatus = ForBusInfo.Road_Pause;
+                    m_CurFeature = null;
+                    if (MessageBox.Show("是否临时保存？\n", "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+                    {
+                        if (EngineFuntions.GetSeledFeatures(m_CurFeatureLayer, ref m_featureCollection))
+                        {
+                            string strLineID = "";
+                            if (m_featureCollection.Count < 100)
+                            {
+                                foreach (IFeature pfea in m_featureCollection)
+                                {
+                                    strLineID = string.Format("{0},{1}", strLineID, pfea.OID);
+                                }
+                            }
+                            else
+                            {
+                                foreach (IFeature pfea in m_featureColByOrder)
+                                {
+                                    strLineID = string.Format("{0},{1}", strLineID, pfea.OID);
+                                }
+                            }
+                            ForBusInfo.WritePrivateProfileString("LineId", "IDNumber", strLineID, Winapp.StartupPath + "\\Businfo.ini");
+                            ForBusInfo.WritePrivateProfileString("LineId", "FormPoint",string.Format("{0},{1}",m_FormPoint.X.ToString(),m_FormPoint.Y.ToString()), Winapp.StartupPath + "\\Businfo.ini");
+                        }
+                        else
+                        {
+                            MessageBox.Show("提示：请在道路中心线路中选中路段！\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        EngineFuntions.m_AxMapControl.Map.ClearSelection();
+                        EngineFuntions.m_AxMapControl.Refresh();
+                    }
+                    break;
+
+                case ForBusInfo.Road_Resume://继续临时线路进行编辑
+
+                    string strLID = ForBusInfo.GetProfileString("LineId", "IDNumber", Winapp.StartupPath + "\\Businfo.ini");
+                    strLID = strLID.Substring(1);
+                    string[] strLIDs = strLID.Split(',');
+                         
+                    if(strLIDs.Length>2)
+                    {
+                        m_CurFeatureLayer = EngineFuntions.SetCanSelLay("道路中心线");
+                        EngineFuntions.m_AxMapControl.Map.ClearSelection();
+                        m_featureCollection.Clear();
+                        m_featureCollection = EngineFuntions.GetSeartchFeatures(m_CurFeatureLayer, string.Format("OBJECTID IN ({0})", strLID));
+                        m_featureColByOrder.Clear();
+                        m_featureColByOrder.AddRange(m_featureCollection); 
+                        EngineFuntions.MapRefresh();
+                        m_nPLineNum = strLIDs.Length;
+                        strLID = ForBusInfo.GetProfileString("LineId", "FormPoint", Winapp.StartupPath + "\\Businfo.ini");
+                        string[] strPoints = strLID.Split(',');
+                        IPolyline pline = m_featureCollection[m_featureCollection.Count - 1].Shape as IPolyline;
+                        m_FormPoint = pline.FromPoint;
+                        m_FormPoint.PutCoords(Convert.ToDouble(strPoints[0]), Convert.ToDouble(strPoints[1]));
+                        EngineFuntions.ZoomPoint(m_FormPoint, 1500);
+                        
+                        //m_ToolStatus = ForBusInfo.Road_Add;
+                        //axMapControl1.MousePointer = esriControlsMousePointer.esriPointerIdentify;
+                    }
+
+                    break;
+
                 case ForBusInfo.Road_End://完成线路添加
                     m_ToolStatus = ForBusInfo.Road_End;
                     m_CurFeature = null;
@@ -611,7 +675,6 @@ namespace Businfo
                                  if (m_CurFeature != null)
                                  {
                                      m_FeedBack = new MovePointFeedbackClass();
-
                                      m_FeedBack.Display = pActiveView.ScreenDisplay;
                                      IMovePointFeedback pointMoveFeedback = m_FeedBack as IMovePointFeedback;
                                      pointMoveFeedback.Start(m_CurFeature.Shape as GISPoint, m_mapPoint);
@@ -656,8 +719,7 @@ namespace Businfo
                                      frmPopup.ShowDialog();
                                  }
                              }
-
-                             //m_ToolStatus = -1;
+                             //m_ToolStatus = -1;54
                              //axMapControl1.MousePointer = esriControlsMousePointer.esriPointerDefault;
                              break;
                          }
@@ -706,13 +768,6 @@ namespace Businfo
                             EngineFuntions.ClickSel(m_mapPoint, true, true, 6);
                             if (EngineFuntions.GetSeledFeatures(m_CurFeatureLayer, ref  m_featureCollection))
                             {
-                               
-                                //System.IO.FileStream fst1 = new System.IO.FileStream("C:\\222.txt", FileMode.Append);//追加模式
-                                //StreamWriter stw1 = new StreamWriter(fst1, System.Text.Encoding.GetEncoding("utf-8"));//指定编码.否则将出错!
-                                //IPolyline pline1 = m_featureCollection[0].Shape as IPolyline;
-                                //stw1.WriteLine(string.Format("{0}:{1}-{2};;;;{3}-{4}", m_featureCollection.Count - 1, pline1.FromPoint.X, pline1.FromPoint.Y, pline1.ToPoint.X, pline1.ToPoint.Y));
-                                //stw1.Close();
-                                //fst1.Close();
                                 if (m_featureCollection.Count == 2)
                                 {
                                     IPolyline pline = m_featureCollection[m_featureCollection.Count - 2].Shape as IPolyline;
@@ -731,7 +786,7 @@ namespace Businfo
                                 {
                                     IPolyline pline = m_featureCollection[m_featureCollection.Count - 1].Shape as IPolyline;
                                     
-                                    if (m_featureCollection.Count == 99)
+                                    if (m_featureCollection.Count == 99)//超过100时选择集就不是按照选择先后顺序列出了，必须人工判断
                                     {
                                         m_featureColByOrder.Clear();
                                         m_featureColByOrder.AddRange(m_featureCollection);
@@ -762,19 +817,19 @@ namespace Businfo
                                     
                                     PointAfter1 = pline.FromPoint;
                                     PointAfter2 = pline.ToPoint;
-                                    //System.IO.FileStream fst = new System.IO.FileStream("C:\\222.txt", FileMode.Append);//追加模式
-                                    //StreamWriter stw = new StreamWriter(fst, System.Text.Encoding.GetEncoding("utf-8"));//指定编码.否则将出错!
-                                    ////stw.WriteLine(string.Format("{0}:{1}-{2};;;;{3}-{4}", m_featureCollection.Count - 1,PointAfter1.X,PointAfter1.Y,PointAfter2.X,PointAfter2.Y));
-                                    
-                                    //foreach (IFeature pfea in m_featureCollection)
-                                    //{
-                                    //   stw.WriteLine(pfea.get_Value(pfea.Fields.FindField("OBJECTID")).ToString());
-                                    //}
-                                    //stw.WriteLine("");
-                                    //stw.Close();
-                                    //fst.Close();
+                                    System.IO.FileStream fst = new System.IO.FileStream("C:\\222.txt", FileMode.Append);//追加模式
+                                    StreamWriter stw = new StreamWriter(fst, System.Text.Encoding.GetEncoding("utf-8"));//指定编码.否则将出错!
+                                    //stw.WriteLine(string.Format("{0}:{1}-{2};;;;{3}-{4}", m_featureCollection.Count - 1,PointAfter1.X,PointAfter1.Y,PointAfter2.X,PointAfter2.Y));
 
-                                     if (m_FormPoint.Compare(PointAfter1) == 0)
+                                    foreach (IFeature pfea in m_featureCollection)
+                                    {
+                                        stw.WriteLine(pfea.get_Value(pfea.Fields.FindField("OBJECTID")).ToString());
+                                    }
+                                    stw.WriteLine("");
+                                    stw.Close();
+                                    fst.Close();
+
+                                    if (m_FormPoint.Compare(PointAfter1) == 0)
                                      {
                                          m_FormPoint = PointAfter2;
                                          m_PolylineCollection.Add(pline);
@@ -868,7 +923,7 @@ namespace Businfo
              }
            if (2 == e.button)
            {
-               EngineFuntions.ZoomPoint(m_mapPoint, EngineFuntions.m_AxMapControl.Map.MapScale); 
+               EngineFuntions.PanPoint(m_mapPoint); 
            }
          
         }
@@ -921,7 +976,9 @@ namespace Businfo
         {
             //Release COM objects and shut down the AoInitilaize object
             //m_pAoInitialize.Shutdown();
-            m_pMapDocument.Save(m_pMapDocument.UsesRelativePaths, false);
+            axMapControl1.Map.ClearSelection();
+            axMapControl1.ActiveView.GraphicsContainer.DeleteAllElements();
+            m_pMapDocument.Save(false,true);
         }
 
         private void axMapControl1_OnAfterScreenDraw(object sender, IMapControlEvents2_OnAfterScreenDrawEvent e)
