@@ -89,6 +89,7 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ESRI.ArcGIS.3DAnalyst, Version=9.2.3.1380, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86" />
     <Reference Include="ESRI.ArcGIS.ADF, Version=9.2.0.1177, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\DotNet\ESRI.ArcGIS.ADF.dll</HintPath>
@@ -123,6 +124,8 @@
       <HintPath>..\..\..\..\..\DotNet\ESRI.ArcGIS.Geometry.dll</HintPath>
       <AssemblyFolderKey>hklm\dn\arcgis desktop</AssemblyFolderKey>
     </Reference>
+    <Reference Include="ESRI.ArcGIS.GlobeCore, Version=9.2.3.1380, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86" />
+    <Reference Include="ESRI.ArcGIS.Output, Version=9.2.3.1380, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86" />
     <Reference Include="ESRI.ArcGIS.System">
       <Name>ESRI.ArcGIS.System</Name>
       <HintPath>..\..\..\..\..\DotNet\ESRI.ArcGIS.System.dll</HintPath>

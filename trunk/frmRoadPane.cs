@@ -145,6 +145,12 @@ namespace Businfo
                 EngineFuntions.m_AxMapControl.ActiveView.ScreenDisplay.Invalidate(null, true, (short)esriScreenCache.esriAllScreenCaches);
                 System.Windows.Forms.Application.DoEvents();
                 EngineFuntions.FlashShape(m_pCurFeature.ShapeCopy);
+                EngineFuntions.MapRefresh();
+                EngineFuntions.m_AxMapControl.Map.ClearSelection();
+                EngineFuntions.m_AxMapControl.ActiveView.GraphicsContainer.DeleteAllElements();
+                EngineFuntions.m_AxMapControl.Map.SelectFeature(EngineFuntions.m_Layer_BusRoad, m_pCurFeature);
+                EngineFuntions.MapRefresh();
+                
             }
         }
 

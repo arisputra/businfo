@@ -48,6 +48,8 @@ namespace Businfo.Globe
         public const int BusInfo_Help = 1066;//帮助
         public const int Bus_Select = 1067;//多变形选择
         public const int BusInfo_ParaSet = 1068;//参数设置
+        public const int Road_Pause = 1069;//保存临时的线路
+        public const int Road_Resume = 1070;//继续临时线路进行编辑
 
         public const int Map3D_ZoomIn = 10211; //放大
         public const int Map3D_ZoomOut = 10212; //缩小
