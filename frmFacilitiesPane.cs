@@ -161,5 +161,14 @@ namespace Businfo
             }
         }
 
+        private void DataGridView1_Sorted(object sender, EventArgs e)
+        {
+            int nNum = 1;
+            foreach (DataGridViewRow eRow in DataGridView1.Rows)
+            {
+                eRow.HeaderCell.Value = nNum++.ToString();
+            }
+        }
+
     }
 }

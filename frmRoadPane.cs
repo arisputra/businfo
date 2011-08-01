@@ -270,7 +270,7 @@ namespace Businfo
                         mycurve.ConstructOffset((IPolycurve)m_pCurFeature.Shape, frmPopup.n_nBufferLength, ref Missing, ref Missing);
                         IPolygon pPolygon;
                         EngineFuntions.m_Layer_BusStation.Selectable = true;
-                        pPolygon = (IPolygon)EngineFuntions.ClickSel((IGeometry)mycurve, false, false, 35);
+                        pPolygon = (IPolygon)EngineFuntions.ClickSel((IGeometry)mycurve, false, false, 25);
                         if (EngineFuntions.GetSeledFeatures(EngineFuntions.m_Layer_BusStation, ref m_featureCollection))
                         {
                             for (int i = m_featureCollection.Count; i > 0; i--)
@@ -290,15 +290,15 @@ namespace Businfo
                         mycon.Close();
                         frmPopup.Show();
                     }
-                    else
+                    else//第一次选择中，没有关联过站点的。
                     {
                         EngineFuntions.m_AxMapControl.ActiveView.GraphicsContainer.DeleteAllElements();
                         object Missing = Type.Missing;
                         IConstructCurve mycurve = new PolylineClass();
-                        mycurve.ConstructOffset((IPolycurve)m_pCurFeature.Shape, 35, ref Missing, ref Missing);
+                        mycurve.ConstructOffset((IPolycurve)m_pCurFeature.Shape, 25, ref Missing, ref Missing);
                         IPolygon pPolygon;
                         EngineFuntions.m_Layer_BusStation.Selectable = true;
-                        pPolygon = (IPolygon)EngineFuntions.ClickSel((IGeometry)mycurve, false, false, 35);
+                        pPolygon = (IPolygon)EngineFuntions.ClickSel((IGeometry)mycurve, false, false, 25);
                         EngineFuntions.AddPolygonElement(pPolygon);
                         if (EngineFuntions.GetSeledFeatures(EngineFuntions.m_Layer_BusStation, ref m_featureCollection))
                         {

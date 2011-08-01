@@ -93,6 +93,7 @@
             this.DataGridView1.RowTemplate.Height = 23;
             this.DataGridView1.Size = new System.Drawing.Size(244, 419);
             this.DataGridView1.TabIndex = 8;
+            this.DataGridView1.Sorted += new System.EventHandler(this.DataGridView1_Sorted);
             this.DataGridView1.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridView1_CellMouseDown);
             // 
             // CheckBox
@@ -109,26 +110,26 @@
             this.编辑属性ToolStripMenuItem,
             this.全景浏览ToolStripMenuItem});
             this.ContextMenuStrip1.Name = "ContextMenuStrip1";
-            this.ContextMenuStrip1.Size = new System.Drawing.Size(119, 70);
+            this.ContextMenuStrip1.Size = new System.Drawing.Size(125, 70);
             // 
             // 定位到ToolStripMenuItem
             // 
             this.定位到ToolStripMenuItem.Name = "定位到ToolStripMenuItem";
-            this.定位到ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.定位到ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.定位到ToolStripMenuItem.Text = "定位到";
             this.定位到ToolStripMenuItem.Click += new System.EventHandler(this.定位到ToolStripMenuItem_Click);
             // 
             // 编辑属性ToolStripMenuItem
             // 
             this.编辑属性ToolStripMenuItem.Name = "编辑属性ToolStripMenuItem";
-            this.编辑属性ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.编辑属性ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.编辑属性ToolStripMenuItem.Text = "编辑属性";
             this.编辑属性ToolStripMenuItem.Click += new System.EventHandler(this.编辑属性ToolStripMenuItem_Click);
             // 
             // 全景浏览ToolStripMenuItem
             // 
             this.全景浏览ToolStripMenuItem.Name = "全景浏览ToolStripMenuItem";
-            this.全景浏览ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.全景浏览ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.全景浏览ToolStripMenuItem.Text = "全景浏览";
             this.全景浏览ToolStripMenuItem.Click += new System.EventHandler(this.全景浏览ToolStripMenuItem_Click);
             // 

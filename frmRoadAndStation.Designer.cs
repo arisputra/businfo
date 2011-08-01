@@ -38,6 +38,7 @@
             this.BtnDele = new System.Windows.Forms.Button();
             this.BtnDOWN = new System.Windows.Forms.Button();
             this.Label1 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.GroupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -65,7 +66,8 @@
             // 
             // BtnTrue
             // 
-            this.BtnTrue.Location = new System.Drawing.Point(234, 322);
+            this.BtnTrue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnTrue.Location = new System.Drawing.Point(314, 322);
             this.BtnTrue.Name = "BtnTrue";
             this.BtnTrue.Size = new System.Drawing.Size(61, 44);
             this.BtnTrue.TabIndex = 1;
@@ -75,19 +77,23 @@
             // 
             // ListBox1
             // 
-            this.ListBox1.Font = new System.Drawing.Font("宋体", 11F);
+            this.ListBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.ListBox1.Font = new System.Drawing.Font("宋体", 13F);
             this.ListBox1.FormattingEnabled = true;
-            this.ListBox1.ItemHeight = 15;
+            this.ListBox1.ItemHeight = 17;
             this.ListBox1.Location = new System.Drawing.Point(7, 47);
             this.ListBox1.Name = "ListBox1";
-            this.ListBox1.Size = new System.Drawing.Size(222, 319);
+            this.ListBox1.Size = new System.Drawing.Size(294, 395);
             this.ListBox1.TabIndex = 0;
             this.ListBox1.DoubleClick += new System.EventHandler(this.ListBox1_DoubleClick);
             this.ListBox1.Click += new System.EventHandler(this.ListBox1_Click);
             // 
             // BtnUP
             // 
-            this.BtnUP.Location = new System.Drawing.Point(235, 85);
+            this.BtnUP.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnUP.Location = new System.Drawing.Point(315, 85);
             this.BtnUP.Name = "BtnUP";
             this.BtnUP.Size = new System.Drawing.Size(61, 46);
             this.BtnUP.TabIndex = 1;
@@ -97,6 +103,9 @@
             // 
             // GroupBox1
             // 
+            this.GroupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.GroupBox1.Controls.Add(this.checkBox2);
             this.GroupBox1.Controls.Add(this.CheckBox1);
             this.GroupBox1.Controls.Add(this.BtnTrue);
@@ -107,7 +116,7 @@
             this.GroupBox1.Font = new System.Drawing.Font("宋体", 9F);
             this.GroupBox1.Location = new System.Drawing.Point(13, 35);
             this.GroupBox1.Name = "GroupBox1";
-            this.GroupBox1.Size = new System.Drawing.Size(305, 379);
+            this.GroupBox1.Size = new System.Drawing.Size(391, 457);
             this.GroupBox1.TabIndex = 6;
             this.GroupBox1.TabStop = false;
             this.GroupBox1.Text = "线路站点列表";
@@ -115,7 +124,7 @@
             // checkBox2
             // 
             this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(106, 20);
+            this.checkBox2.Location = new System.Drawing.Point(172, 20);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(72, 16);
             this.checkBox2.TabIndex = 2;
@@ -125,7 +134,8 @@
             // 
             // BtnDele
             // 
-            this.BtnDele.Location = new System.Drawing.Point(234, 243);
+            this.BtnDele.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnDele.Location = new System.Drawing.Point(314, 243);
             this.BtnDele.Name = "BtnDele";
             this.BtnDele.Size = new System.Drawing.Size(61, 46);
             this.BtnDele.TabIndex = 1;
@@ -135,7 +145,8 @@
             // 
             // BtnDOWN
             // 
-            this.BtnDOWN.Location = new System.Drawing.Point(234, 164);
+            this.BtnDOWN.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnDOWN.Location = new System.Drawing.Point(314, 164);
             this.BtnDOWN.Name = "BtnDOWN";
             this.BtnDOWN.Size = new System.Drawing.Size(61, 46);
             this.BtnDOWN.TabIndex = 1;
@@ -152,11 +163,22 @@
             this.Label1.Size = new System.Drawing.Size(0, 16);
             this.Label1.TabIndex = 7;
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(327, 4);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 9;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // frmRoadAndStation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(330, 423);
+            this.ClientSize = new System.Drawing.Size(416, 504);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.Lab_Name);
             this.Controls.Add(this.GroupBox1);
             this.Controls.Add(this.Label1);
@@ -185,5 +207,6 @@
         internal System.Windows.Forms.Button BtnDOWN;
         internal System.Windows.Forms.Label Label1;
         internal System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.Button button1;
     }
 }

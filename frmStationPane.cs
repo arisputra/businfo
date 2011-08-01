@@ -325,11 +325,24 @@ namespace Businfo
                     }
                     range1 = worksheet.get_Range("A5", "A5");
                     range1.Value2 = string.Format("总经过线路：{0}", nQueryCount);
-
                     mycon.Close();
                 }
             }
         }
 
-     }
+        private void DataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void DataGridView1_Sorted(object sender, EventArgs e)
+        {
+            int nNum = 1;
+            foreach (DataGridViewRow eRow in DataGridView1.Rows)
+            {
+                eRow.HeaderCell.Value = nNum++.ToString();
+            }
+        }
+
+    }
 }

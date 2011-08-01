@@ -452,7 +452,7 @@ namespace Businfo.Globe
                 {
                     pTopOp = pTopOp.Union(colFeatures[i].ShapeCopy) as ITopologicalOperator3;
                 }
-                //pPolyline = pTopOp as IPolyline;
+                pPolyline = pTopOp as IPolyline;
                 //pGeometryCollection = (IGeometryCollection)pPolyline;
                 //if (pGeometryCollection.GeometryCount > 1)
                 //{
