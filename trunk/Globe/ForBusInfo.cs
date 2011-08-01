@@ -249,7 +249,8 @@ namespace Businfo.Globe
                                grid.Columns[10].Visible = true;
                                grid.Columns[13].Visible = true;
                                grid.Columns[14].Visible = true;
-                               grid.Columns[51].Visible = true;
+                               grid.Columns[51].Visible = true;// "站点说明";
+                               grid.Columns[51].DisplayIndex = 4;
                            }
                            else
                            {
@@ -265,15 +266,30 @@ namespace Businfo.Globe
                                }
                            }
                            grid.Columns[3].HeaderText = "站点名称";
+                           grid.Columns[51].DisplayIndex = 4;//改变顺序
                            grid.Columns[4].HeaderText = "行向";
                            grid.Columns[5].HeaderText = "副站名";
                            grid.Columns[5].Frozen = true;
+                           grid.Columns[43].DisplayIndex = 7;
+                           grid.Columns[44].DisplayIndex = 8;
+                           grid.Columns[45].DisplayIndex = 9;
+                           grid.Columns[48].DisplayIndex = 10;
+                           grid.Columns[49].DisplayIndex = 11;
+                           grid.Columns[50].DisplayIndex = 12;
+                           grid.Columns[12].DisplayIndex = 13;
+                           grid.Columns[11].DisplayIndex = 14;
+                           grid.Columns[41].DisplayIndex = 15;
+                           grid.Columns[39].DisplayIndex = 16;
+                           grid.Columns[46].DisplayIndex = 17;
+                           grid.Columns[17].DisplayIndex = 18;
+                           grid.Columns[47].DisplayIndex = 19;
+                           grid.Columns[35].DisplayIndex = 20;
                            grid.Columns[6].HeaderText = "主要标识物";
                            grid.Columns[7].HeaderText = "站点所在道路";
                            grid.Columns[8].HeaderText = "GPS经度";
                            grid.Columns[9].HeaderText = "GPS纬度";
                            grid.Columns[10].HeaderText = "GPS高度";
-                           grid.Columns[11].HeaderText = "站杆材质";
+                           grid.Columns[11].HeaderText = "站杆维护单位";//站杆材质
                            grid.Columns[12].HeaderText = "站杆式样";
                            grid.Columns[13].HeaderText = "邻近标识物";
                            grid.Columns[14].HeaderText = "站牌规格";
@@ -297,22 +313,22 @@ namespace Businfo.Globe
                            grid.Columns[32].HeaderText = "全天集结量";
                            grid.Columns[33].HeaderText = "全天疏散量";
                            grid.Columns[34].HeaderText = "线路数";
-                           grid.Columns[35].HeaderText = "迁移安装时间";
+                           grid.Columns[35].HeaderText = "候车亭建设时间";//原来是 迁移安装时间
                            grid.Columns[36].HeaderText = "改建时间";
                            grid.Columns[37].HeaderText = "拆除时间";
                            grid.Columns[38].HeaderText = "候车亭长度";
-                           grid.Columns[39].HeaderText = "站杆材质2";
+                           grid.Columns[39].HeaderText = "站杆维护单位2";//原来是 站杆材质2
                            grid.Columns[40].HeaderText = "站杆材质3";
                            grid.Columns[41].HeaderText = "站杆样式2";
                            grid.Columns[42].HeaderText = "站杆样式3";
-                           grid.Columns[43].HeaderText = "调度公司1";
-                           grid.Columns[44].HeaderText = "调度线路1";
-                           grid.Columns[45].HeaderText = "调度站道1";
-                           grid.Columns[46].HeaderText = "调度公司2";
-                           grid.Columns[47].HeaderText = "调度线路2";
-                           grid.Columns[48].HeaderText = "调度站道2";
-                           grid.Columns[49].HeaderText = "调度公司3";
-                           grid.Columns[50].HeaderText = "调度线路3";
+                           grid.Columns[43].HeaderText = "线路牌材质";//原来是 调度公司1
+                           grid.Columns[44].HeaderText = "线路牌尺寸";//原来是 调度线路1
+                           grid.Columns[45].HeaderText = "线路牌制作单位";//原来是 调度站道1
+                           grid.Columns[46].HeaderText = "候车亭规模";//原来是 调度公司2
+                           grid.Columns[47].HeaderText = "候车亭维护单位";//原来是 调度线路2
+                           grid.Columns[48].HeaderText = "线路牌材质2";//原来是 调度站道2
+                           grid.Columns[49].HeaderText = "线路牌尺寸2";//原来是 调度公司3
+                           grid.Columns[50].HeaderText = "线路牌制作单位2";//原来是 调度线路3
                            grid.Columns[51].HeaderText = "站点说明";//原来是 调度站道3
                            grid.Columns[52].HeaderText = "站点类别";
                         }
@@ -349,7 +365,8 @@ namespace Businfo.Globe
                             grid.Columns[10].Visible = true;
                             grid.Columns[13].Visible = true;
                             grid.Columns[14].Visible = true;
-                            grid.Columns[51].Visible = true;
+                            grid.Columns[51].Visible = true;// "站点说明";
+                            grid.Columns[51].DisplayIndex = 4;
                         }
                         else if (strShow[0] == "all")
                         {
@@ -372,15 +389,30 @@ namespace Businfo.Globe
                             }
                         }
                         grid.Columns[3].HeaderText = "站点名称";
+                        grid.Columns[51].DisplayIndex = 4;//改变顺序
                         grid.Columns[4].HeaderText = "行向";
                         grid.Columns[5].HeaderText = "副站名";
                         grid.Columns[5].Frozen = true;
+                        grid.Columns[43].DisplayIndex = 7;
+                        grid.Columns[44].DisplayIndex = 8;
+                        grid.Columns[45].DisplayIndex = 9;
+                        grid.Columns[48].DisplayIndex = 10;
+                        grid.Columns[49].DisplayIndex = 11;
+                        grid.Columns[50].DisplayIndex = 12;
+                        grid.Columns[12].DisplayIndex = 13;
+                        grid.Columns[11].DisplayIndex = 14;
+                        grid.Columns[41].DisplayIndex = 15;
+                        grid.Columns[39].DisplayIndex = 16;
+                        grid.Columns[46].DisplayIndex = 17;
+                        grid.Columns[17].DisplayIndex = 18;
+                        grid.Columns[47].DisplayIndex = 19;
+                        grid.Columns[35].DisplayIndex = 20;
                         grid.Columns[6].HeaderText = "主要标识物";
                         grid.Columns[7].HeaderText = "站点所在道路";
                         grid.Columns[8].HeaderText = "GPS经度";
                         grid.Columns[9].HeaderText = "GPS纬度";
                         grid.Columns[10].HeaderText = "GPS高度";
-                        grid.Columns[11].HeaderText = "站杆材质";
+                        grid.Columns[11].HeaderText = "站杆维护单位";//站杆材质
                         grid.Columns[12].HeaderText = "站杆式样";
                         grid.Columns[13].HeaderText = "邻近标识物";
                         grid.Columns[14].HeaderText = "站牌规格";
@@ -404,24 +436,25 @@ namespace Businfo.Globe
                         grid.Columns[32].HeaderText = "全天集结量";
                         grid.Columns[33].HeaderText = "全天疏散量";
                         grid.Columns[34].HeaderText = "线路数";
-                        grid.Columns[35].HeaderText = "迁移安装时间";
+                        grid.Columns[35].HeaderText = "候车亭建设时间";//原来是 迁移安装时间
                         grid.Columns[36].HeaderText = "改建时间";
                         grid.Columns[37].HeaderText = "拆除时间";
                         grid.Columns[38].HeaderText = "候车亭长度";
-                        grid.Columns[39].HeaderText = "站杆材质2";
+                        grid.Columns[39].HeaderText = "站杆维护单位2";//原来是 站杆材质2
                         grid.Columns[40].HeaderText = "站杆材质3";
                         grid.Columns[41].HeaderText = "站杆样式2";
                         grid.Columns[42].HeaderText = "站杆样式3";
-                        grid.Columns[43].HeaderText = "调度公司1";
-                        grid.Columns[44].HeaderText = "调度线路1";
-                        grid.Columns[45].HeaderText = "调度站道1";
-                        grid.Columns[46].HeaderText = "调度公司2";
-                        grid.Columns[47].HeaderText = "调度线路2";
-                        grid.Columns[48].HeaderText = "调度站道2";
-                        grid.Columns[49].HeaderText = "调度公司3";
-                        grid.Columns[50].HeaderText = "调度线路3";
+                        grid.Columns[43].HeaderText = "线路牌材质";//原来是 调度公司1
+                        grid.Columns[44].HeaderText = "线路牌尺寸";//原来是 调度线路1
+                        grid.Columns[45].HeaderText = "线路牌制作单位";//原来是 调度站道1
+                        grid.Columns[46].HeaderText = "候车亭规模";//原来是 调度公司2
+                        grid.Columns[47].HeaderText = "候车亭维护单位";//原来是 调度线路2
+                        grid.Columns[48].HeaderText = "线路牌材质2";//原来是 调度站道2
+                        grid.Columns[49].HeaderText = "线路牌尺寸2";//原来是 调度公司3
+                        grid.Columns[50].HeaderText = "线路牌制作单位2";//原来是 调度线路3
                         grid.Columns[51].HeaderText = "站点说明";//原来是 调度站道3
                         grid.Columns[52].HeaderText = "站点类别";
+                      
                     }
                     break;
                    case GridSetType.Station_FillByStationName:
@@ -810,8 +843,9 @@ namespace Businfo.Globe
 
     {
         public int ID;
-        public string StationName, Direct;
+        public string StationName, Direct,StationExplain;//原来是 调度站道3，现在是站点说明
         public double rLength;//点在线上距起点的距离
+        public string StationCharacter;//站点所在道路
 
         public BusStation(string StationName,string Direct,int ID)
         {
@@ -820,17 +854,19 @@ namespace Businfo.Globe
             this.ID = ID;
         }
 
-        public BusStation(string StationName, string Direct, int ID, double rLength)
+        public BusStation(string StationName, string Direct, int ID, double rLength,string StationExplain,string StationCharacter)
         {
             this.StationName = StationName;
             this.Direct = Direct;
             this.ID = ID;
             this.rLength = rLength;
+            this.StationExplain = StationExplain;
+            this.StationCharacter = StationCharacter;
         }
 
         public override string ToString()
         {
-            return string.Format("{0}-{1}" ,StationName , Direct);
+            return string.Format("{0}-{1}-{2}", StationName, Direct, StationExplain);
         }
 
         #region IComparable<BusStation> 成员

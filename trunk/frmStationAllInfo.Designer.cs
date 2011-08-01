@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.DataGridView1 = new System.Windows.Forms.DataGridView();
+            this.Checkbox = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.定位到ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.全景浏览ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -39,7 +40,6 @@
             this.button1 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
-            this.Checkbox = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.DataGridView1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -69,9 +69,17 @@
             this.DataGridView1.TabIndex = 3;
             this.DataGridView1.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView1_CellValueChanged);
             this.DataGridView1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DataGridView1_MouseDown);
+            this.DataGridView1.Sorted += new System.EventHandler(this.DataGridView1_Sorted);
             this.DataGridView1.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridView1_CellMouseDown);
             this.DataGridView1.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridView1_CellMouseDoubleClick);
             this.DataGridView1.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.DataGridView1_DataError);
+            // 
+            // Checkbox
+            // 
+            this.Checkbox.Frozen = true;
+            this.Checkbox.HeaderText = "Checkbox";
+            this.Checkbox.Name = "Checkbox";
+            this.Checkbox.Width = 59;
             // 
             // contextMenuStrip1
             // 
@@ -79,19 +87,19 @@
             this.定位到ToolStripMenuItem,
             this.全景浏览ToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(119, 48);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(125, 48);
             // 
             // 定位到ToolStripMenuItem
             // 
             this.定位到ToolStripMenuItem.Name = "定位到ToolStripMenuItem";
-            this.定位到ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.定位到ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.定位到ToolStripMenuItem.Text = "定位到";
             this.定位到ToolStripMenuItem.Click += new System.EventHandler(this.定位到ToolStripMenuItem_Click);
             // 
             // 全景浏览ToolStripMenuItem
             // 
             this.全景浏览ToolStripMenuItem.Name = "全景浏览ToolStripMenuItem";
-            this.全景浏览ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.全景浏览ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.全景浏览ToolStripMenuItem.Text = "全景浏览";
             this.全景浏览ToolStripMenuItem.Click += new System.EventHandler(this.全景浏览ToolStripMenuItem_Click);
             // 
@@ -145,13 +153,6 @@
             this.button4.Text = "输出到Excel";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
-            // Checkbox
-            // 
-            this.Checkbox.Frozen = true;
-            this.Checkbox.HeaderText = "Checkbox";
-            this.Checkbox.Name = "Checkbox";
-            this.Checkbox.Width = 59;
             // 
             // frmStationAllInfo
             // 

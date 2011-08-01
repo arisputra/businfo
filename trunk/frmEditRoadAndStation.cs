@@ -85,14 +85,18 @@ namespace Businfo
             foreach (IFeature pfeat in m_CurStationList)
             {
                 pPLine.QueryPointAndDistance(esriSegmentExtension.esriNoExtension, pfeat.ShapeCopy as IPoint, asRatio, outPoint, ref distanceAlongCurve, ref distanceFromCurve, ref bRightSide);
-                m_BusStationList.Add(new BusStation(pfeat.get_Value(pfeat.Fields.FindField("StationName")).ToString(), pfeat.get_Value(pfeat.Fields.FindField("Direct")).ToString(), (int)pfeat.get_Value(pfeat.Fields.FindField("OBJECTID")), distanceAlongCurve));
+                m_BusStationList.Add(new BusStation(pfeat.get_Value(pfeat.Fields.FindField("StationName")).ToString(), pfeat.get_Value(pfeat.Fields.FindField("Direct")).ToString(), (int)pfeat.get_Value(pfeat.Fields.FindField("OBJECTID")), distanceAlongCurve, pfeat.get_Value(pfeat.Fields.FindField("DispatchStationThird")).ToString(),pfeat.get_Value(pfeat.Fields.FindField("StationCharacter")).ToString()));
                 EngineFuntions.AddTextElement(pfeat.Shape, pfeat.get_Value(pfeat.Fields.FindField("StationName")).ToString());
             }
             //m_BusStationList.Sort();
             foreach (BusStation pItem in m_BusStationList)
             {
+                DataGridViewRow dr = new DataGridViewRow();
+                dataGridView1.Rows.Add(pItem.StationName, pItem.StationExplain, pItem.Direct,pItem.StationCharacter);
+
                 checkedListBox1.Items.Add(pItem);
             }
+
             if (m_BusStationList[0].rLength > m_BusStationList[1].rLength)
                 m_bReverse = true;
             else
@@ -101,7 +105,7 @@ namespace Businfo
             foreach (IFeature pfeat in m_SelStationList)
             {
                 pPLine.QueryPointAndDistance(esriSegmentExtension.esriNoExtension, pfeat.ShapeCopy as IPoint, asRatio, outPoint, ref distanceAlongCurve, ref distanceFromCurve, ref bRightSide);
-                m_SelBusStationList.Add(new BusStation(pfeat.get_Value(pfeat.Fields.FindField("StationName")).ToString(), pfeat.get_Value(pfeat.Fields.FindField("Direct")).ToString(), (int)pfeat.get_Value(pfeat.Fields.FindField("OBJECTID")), distanceAlongCurve));
+                m_SelBusStationList.Add(new BusStation(pfeat.get_Value(pfeat.Fields.FindField("StationName")).ToString(), pfeat.get_Value(pfeat.Fields.FindField("Direct")).ToString(), (int)pfeat.get_Value(pfeat.Fields.FindField("OBJECTID")), distanceAlongCurve, pfeat.get_Value(pfeat.Fields.FindField("DispatchStationThird")).ToString(), pfeat.get_Value(pfeat.Fields.FindField("StationCharacter")).ToString()));
                 EngineFuntions.AddTextElement(pfeat.Shape, pfeat.get_Value(pfeat.Fields.FindField("StationName")).ToString());
             }
             m_SelBusStationList.Sort();
@@ -134,10 +138,14 @@ namespace Businfo
                 {
                     if (ForBusInfo.Connect_Type == 1)
                         pStrSQL = String.Format("insert into sde.RoadAndStation(RoadID,StationID,StationOrder,BufferLength) values({0},{1},{2},{3})"
-                        , m_nRoadID, pBusStation.ID, nOrder++, n_nBufferLength);
+                        , m_nRoadID, pBusStation.ID, nOrder++, n_nBufferLength
+                        , String.Format("{0}-{1}",m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("RoadName")).ToString(),m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("RoadTravel")).ToString())
+                        , String.Format("{0}-{1}", pBusStation.StationName, pBusStation.Direct));
                     else
                         pStrSQL = String.Format("insert into RoadAndStation(RoadID,StationID,StationOrder,BufferLength) values({0},{1},{2},{3})"
-                        , m_nRoadID, pBusStation.ID, nOrder++, n_nBufferLength);
+                        , m_nRoadID, pBusStation.ID, nOrder++, n_nBufferLength
+                         , String.Format("{0}-{1}", m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("RoadName")).ToString(), m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("RoadTravel")).ToString())
+                        , String.Format("{0}-{1}", pBusStation.StationName, pBusStation.Direct));
                     pCom = new OleDbCommand(pStrSQL, mycon);
                     pCom.ExecuteNonQuery();
                 }
@@ -149,6 +157,11 @@ namespace Businfo
             {
                 MessageBox.Show("生成关联表出错\n" + ex.ToString(), "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }

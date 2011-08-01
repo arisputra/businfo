@@ -21,9 +21,8 @@ namespace Businfo
         [STAThread]
         static void Main()
         {
-            
-            ForBusInfo.AppIni(2);//初始化连接类型
-            Application.Run(new frmFlash());
+            ForBusInfo.AppIni(1);//初始化连接类型
+            Application.Run(new frmMainNew());
         }
 
         private void timer1_Tick(object sender, EventArgs e)

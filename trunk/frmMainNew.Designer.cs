@@ -66,6 +66,7 @@
             this.axLicenseControl1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axLicenseControl1.OcxState")));
             this.axLicenseControl1.Size = new System.Drawing.Size(32, 32);
             this.axLicenseControl1.TabIndex = 15;
+            this.axLicenseControl1.Enter += new System.EventHandler(this.axLicenseControl1_Enter);
             // 
             // axMapControl1
             // 
