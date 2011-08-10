@@ -328,6 +328,12 @@
     <Compile Include="frmRoadRecover.Designer.cs">
       <DependentUpon>frmRoadRecover.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmRoadTable.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmRoadTable.Designer.cs">
+      <DependentUpon>frmRoadTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmStationAllInfo.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -351,6 +357,12 @@
     </Compile>
     <Compile Include="frmRoadPara.Designer.cs">
       <DependentUpon>frmRoadPara.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmStationTable.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmStationTable.Designer.cs">
+      <DependentUpon>frmStationTable.cs</DependentUpon>
     </Compile>
     <Compile Include="Globe\CoordTrans.cs" />
     <Compile Include="Globe\ForBusInfo.cs" />
@@ -383,6 +395,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmFacilitiesPane.resx">
       <DependentUpon>frmFacilitiesPane.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmRoadTable.resx">
+      <DependentUpon>frmRoadTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmStationTable.resx">
+      <DependentUpon>frmStationTable.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

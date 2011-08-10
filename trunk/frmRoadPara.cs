@@ -62,6 +62,12 @@ namespace Businfo
                 m_pFeature.set_Value(nIndex, textBox9.Text);
                 nIndex = fields.FindField("EndCloseTim");
                 m_pFeature.set_Value(nIndex, textBox10.Text);
+
+                nIndex = fields.FindField("Company");//所属公司
+                m_pFeature.set_Value(nIndex, comboBox2.Text);
+                nIndex = fields.FindField("Picture5");//票价四
+                m_pFeature.set_Value(nIndex, textBox12.Text);
+
                 m_pFeature.Store();
                 ForBusInfo.Add_Log(ForBusInfo.Login_name, "添加线路", textBox1.Text + textBox3.Text, "");
             }
