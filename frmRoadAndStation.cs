@@ -161,7 +161,10 @@ namespace Businfo
         {
             ListBox1.Items.Clear();
             m_BusStationList.Clear();
+
+          
             IPolyline pPLine = m_pCurFeature.ShapeCopy as IPolyline;
+          
             ESRI.ArcGIS.Geometry.IPoint outPoint = new PointClass();
             double distanceAlongCurve = 0;//该点在曲线上最近的点距曲线起点的距离
             double distanceFromCurve = 0;//该点到曲线的直线距离
@@ -261,108 +264,200 @@ namespace Businfo
 
 
                 List<IFeature> featureCollection = EngineFuntions.GetSeartchFeatures(EngineFuntions.m_Layer_BusRoad, "OBJECTID > -1");
-                for (int j = 0;j< 301;j++)
+                for (int j = 0; j < featureCollection.Count; j++)
                 {
                     IFeature pFea = featureCollection[j];
                     if (pFea.get_Value(pFea.Fields.FindField("RoadName")).ToString() == "703" && pFea.get_Value(pFea.Fields.FindField("RoadTravel")).ToString() == "去行")
                     {
                         continue;
                     }
-                    EngineFuntions.m_AxMapControl.Map.ClearSelection();
-                    object Missing = Type.Missing;
-                    IConstructCurve mycurve = new PolylineClass();
-                    mycurve.ConstructOffset((IPolycurve)pFea.Shape, 25, ref Missing, ref Missing);
-                    EngineFuntions.ClickSel((IGeometry)mycurve, false, false, 25);
-                    if (EngineFuntions.GetSeledFeatures(EngineFuntions.m_Layer_BusStation, ref m_featureCollection))
+                    if (pFea.get_Value(pFea.Fields.FindField("RoadName")).ToString() == "703")
+                    //if (pFea.get_Value(pFea.Fields.FindField("Company")).ToString().Contains("三公司"))
                     {
-                        m_BusStationList.Clear();
-                        IPolyline pPLine = pFea.ShapeCopy as IPolyline;
-                        ESRI.ArcGIS.Geometry.IPoint outPoint = new PointClass();
-                        double distanceAlongCurve = 0;//该点在曲线上最近的点距曲线起点的距离
-                        double distanceFromCurve = 0;//该点到曲线的直线距离
-                        bool bRightSide = false;//点在线的左边还是右边
-                        bool asRatio = false;  //asRatio：byval方式，bool类型，表示上面两个参数给定的长度是以绝对距离的方式给出还是以占曲线总长度的比例的方式给出
-                        foreach (IFeature pfeat in m_featureCollection)
-                        {
-                            pPLine.QueryPointAndDistance(esriSegmentExtension.esriNoExtension, pfeat.ShapeCopy as ESRI.ArcGIS.Geometry.IPoint, asRatio, outPoint, ref distanceAlongCurve, ref distanceFromCurve, ref bRightSide);
-                            m_BusStationList.Add(new BusStation(pfeat.get_Value(pfeat.Fields.FindField("StationName")).ToString(), pfeat.get_Value(pfeat.Fields.FindField("Direct")).ToString(), (int)pfeat.get_Value(pfeat.Fields.FindField("OBJECTID")), distanceAlongCurve, pfeat.get_Value(pfeat.Fields.FindField("DispatchStationThird")).ToString(), pfeat.get_Value(pfeat.Fields.FindField("StationCharacter")).ToString()));
-                            //EngineFuntions.AddTextElement(pfeat.Shape, pfeat.get_Value(pfeat.Fields.FindField("StationName")).ToString());
-                        }
-                        m_BusStationList.Sort();
-                       
-                        //////////////////////////////////////////////////////
-                        _Workbook workbook = workbooks.Open("C:\\1.xls", Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
-                        Sheets sheets = workbook.Worksheets;
-                        _Worksheet worksheet = (_Worksheet)sheets.get_Item(1);
-                        Range range1;
-                        range1 = worksheet.get_Range("A1","A1");
-                        range1.Value2 = pFea.get_Value(pFea.Fields.FindField("RoadName")).ToString();
-                        range1 = worksheet.get_Range("B1", "B1");
-                        range1.Value2 = pFea.get_Value(pFea.Fields.FindField("RoadTravel")).ToString();
-                        range1 = worksheet.get_Range("C1", "C1");
-                        range1.Value2 = pFea.get_Value(pFea.Fields.FindField("OBJECTID")).ToString();
-                        for (int i = 0; i < m_BusStationList.Count; i++)
-                        {
-                            BusStation eTableRow = m_BusStationList[i];
-                            range1 = worksheet.get_Range(string.Format("A{0}", 3 + i), string.Format("A{0}", 3 + i));
-                            range1.Value2 = eTableRow.StationName;
-                            range1 = worksheet.get_Range(string.Format("B{0}", 3 + i), string.Format("B{0}", 3 + i));
-                            range1.Value2 = eTableRow.StationExplain;
-                            range1 = worksheet.get_Range(string.Format("C{0}", 3 + i), string.Format("C{0}", 3 + i));
-                            range1.Value2 = eTableRow.Direct;
-                            range1 = worksheet.get_Range(string.Format("D{0}", 3 + i), string.Format("D{0}", 3 + i));
-                            range1.Value2 = eTableRow.StationCharacter;
-                            range1 = worksheet.get_Range(string.Format("E{0}", 3 + i), string.Format("E{0}", 3 + i));
-                            range1.Value2 = eTableRow.ID;
-                        }
                         EngineFuntions.m_AxMapControl.Map.ClearSelection();
-                     IConstructCurve mycurve1 = new PolylineClass();
-                    mycurve1.ConstructOffset((IPolycurve)pFea.Shape, -25, ref Missing, ref Missing);
-                    EngineFuntions.ClickSel((IGeometry)mycurve1, false, false, 25);
-                    if (EngineFuntions.GetSeledFeatures(EngineFuntions.m_Layer_BusStation, ref m_featureCollection))
-                    {
-                        m_BusStationList.Clear();
-                        IPolyline pPLine1 = pFea.ShapeCopy as IPolyline;
-                        ESRI.ArcGIS.Geometry.IPoint outPoint1 = new PointClass();
-                        foreach (IFeature pfeat in m_featureCollection)
+                        object Missing = Type.Missing;
+                        IConstructCurve mycurve = new PolylineClass();
+                        mycurve.ConstructOffset((IPolycurve)pFea.Shape, 25, ref Missing, ref Missing);
+                        EngineFuntions.ClickSel((IGeometry)mycurve, false, false, 25);
+                        if (EngineFuntions.GetSeledFeatures(EngineFuntions.m_Layer_BusStation, ref m_featureCollection))
                         {
-                            pPLine1.QueryPointAndDistance(esriSegmentExtension.esriNoExtension, pfeat.ShapeCopy as ESRI.ArcGIS.Geometry.IPoint, asRatio, outPoint, ref distanceAlongCurve, ref distanceFromCurve, ref bRightSide);
-                            m_BusStationList.Add(new BusStation(pfeat.get_Value(pfeat.Fields.FindField("StationName")).ToString(), pfeat.get_Value(pfeat.Fields.FindField("Direct")).ToString(), (int)pfeat.get_Value(pfeat.Fields.FindField("OBJECTID")), distanceAlongCurve, pfeat.get_Value(pfeat.Fields.FindField("DispatchStationThird")).ToString(), pfeat.get_Value(pfeat.Fields.FindField("StationCharacter")).ToString()));
-                           // EngineFuntions.AddTextElement(pfeat.Shape, pfeat.get_Value(pfeat.Fields.FindField("StationName")).ToString());
-                        }
-                        m_BusStationList.Sort();
-                        m_BusStationList.Reverse();
-                        _Worksheet worksheet1 = (_Worksheet)sheets.get_Item(2);
-                        range1 = worksheet1.get_Range("A1", "A1");
-                        range1.Value2 = pFea.get_Value(pFea.Fields.FindField("RoadName")).ToString();
-                        range1 = worksheet1.get_Range("B1", "B1");
-                        range1.Value2 = pFea.get_Value(pFea.Fields.FindField("RoadTravel")).ToString();
-                        range1 = worksheet1.get_Range("C1", "C1");
-                        range1.Value2 = pFea.get_Value(pFea.Fields.FindField("OBJECTID")).ToString();
-                        for (int i = 0; i < m_BusStationList.Count; i++)
-                        {
-                            BusStation eTableRow = m_BusStationList[i];
-                            range1 = worksheet1.get_Range(string.Format("A{0}", 3 + i), string.Format("A{0}", 3 + i));
-                            range1.Value2 = eTableRow.StationName;
-                            range1 = worksheet1.get_Range(string.Format("B{0}", 3 + i), string.Format("B{0}", 3 + i));
-                            range1.Value2 = eTableRow.StationExplain;
-                            range1 = worksheet1.get_Range(string.Format("C{0}", 3 + i), string.Format("C{0}", 3 + i));
-                            range1.Value2 = eTableRow.Direct;
-                            range1 = worksheet1.get_Range(string.Format("D{0}", 3 + i), string.Format("D{0}", 3 + i));
-                            range1.Value2 = eTableRow.StationCharacter;
-                            range1 = worksheet1.get_Range(string.Format("E{0}", 3 + i), string.Format("E{0}", 3 + i));
-                            range1.Value2 = eTableRow.ID;
-                        }
+                            m_BusStationList.Clear();
+                            IPolyline pPLine = pFea.ShapeCopy as IPolyline;
+                            ESRI.ArcGIS.Geometry.IPoint outPoint = new PointClass();
+                            double distanceAlongCurve = 0;//该点在曲线上最近的点距曲线起点的距离
+                            double distanceFromCurve = 0;//该点到曲线的直线距离
+                            bool bRightSide = false;//点在线的左边还是右边
+                            bool asRatio = false;  //asRatio：byval方式，bool类型，表示上面两个参数给定的长度是以绝对距离的方式给出还是以占曲线总长度的比例的方式给出
+                            foreach (IFeature pfeat in m_featureCollection)
+                            {
+                                pPLine.QueryPointAndDistance(esriSegmentExtension.esriNoExtension, pfeat.ShapeCopy as ESRI.ArcGIS.Geometry.IPoint, asRatio, outPoint, ref distanceAlongCurve, ref distanceFromCurve, ref bRightSide);
+                                m_BusStationList.Add(new BusStation(pfeat.get_Value(pfeat.Fields.FindField("StationName")).ToString(), pfeat.get_Value(pfeat.Fields.FindField("Direct")).ToString(), (int)pfeat.get_Value(pfeat.Fields.FindField("OBJECTID")), distanceAlongCurve, pfeat.get_Value(pfeat.Fields.FindField("DispatchStationThird")).ToString(), pfeat.get_Value(pfeat.Fields.FindField("StationCharacter")).ToString()));
+                                //EngineFuntions.AddTextElement(pfeat.Shape, pfeat.get_Value(pfeat.Fields.FindField("StationName")).ToString());
+                            }
+                            m_BusStationList.Sort();
+
+                            //////////////////////////////////////////////////////
+                            _Workbook workbook = workbooks.Open("C:\\1.xls", Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+    Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+                            Sheets sheets = workbook.Worksheets;
+                            _Worksheet worksheet = (_Worksheet)sheets.get_Item(1);
+                            Range range1;
+                            range1 = worksheet.get_Range("A1", "A1");
+                            range1.Value2 = pFea.get_Value(pFea.Fields.FindField("RoadName")).ToString();
+                            range1 = worksheet.get_Range("B1", "B1");
+                            range1.Value2 = pFea.get_Value(pFea.Fields.FindField("RoadTravel")).ToString();
+                            range1 = worksheet.get_Range("C1", "C1");
+                            range1.Value2 = pFea.get_Value(pFea.Fields.FindField("OBJECTID")).ToString();
+                            for (int i = 0; i < m_BusStationList.Count; i++)
+                            {
+                                BusStation eTableRow = m_BusStationList[i];
+                                range1 = worksheet.get_Range(string.Format("A{0}", 3 + i), string.Format("A{0}", 3 + i));
+                                range1.Value2 = eTableRow.StationName;
+                                range1 = worksheet.get_Range(string.Format("B{0}", 3 + i), string.Format("B{0}", 3 + i));
+                                range1.Value2 = eTableRow.StationExplain;
+                                range1 = worksheet.get_Range(string.Format("C{0}", 3 + i), string.Format("C{0}", 3 + i));
+                                range1.Value2 = eTableRow.Direct;
+                                range1 = worksheet.get_Range(string.Format("D{0}", 3 + i), string.Format("D{0}", 3 + i));
+                                range1.Value2 = eTableRow.StationCharacter;
+                                range1 = worksheet.get_Range(string.Format("E{0}", 3 + i), string.Format("E{0}", 3 + i));
+                                range1.Value2 = eTableRow.ID;
+                            }
+                            EngineFuntions.m_AxMapControl.Map.ClearSelection();
+                            IConstructCurve mycurve1 = new PolylineClass();
+                            mycurve1.ConstructOffset((IPolycurve)pFea.Shape, -25, ref Missing, ref Missing);
+                            EngineFuntions.ClickSel((IGeometry)mycurve1, false, false, 25);
+                            if (EngineFuntions.GetSeledFeatures(EngineFuntions.m_Layer_BusStation, ref m_featureCollection))
+                            {
+                                m_BusStationList.Clear();
+                                IPolyline pPLine1 = pFea.ShapeCopy as IPolyline;
+                                ESRI.ArcGIS.Geometry.IPoint outPoint1 = new PointClass();
+                                foreach (IFeature pfeat in m_featureCollection)
+                                {
+                                    pPLine1.QueryPointAndDistance(esriSegmentExtension.esriNoExtension, pfeat.ShapeCopy as ESRI.ArcGIS.Geometry.IPoint, asRatio, outPoint, ref distanceAlongCurve, ref distanceFromCurve, ref bRightSide);
+                                    m_BusStationList.Add(new BusStation(pfeat.get_Value(pfeat.Fields.FindField("StationName")).ToString(), pfeat.get_Value(pfeat.Fields.FindField("Direct")).ToString(), (int)pfeat.get_Value(pfeat.Fields.FindField("OBJECTID")), distanceAlongCurve, pfeat.get_Value(pfeat.Fields.FindField("DispatchStationThird")).ToString(), pfeat.get_Value(pfeat.Fields.FindField("StationCharacter")).ToString()));
+                                    // EngineFuntions.AddTextElement(pfeat.Shape, pfeat.get_Value(pfeat.Fields.FindField("StationName")).ToString());
+                                }
+                                m_BusStationList.Sort();
+                                m_BusStationList.Reverse();
+                                _Worksheet worksheet1 = (_Worksheet)sheets.get_Item(2);
+                                range1 = worksheet1.get_Range("A1", "A1");
+                                range1.Value2 = pFea.get_Value(pFea.Fields.FindField("RoadName")).ToString();
+                                range1 = worksheet1.get_Range("B1", "B1");
+                                range1.Value2 = pFea.get_Value(pFea.Fields.FindField("RoadTravel")).ToString();
+                                range1 = worksheet1.get_Range("C1", "C1");
+                                range1.Value2 = pFea.get_Value(pFea.Fields.FindField("OBJECTID")).ToString();
+                                for (int i = 0; i < m_BusStationList.Count; i++)
+                                {
+                                    BusStation eTableRow = m_BusStationList[i];
+                                    range1 = worksheet1.get_Range(string.Format("A{0}", 3 + i), string.Format("A{0}", 3 + i));
+                                    range1.Value2 = eTableRow.StationName;
+                                    range1 = worksheet1.get_Range(string.Format("B{0}", 3 + i), string.Format("B{0}", 3 + i));
+                                    range1.Value2 = eTableRow.StationExplain;
+                                    range1 = worksheet1.get_Range(string.Format("C{0}", 3 + i), string.Format("C{0}", 3 + i));
+                                    range1.Value2 = eTableRow.Direct;
+                                    range1 = worksheet1.get_Range(string.Format("D{0}", 3 + i), string.Format("D{0}", 3 + i));
+                                    range1.Value2 = eTableRow.StationCharacter;
+                                    range1 = worksheet1.get_Range(string.Format("E{0}", 3 + i), string.Format("E{0}", 3 + i));
+                                    range1.Value2 = eTableRow.ID;
+                                }
+                            }
+                            workbook.SaveAs(string.Format("E:\\{0}-{1}({2})", pFea.get_Value(pFea.Fields.FindField("RoadName")), pFea.get_Value(pFea.Fields.FindField("RoadTravel")), pFea.get_Value(pFea.Fields.FindField("Company"))), Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookNormal, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlNoChange, Type.Missing, Type.Missing, Type.Missing, Type.Missing, null);
+                            workbooks.Close();
                     }
-                        workbook.SaveAs(string.Format("E:\\{0}-{1}", pFea.get_Value(pFea.Fields.FindField("RoadName")), pFea.get_Value(pFea.Fields.FindField("RoadTravel"))), Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookNormal, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlNoChange, Type.Missing, Type.Missing, Type.Missing, Type.Missing, null);
-                        workbooks.Close();
-                        //break;
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                       
+                    
                     }
                 
                 }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                Excelapp app = new Excelapp();
+                if (app == null)
+                {
+                    MessageBox.Show("创建Excel服务失败!\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                app.Visible = false;//不打开excel
+                app.DisplayAlerts = false;
+                Workbooks workbooks = app.Workbooks;
+                OleDbConnection mycon = new OleDbConnection(ForBusInfo.Connect_Sql);
+                mycon.Open();
+
+                foreach (string folderName in openFileDialog1.FileNames)
+                {
+                    _Workbook workbook = workbooks.Open(folderName, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+                Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+                    Sheets sheets = workbook.Worksheets;
+                    _Worksheet worksheet = (_Worksheet)sheets.get_Item(1);
+                    Range range1;
+                    range1 = worksheet.get_Range("C1","C1");
+                    m_nRoadID = Convert.ToInt32(range1.Value2.ToString());
+
+                    range1 = worksheet.get_Range("A1","A1");
+                    string RoadName = range1.Value2.ToString();
+                    range1 = worksheet.get_Range("B1", "B1");
+                    RoadName = RoadName + "-" + range1.Value2.ToString();
+
+                    string StationName,StationID;
+
+                    int nBufferLength;
+                    if(worksheet.Name.ToString() == "表一")
+                    {
+                        nBufferLength = 25;
+                    }
+                    else
+                        nBufferLength = -25;
+                    
+                    try
+                    {
+                        string pStrSQL;
+                        OleDbCommand pCom;
+                        if (ForBusInfo.Connect_Type == 1)
+                            pStrSQL = String.Format("delete from  sde.RoadAndStation where RoadID = {0}", m_nRoadID);
+                        else
+                            pStrSQL = String.Format("delete from  RoadAndStation where RoadID = {0}", m_nRoadID);
+                        pCom = new OleDbCommand(pStrSQL, mycon);
+                        pCom.ExecuteNonQuery();
+                        for (int i = 3; i < 60; i++ )
+                        {
+                            range1 = worksheet.get_Range(string.Format("A{0}", i), string.Format("A{0}",i));
+                            if (range1.Value2 == null)
+                            {
+                                break;
+                            }
+                            StationName = range1.Value2.ToString();
+                            range1 = worksheet.get_Range(string.Format("C{0}", i), string.Format("C{0}", i));
+                            StationName = StationName + "-" + range1.Value2.ToString();
+
+                            range1 = worksheet.get_Range(string.Format("E{0}", i), string.Format("E{0}", i));
+                            StationID = range1.Value2.ToString();
+
+                            if (ForBusInfo.Connect_Type == 1)
+                                pStrSQL = String.Format("insert into sde.RoadAndStation(RoadID,StationID,StationOrder,BufferLength,Roadinfo ,StationInfo) values({0},{1},{2},{3},'{4}','{5}')"
+                                , m_nRoadID, StationID, i - 3, nBufferLength
+                                , RoadName
+                                , StationName);
+                            else
+                                pStrSQL = String.Format("insert into RoadAndStation(RoadID,StationID,StationOrder,BufferLength,Roadinfo ,StationInfo) values({0},{1},{2},{3},'{4}','{5}')"
+                                , m_nRoadID, StationID, i - 3, nBufferLength
+                                 , RoadName
+                                , StationName);
+                            pCom = new OleDbCommand(pStrSQL, mycon);
+                            pCom.ExecuteNonQuery();
+                        }
+
+                    }
+                    catch (System.Exception ex)
+                    {
+                        MessageBox.Show("生成关联表出错\n" + ex.ToString(), "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+
+                }
+                mycon.Close();
+                app.Quit();
+            }
         }
     }
 }

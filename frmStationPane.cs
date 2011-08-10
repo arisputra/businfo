@@ -211,38 +211,53 @@ namespace Businfo
 
         private void 站点表单ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (ForBusInfo.Excel_app == null)
+            {
+                MessageBox.Show("创建Excel服务失败!\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            ForBusInfo.Excel_app.Visible = true;
+            Workbooks workbooks = ForBusInfo.Excel_app.Workbooks;
+            //_Workbook workbook = ForBusInfo.Excel_app.Workbooks.Add(System.Reflection.Missing.Value);
+            //_Worksheet worksheet = null;
+            //if (workbook.Worksheets.Count > 0)
+            //{
+            //    worksheet = (Microsoft.Office.Interop.Excel.Worksheet)workbook.Worksheets.get_Item(1);
+            //}
+            //else
+            //{
+            //    workbook.Worksheets.Add(System.Reflection.Missing.Value, System.Reflection.Missing.Value, System.Reflection.Missing.Value,
+            //System.Reflection.Missing.Value);
+            //    worksheet = (Microsoft.Office.Interop.Excel.Worksheet)workbook.Worksheets.get_Item(1);
+            //}
+            _Workbook workbook = workbooks.Open(System.Windows.Forms.Application.StartupPath + "\\data\\路单.xls", Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+            Sheets sheets = workbook.Worksheets;
+            _Worksheet worksheet = (_Worksheet)sheets.get_Item(1);
+
             m_featureCollection.Clear();
             DataGridView1.EndEdit();
-            List<IFeature> pCurFeatureList;
+            //List<IFeature> pCurFeatureList;
             bool bCheck = false;
+            int nTotal = 0;
             foreach (DataGridViewRow eRow in DataGridView1.Rows)//判断是否打钩进行多选择
             {
+                
                 if (eRow.Cells[0].Value != null && (bool)eRow.Cells[0].Value == true)
                 {
-                    if (ForBusInfo.Excel_app == null)
+                    string strAB;
+                    if (nTotal%2 == 0)
                     {
-                        MessageBox.Show("创建Excel服务失败!\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                    ForBusInfo.Excel_app.Visible = true;
-                    //ForBusInfo.Excel_app.DisplayAlerts = false;
-                    //Workbooks workbooks = ForBusInfo.Excel_app.Workbooks;
-                    _Workbook workbook = ForBusInfo.Excel_app.Workbooks.Add(System.Reflection.Missing.Value);
-                    _Worksheet worksheet = null;
-                    if (workbook.Worksheets.Count > 0)
-                    {
-                        worksheet = (Microsoft.Office.Interop.Excel.Worksheet)workbook.Worksheets.get_Item(1);
+                        strAB = "A";
                     }
                     else
                     {
-                        workbook.Worksheets.Add(System.Reflection.Missing.Value, System.Reflection.Missing.Value, System.Reflection.Missing.Value,
-                    System.Reflection.Missing.Value);
-                        worksheet = (Microsoft.Office.Interop.Excel.Worksheet)workbook.Worksheets.get_Item(1);
+                        strAB = "B";
                     }
-                    Range range1 = worksheet.get_Range("A1", "A1");
-                    range1.Value2 = string.Format("{0}({1})({2}:{3})", eRow.Cells["StationName"].Value, eRow.Cells["StationAlias"].Value, eRow.Cells["MainSymbol"].Value, eRow.Cells["Direct"].Value);
-                    range1 = worksheet.get_Range("A2", "A2");
-                    range1.Value2 = string.Format("{0}:{1}", eRow.Cells["StationStyle"].Value, eRow.Cells["RodStyleFirst"].Value);
-                    range1 = worksheet.get_Range("A3", "A3");
+                    Range range1 = worksheet.get_Range(string.Format("{0}{1}", strAB, 1 + (nTotal / 2) * 8), string.Format("{0}{1}", strAB, 1 + (nTotal / 2) * 8));
+                    range1.Value2 = string.Format("{0}({1})({2}:{3})", eRow.Cells["StationName"].Value, eRow.Cells["DispatchStationThird"].Value, eRow.Cells["Direct"].Value, eRow.Cells["MainSymbol"].Value);
+                    range1 = worksheet.get_Range(string.Format("{0}{1}", strAB, 2 + (nTotal / 2) * 8), string.Format("{0}{1}", strAB, 2 + (nTotal / 2) * 8));
+                    range1.Value2 = string.Format("线路牌1:{0}:{1}:{2}      线路牌2：{3}:{4}:{5}", eRow.Cells["DispatchCompanyFirst"].Value, eRow.Cells["DispatchRouteFirst"].Value, eRow.Cells["DispatchStationFirst"].Value, eRow.Cells["DispatchStationSecond"].Value, eRow.Cells["DispatchCompanyThird"].Value, eRow.Cells["DispatchRouteThird"].Value);
+                    range1 = worksheet.get_Range(string.Format("{0}{1}", strAB, 3 + (nTotal / 2) * 8), string.Format("{0}{1}", strAB, 3 + (nTotal / 2) * 8));
                     range1.Value2 = eRow.Cells["BusShelter"].Value;
 
 
@@ -262,11 +277,13 @@ namespace Businfo
                         {
                             strRoad = strRoad + eDataRow["RoadName"].ToString() + "、";
                         }
-                        range1 = worksheet.get_Range("A4", "A4");
-                        range1.Value2 = strRoad;
+                        range1 = worksheet.get_Range(string.Format("{0}{1}", strAB, 4 + (nTotal / 2) * 8), string.Format("{0}{1}", strAB, 4 + (nTotal / 2) * 8));
+                        range1.Value2 = string.Format("总经过线路({0}条)：{1}",nQueryCount,strRoad);
                     }
-                    range1 = worksheet.get_Range("A5", "A5");
-                    range1.Value2 = string.Format("总经过线路：{0}",nQueryCount);
+
+                    worksheet.PageSetup.PrintArea = string.Format("$A$1:$B${0}", 8 + (nTotal / 2)*8);
+
+                    nTotal++;
 
                     mycon.Close();
                     bCheck = true;
@@ -277,29 +294,10 @@ namespace Businfo
             {
                 if (m_pCurFeature != null)
                 {
-                    if (ForBusInfo.Excel_app == null)
-                    {
-                        MessageBox.Show("创建Excel服务失败!\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                    ForBusInfo.Excel_app.Visible = true;
-                    //ForBusInfo.Excel_app.DisplayAlerts = false;
-                    //Workbooks workbooks = ForBusInfo.Excel_app.Workbooks;
-                    _Workbook workbook = ForBusInfo.Excel_app.Workbooks.Add(System.Reflection.Missing.Value);
-                    _Worksheet worksheet = null;
-                    if (workbook.Worksheets.Count > 0)
-                    {
-                        worksheet = (Microsoft.Office.Interop.Excel.Worksheet)workbook.Worksheets.get_Item(1);
-                    }
-                    else
-                    {
-                        workbook.Worksheets.Add(System.Reflection.Missing.Value, System.Reflection.Missing.Value, System.Reflection.Missing.Value,
-                    System.Reflection.Missing.Value);
-                        worksheet = (Microsoft.Office.Interop.Excel.Worksheet)workbook.Worksheets.get_Item(1);
-                    }
                     Range range1 = worksheet.get_Range("A1", "A1");
-                    range1.Value2 = string.Format("{0}({1})({2}:{3})", DataGridView1.Rows[m_nCurRowIndex].Cells["StationName"].Value, DataGridView1.Rows[m_nCurRowIndex].Cells["StationAlias"].Value, DataGridView1.Rows[m_nCurRowIndex].Cells["MainSymbol"].Value, DataGridView1.Rows[m_nCurRowIndex].Cells["Direct"].Value);
+                    range1.Value2 = string.Format("{0}({1})({2}:{3})", DataGridView1.Rows[m_nCurRowIndex].Cells["StationName"].Value, DataGridView1.Rows[m_nCurRowIndex].Cells["DispatchStationThird"].Value, DataGridView1.Rows[m_nCurRowIndex].Cells["Direct"].Value, DataGridView1.Rows[m_nCurRowIndex].Cells["MainSymbol"].Value);
                     range1 = worksheet.get_Range("A2", "A2");
-                    range1.Value2 = string.Format("{0}:{1}", DataGridView1.Rows[m_nCurRowIndex].Cells["StationStyle"].Value, DataGridView1.Rows[m_nCurRowIndex].Cells["RodStyleFirst"].Value);
+                    range1.Value2 = string.Format("线路牌1:{0}:{1}:{2}      线路牌2：{3}:{4}:{5}", DataGridView1.Rows[m_nCurRowIndex].Cells["DispatchCompanyFirst"].Value, DataGridView1.Rows[m_nCurRowIndex].Cells["DispatchRouteFirst"].Value, DataGridView1.Rows[m_nCurRowIndex].Cells["DispatchStationFirst"].Value, DataGridView1.Rows[m_nCurRowIndex].Cells["DispatchStationSecond"].Value, DataGridView1.Rows[m_nCurRowIndex].Cells["DispatchCompanyThird"].Value, DataGridView1.Rows[m_nCurRowIndex].Cells["DispatchRouteThird"].Value);
                     range1 = worksheet.get_Range("A3", "A3");
                     range1.Value2 = DataGridView1.Rows[m_nCurRowIndex].Cells["BusShelter"].Value;
 
@@ -321,10 +319,10 @@ namespace Businfo
                             strRoad = strRoad + eDataRow["RoadName"].ToString() + "、";
                         }
                         range1 = worksheet.get_Range("A4", "A4");
-                        range1.Value2 = strRoad;
+                        range1.Value2 = string.Format("总经过线路({0}条)：{1}", nQueryCount, strRoad);
                     }
-                    range1 = worksheet.get_Range("A5", "A5");
-                    range1.Value2 = string.Format("总经过线路：{0}", nQueryCount);
+
+                    worksheet.PageSetup.PrintArea = "$A$1:$A$8";
                     mycon.Close();
                 }
             }

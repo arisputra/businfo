@@ -22,7 +22,7 @@ namespace Businfo
         static void Main()
         {
             ForBusInfo.AppIni(1);//初始化连接类型
-            Application.Run(new frmMainNew());
+            Application.Run(new frmFlash());
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -33,7 +33,7 @@ namespace Businfo
             }
             else
             {
-                this.Hide() ;
+                this.Hide();
                 timer1.Stop();
                 frmMainNew frmmain = new frmMainNew();
                 frmmain.m_frmFlash = this;

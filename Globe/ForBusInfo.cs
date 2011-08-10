@@ -48,8 +48,9 @@ namespace Businfo.Globe
         public const int BusInfo_Help = 1066;//帮助
         public const int Bus_Select = 1067;//多变形选择
         public const int BusInfo_ParaSet = 1068;//参数设置
-        public const int Road_Pause = 1069;//保存临时的线路
-        public const int Road_Resume = 1070;//继续临时线路进行编辑
+        public const int Road_Pause = 1070;//保存临时的线路
+        public const int Road_Resume = 1071;//继续临时线路进行编辑
+        public const int Table_StationTable = 1069;//路单导出
 
         public const int Map3D_ZoomIn = 10211; //放大
         public const int Map3D_ZoomOut = 10212; //缩小
@@ -499,6 +500,9 @@ namespace Businfo.Globe
                         grid.Columns[4].Visible = true;
                         grid.Columns[4].HeaderText = "行向";
                         grid.Columns[4].Width = 55;
+                        grid.Columns[5].Visible = true;
+                        grid.Columns[5].HeaderText = "所属公司";
+                        grid.Columns[5].Width = 90;
                     }
                     break;
                    case GridSetType.Road_FillAll:
@@ -532,6 +536,7 @@ namespace Businfo.Globe
                         grid.Columns[11].HeaderText = "票价1";
                         grid.Columns[12].HeaderText = "票价2";
                         grid.Columns[13].HeaderText = "票价3";
+                        grid.Columns[28].DisplayIndex = 14;
                         grid.Columns[14].HeaderText = "线路编号";
                         grid.Columns[15].HeaderText = "长度";
                         grid.Columns[16].HeaderText = "平均满载率";
@@ -546,7 +551,7 @@ namespace Businfo.Globe
                         grid.Columns[25].HeaderText = "图片2";
                         grid.Columns[26].HeaderText = "图片3";
                         grid.Columns[27].HeaderText = "图片4";
-                        grid.Columns[28].HeaderText = "图片5";
+                        grid.Columns[28].HeaderText = "票价4";//原来是 图片5
                         grid.Columns[29].HeaderText = "所属单位";
                         grid.Columns[30].HeaderText = "服务面积";
                         grid.Columns[31].HeaderText = "平均运距";
@@ -593,6 +598,7 @@ namespace Businfo.Globe
                         grid.Columns[11].HeaderText = "票价1";
                         grid.Columns[12].HeaderText = "票价2";
                         grid.Columns[13].HeaderText = "票价3";
+                        grid.Columns[28].DisplayIndex = 14;
                         grid.Columns[14].HeaderText = "线路编号";
                         grid.Columns[15].HeaderText = "长度";
                         grid.Columns[16].HeaderText = "平均满载率";
@@ -607,7 +613,7 @@ namespace Businfo.Globe
                         grid.Columns[25].HeaderText = "图片2";
                         grid.Columns[26].HeaderText = "图片3";
                         grid.Columns[27].HeaderText = "图片4";
-                        grid.Columns[28].HeaderText = "图片5";
+                        grid.Columns[28].HeaderText = "票价4";//原来是 图片5
                         grid.Columns[29].HeaderText = "所属单位";
                         grid.Columns[30].HeaderText = "服务面积";
                         grid.Columns[31].HeaderText = "平均运距";
@@ -637,14 +643,16 @@ namespace Businfo.Globe
                             eCol.ReadOnly = true;
                             eCol.Resizable = DataGridViewTriState.False;
                         }
+                        grid.Columns[0].ReadOnly = false;
                     }
+                   
                     break;
                }
                 mycon.Close();
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show("添加日志文件出错\n" + ex.ToString(), "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("StationFill 函数出错！\n" + ex.ToString(), "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 

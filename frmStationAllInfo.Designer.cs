@@ -65,7 +65,7 @@
             this.DataGridView1.MultiSelect = false;
             this.DataGridView1.Name = "DataGridView1";
             this.DataGridView1.RowTemplate.Height = 23;
-            this.DataGridView1.Size = new System.Drawing.Size(462, 277);
+            this.DataGridView1.Size = new System.Drawing.Size(564, 421);
             this.DataGridView1.TabIndex = 3;
             this.DataGridView1.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView1_CellValueChanged);
             this.DataGridView1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DataGridView1_MouseDown);
@@ -87,19 +87,19 @@
             this.定位到ToolStripMenuItem,
             this.全景浏览ToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(125, 48);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(119, 48);
             // 
             // 定位到ToolStripMenuItem
             // 
             this.定位到ToolStripMenuItem.Name = "定位到ToolStripMenuItem";
-            this.定位到ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.定位到ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
             this.定位到ToolStripMenuItem.Text = "定位到";
             this.定位到ToolStripMenuItem.Click += new System.EventHandler(this.定位到ToolStripMenuItem_Click);
             // 
             // 全景浏览ToolStripMenuItem
             // 
             this.全景浏览ToolStripMenuItem.Name = "全景浏览ToolStripMenuItem";
-            this.全景浏览ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.全景浏览ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
             this.全景浏览ToolStripMenuItem.Text = "全景浏览";
             this.全景浏览ToolStripMenuItem.Click += new System.EventHandler(this.全景浏览ToolStripMenuItem_Click);
             // 
@@ -113,7 +113,7 @@
             // button2
             // 
             this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.Location = new System.Drawing.Point(399, 1);
+            this.button2.Location = new System.Drawing.Point(493, 1);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 7;
@@ -134,7 +134,7 @@
             // button3
             // 
             this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button3.Location = new System.Drawing.Point(215, 1);
+            this.button3.Location = new System.Drawing.Point(309, 1);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 9;
@@ -146,7 +146,7 @@
             // button4
             // 
             this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button4.Location = new System.Drawing.Point(314, 1);
+            this.button4.Location = new System.Drawing.Point(408, 1);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(79, 23);
             this.button4.TabIndex = 10;
@@ -158,7 +158,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(494, 324);
+            this.ClientSize = new System.Drawing.Size(588, 460);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.TextBox1);

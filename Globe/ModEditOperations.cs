@@ -200,11 +200,14 @@ namespace Businfo.Globe
         /// <returns>返回缓冲后的面状图形</returns>
         public static IGeometry ClickSel(IGeometry pGeometry, bool iShiftDown, bool bSeclectOne, int nTorrent)
         {
+            
                 Double length;
-                IGeometry pBuffer;
+                IGeometry pBuffer = null;
                 ITopologicalOperator pTopo;
                 pTopo =  (ITopologicalOperator)pGeometry;
-
+                try
+                {
+                
                 if (pGeometry.GeometryType == esriGeometryType.esriGeometryPoint)//点根据比例尺特殊处理
                 {
                     length = ConvertPixelsToMapUnits(m_AxMapControl.ActiveView, nTorrent);
@@ -216,8 +219,7 @@ namespace Businfo.Globe
                     pBuffer = pTopo.Buffer(nTorrent);
                 }
 
-                try
-                {
+               
                     ISelectionEnvironment pSelEnvironment = new SelectionEnvironmentClass();
                     if (iShiftDown)
                     {
@@ -228,7 +230,8 @@ namespace Businfo.Globe
                         pSelEnvironment.CombinationMethod = esriSelectionResultEnum.esriSelectionResultNew;
                     }
                     m_AxMapControl.Map.SelectByShape(pBuffer, pSelEnvironment, bSeclectOne);
-                    m_AxMapControl.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewGeoSelection, null, null);
+                    m_AxMapControl.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewGeoSelection, null, null); 
+               
                 }
                 catch (System.Exception ex)
                 {
@@ -428,13 +431,13 @@ namespace Businfo.Globe
             }
         }
 
-        /// <summary>合并PL线
+        /// <summary>使用ITopologicalOperator3合并PL线，合并后相当于做了Simplify();
        /// 
        /// </summary>
         /// <param name="colFeatures">传入要合并的线类Feature组</param>
         /// <param name="pPolyline">返回合并后的PL线 </param>
         /// <returns>合并是否成功</returns>
-        public static bool MergeLines(List<IFeature> colFeatures, ref IPolyline pPolyline)
+        public static bool MergeLinesByTopo(List<IFeature> colFeatures, ref IPolyline pPolyline)
         {
             try
             {
@@ -452,10 +455,14 @@ namespace Businfo.Globe
                 {
                     pTopOp = pTopOp.Union(colFeatures[i].ShapeCopy) as ITopologicalOperator3;
                 }
+                //pTopOp.Simplify();//1.好像主要作用是把相交的地方自动加上节点。2.可以把首尾相连的，但是不相交的path合并成一个长的path。
                 pPolyline = pTopOp as IPolyline;
-                //pGeometryCollection = (IGeometryCollection)pPolyline;
+                //pTopOp.Simplify();
+                //pGeometryCollection = (IGeometryCollection)pPolyline;//自相交的合并会在自相交点变成一段段的path，不能用count判断了。
                 //if (pGeometryCollection.GeometryCount > 1)
                 //{
+                //    IPath pPath = pGeometryCollection.get_Geometry(0) as IPath;//这是得到polyline path的方法。
+                    
                 //    pPolyline = null;
                 //    return false;
                 //}
@@ -479,8 +486,53 @@ namespace Businfo.Globe
         //    _pointCollection = this.processDuplicatePoint(pPointCol);//删除了重复点后的所有节点Point对象，即节点集合
         //    Console.WriteLine(_pointCollection.PointCount.ToString());
         //}
+        }
 
+        /// <summary>使用IGeometryCollection来合并PL线，这样加入一条线就会是一个path
+        /// 
+        /// </summary>
+        /// <param name="colFeatures">传入要合并的线类Feature组</param>
+        /// <param name="pPolyline">返回合并后的PL线 </param>
+        /// <returns>合并是否成功</returns>
+        public static bool MergeLinesByGeo(List<IFeature> colFeatures, ref IPolyline pPolyline)
+        {
+            try
+            {
+                if (colFeatures.Count < 2)
+                {
+                    MessageBox.Show("合并要素少于2个！\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    pPolyline = null;
+                    return false;
+                }
 
+                IGeometryCollection pGeometryCollection = new PolylineClass();
+
+                foreach (IFeature pfea in colFeatures)
+                {
+                    IGeometryCollection pGeoCol = (IGeometryCollection)pfea.Shape;
+                    pGeometryCollection.AddGeometryCollection(pGeoCol);
+                }
+
+                pPolyline = pGeometryCollection as IPolyline;
+                //pPolyline.SimplifyNetwork();//1.好像主要作用是把相交的地方自动加上节点。2.可以把首尾相连的，但是不相交的path合并成一个长的path。
+                //ITopologicalOperator3 pTopOp;
+                //pTopOp = pPolyline as ITopologicalOperator3;
+                //pTopOp.Simplify();
+                //IGeometryCollection pGeoCollect = (IGeometryCollection)pPolyline;
+                //if (pGeometryCollection.GeometryCount > 1)
+                //{
+                //    IPath pPath = pGeometryCollection.get_Geometry(0) as IPath;//这是得到polyline path的方法。
+                //    pPolyline = null;
+                //    return false;
+                //}
+                return true;
+
+            }
+            catch (Exception Err)
+            {
+                MessageBox.Show(Err.Message, "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return false;
+            }
         }
 
         public static bool LineIsSelfCross(IFeature pFeature)
