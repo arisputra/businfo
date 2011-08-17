@@ -53,16 +53,8 @@ namespace Businfo
                 dataGridView2.Rows.Add(pItem.ID, pItem.rLength, pItem.StationName, pItem.StationExplain, pItem.Direct, pItem.StationCharacter);
             }
 
-            int nNum = 1;
-            foreach (DataGridViewRow eRow in dataGridView1.Rows)
-            {
-                eRow.HeaderCell.Value = nNum++.ToString();
-            }
-            nNum = 1;
-            foreach (DataGridViewRow eRow in dataGridView2.Rows)
-            {
-                eRow.HeaderCell.Value = nNum++.ToString();
-            }
+            ForBusInfo.SetRowNo(dataGridView1);
+            ForBusInfo.SetRowNo(dataGridView2);
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -91,16 +83,8 @@ namespace Businfo
                 dataGridView1.Rows.Add(pItem.ID, pItem.rLength, pItem.StationName, pItem.StationExplain, pItem.Direct, pItem.StationCharacter);
             }
 
-            int nNum = 1;
-            foreach (DataGridViewRow eRow in dataGridView1.Rows)
-            {
-                eRow.HeaderCell.Value = nNum++.ToString();
-            }
-            nNum = 1;
-            foreach (DataGridViewRow eRow in dataGridView2.Rows)
-            {
-                eRow.HeaderCell.Value = nNum++.ToString();
-            }
+            ForBusInfo.SetRowNo(dataGridView1);
+            ForBusInfo.SetRowNo(dataGridView2);
         }
 
         private void frmEditRoadAndStation_Load(object sender, EventArgs e)
@@ -154,17 +138,8 @@ namespace Businfo
             {
                 checkBox1.Visible = false;
             }
-
-            int nNum = 1;
-            foreach (DataGridViewRow eRow in dataGridView1.Rows)
-            {
-                eRow.HeaderCell.Value = nNum++.ToString();
-            }
-            nNum = 1;
-            foreach (DataGridViewRow eRow in dataGridView2.Rows)
-            {
-                eRow.HeaderCell.Value = nNum++.ToString();
-            }
+            ForBusInfo.SetRowNo(dataGridView1);
+            ForBusInfo.SetRowNo(dataGridView2);
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -262,17 +237,8 @@ namespace Businfo
                     dataGridView1.Rows.Add(pItem.ID, pItem.rLength, pItem.StationName, pItem.StationExplain, pItem.Direct, pItem.StationCharacter);
                 }
 
-                int nNum = 1;
-                foreach (DataGridViewRow eRow in dataGridView1.Rows)
-                {
-                    eRow.HeaderCell.Value = nNum++.ToString();
-                }
-                nNum = 1;
-                foreach (DataGridViewRow eRow in dataGridView2.Rows)
-                {
-                    eRow.HeaderCell.Value = nNum++.ToString();
-                }
-
+                ForBusInfo.SetRowNo(dataGridView1);
+                ForBusInfo.SetRowNo(dataGridView2);
             }
         }
 

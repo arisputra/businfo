@@ -41,11 +41,11 @@ namespace Businfo
                 ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Road_FillByStationName, string.Format(" WHERE (RoadName LIKE '%{0}%')", TextBox1.Text), new string[] { "" });
                 //this.公交站线TableAdapter.FillByRoadName(this.roadDataSet.公交站线, "%" + TextBox1.Text + "%");
             }
-            int nNum = 1;
-            foreach (DataGridViewRow eRow in DataGridView1.Rows)
-            {
-                eRow.HeaderCell.Value = nNum++.ToString();
-            }
+            //int nNum = 1;
+            //foreach (DataGridViewRow eRow in DataGridView1.Rows)
+            //{
+            //    eRow.HeaderCell.Value = nNum++.ToString();
+            //}
         }
 
         private void frmRoadPane_Load(object sender, EventArgs e)
@@ -68,11 +68,11 @@ namespace Businfo
                     contextMenuStrip1.Items.Find("制作单ToolStripMenuItem", false)[0].Visible = true;
                     break;
             }
-            int nNum = 1;
-            foreach (DataGridViewRow eRow in DataGridView1.Rows)
-            {
-                eRow.HeaderCell.Value = nNum++.ToString();
-            }
+            //int nNum = 1;
+            //foreach (DataGridViewRow eRow in DataGridView1.Rows)
+            //{
+            //    eRow.HeaderCell.Value = nNum++.ToString();
+            //}
             //this.公交站线TableAdapter.Fill(this.roadDataSet.公交站线);
         }
 
@@ -246,7 +246,7 @@ namespace Businfo
             if (m_pCurFeature != null)
             {
                 //IFeature FFFF = EngineFuntions.GetFeatureByFieldAndValue(EngineFuntions.m_Layer_BusRoad, "OBJECTID","1809");
-                ///////////////////////////////////手动 改变path///////////////////////////////////////
+                /*//////////////////////////////////手动 改变path///////////////////////////////////////
                 IPolyline pPolyl = null;
                 IPolyline pPLine = m_pCurFeature.ShapeCopy as IPolyline;
                 object Missing1 = Type.Missing;
@@ -262,7 +262,7 @@ namespace Businfo
                         IGeometryCollection pGeometryCol = new PolylineClass();//用点来生成polyline，这样就可以自相交。
                         IPath pPath = pGeometryCollection.get_Geometry(0) as IPath;//这是得到polyline path的方法。
                         IPointCollection pPtColl = new PolylineClass();
-                        pPath.ReverseOrientation();
+                        //pPath.ReverseOrientation();
                         //pPtColl.RemovePoints(10, 1);
                         
                         //pPath.FromPoint = pPtColl.get_Point(6);
@@ -271,7 +271,7 @@ namespace Businfo
 
 
                         IPath pPath1 = pGeometryCollection.get_Geometry(1) as IPath;
-                        //pPath1.ReverseOrientation();
+                        pPath1.ReverseOrientation();
                         pGeometryCol.AddGeometry(pPath1 as IGeometry, ref Missing1, ref Missing1);
 
 
@@ -306,11 +306,14 @@ namespace Businfo
                     int nQueryCount = da.Fill(ds);
                     if (nQueryCount > 0)
                     {
+                        IFeature pFea;
                         frmEditRoadAndStation frmPopup = new frmEditRoadAndStation();
                         frmPopup.m_bNew = false;
                         foreach (DataRow eRow in ds.Tables[0].Rows)
                         {
-                            frmPopup.m_CurStationList.Add(EngineFuntions.GetOneSeartchFeature(EngineFuntions.m_Layer_BusStation, "OBJECTID = " + eRow[0].ToString()));
+                            pFea = EngineFuntions.GetOneSeartchFeature(EngineFuntions.m_Layer_BusStation, "OBJECTID = " + eRow[0].ToString());
+                            if (pFea != null)
+                                frmPopup.m_CurStationList.Add(pFea);
                             frmPopup.n_nBufferLength = (int)eRow[2];
                         }
                         frmPopup.m_pCurFeature = m_pCurFeature;
@@ -847,5 +850,7 @@ Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missi
             RefreshGrid();
             EngineFuntions.PartialRefresh(EngineFuntions.m_Layer_BackRoad);
         }
+
+
     }
 }
