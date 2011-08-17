@@ -27,11 +27,11 @@ namespace Businfo
             //this.公交站线TableAdapter.Fill(this.roadDataSet.公交站线);
             RefreshSelectGrid();
             DataGridView1.RowHeadersWidth = 60;
-            int nNum = 1;
-            foreach (DataGridViewRow eRow in DataGridView1.Rows)
-            {
-                eRow.HeaderCell.Value = nNum++.ToString();
-            }
+            //int nNum = 1;
+            //foreach (DataGridViewRow eRow in DataGridView1.Rows)
+            //{
+            //    eRow.HeaderCell.Value = nNum++.ToString();
+            //}
             foreach (DataGridViewColumn eColumn in DataGridView1.Columns)
             {
                 eColumn.ReadOnly = true;
@@ -44,11 +44,11 @@ namespace Businfo
         {
             ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Road_FillAll, "", new string[] { "" });
             //this.公交站线TableAdapter.Fill(this.roadDataSet.公交站线);
-            int nNum = 1;
-            foreach (DataGridViewRow eRow in DataGridView1.Rows)
-            {
-                eRow.HeaderCell.Value = nNum++.ToString();
-            }
+            //int nNum = 1;
+            //foreach (DataGridViewRow eRow in DataGridView1.Rows)
+            //{
+            //    eRow.HeaderCell.Value = nNum++.ToString();
+            //}
             foreach (DataGridViewColumn eColumn in DataGridView1.Columns)
             {
                 eColumn.ReadOnly = true;

@@ -33,21 +33,21 @@ namespace Businfo
             {
                 ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Station_FillByStationName, string.Format(" WHERE (StationName LIKE '%{0}%')", TextBox1.Text), new string[] { "" });
             }
-            int nNum = 1;
-            foreach (DataGridViewRow eRow in DataGridView1.Rows)
-            {
-                eRow.HeaderCell.Value = nNum++.ToString();
-            }
+            //int nNum = 1;
+            //foreach (DataGridViewRow eRow in DataGridView1.Rows)
+            //{
+            //    eRow.HeaderCell.Value = nNum++.ToString();
+            //}
         }
 
         private void frmFacilitiesPane_Load(object sender, EventArgs e)
         {
             RefreshGrid();
-            int nNum = 1;
-            foreach (DataGridViewRow eRow in DataGridView1.Rows)
-            {
-                eRow.HeaderCell.Value = nNum++.ToString();
-            }
+            //int nNum = 1;
+            //foreach (DataGridViewRow eRow in DataGridView1.Rows)
+            //{
+            //    eRow.HeaderCell.Value = nNum++.ToString();
+            //}
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
@@ -163,11 +163,7 @@ namespace Businfo
 
         private void DataGridView1_Sorted(object sender, EventArgs e)
         {
-            int nNum = 1;
-            foreach (DataGridViewRow eRow in DataGridView1.Rows)
-            {
-                eRow.HeaderCell.Value = nNum++.ToString();
-            }
+            ForBusInfo.SetRowNo(DataGridView1);
         }
 
     }

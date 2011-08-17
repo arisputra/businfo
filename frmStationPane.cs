@@ -39,11 +39,11 @@ namespace Businfo
                 ForBusInfo.StationFill(DataGridView1, ForBusInfo.GridSetType.Station_FillByStationName, string.Format(" WHERE (StationName LIKE '%{0}%')", TextBox1.Text), new string[] { "" });
                 //this.公交站点TableAdapter.FillByStationName(this.stationDataSet.公交站点, "%" + TextBox1.Text + "%");
             }
-            int nNum = 1;
-            foreach (DataGridViewRow eRow in DataGridView1.Rows)
-            {
-                eRow.HeaderCell.Value = nNum++.ToString();
-            }
+            //int nNum = 1;
+            //foreach (DataGridViewRow eRow in DataGridView1.Rows)
+            //{
+            //    eRow.HeaderCell.Value = nNum++.ToString();
+            //}
         }
 
         private void 定位到ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -154,11 +154,11 @@ namespace Businfo
         private void frmStationPane_Load(object sender, EventArgs e)
         {
             RefreshGrid();
-            int nNum = 1;
-            foreach (DataGridViewRow eRow in DataGridView1.Rows)
-            {
-                eRow.HeaderCell.Value = nNum++.ToString();
-            }
+            //int nNum = 1;
+            //foreach (DataGridViewRow eRow in DataGridView1.Rows)
+            //{
+            //    eRow.HeaderCell.Value = nNum++.ToString();
+            //}
            //this.公交站点TableAdapter.Fill(this.stationDataSet.公交站点);
         }
 
@@ -335,11 +335,7 @@ Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missi
 
         private void DataGridView1_Sorted(object sender, EventArgs e)
         {
-            int nNum = 1;
-            foreach (DataGridViewRow eRow in DataGridView1.Rows)
-            {
-                eRow.HeaderCell.Value = nNum++.ToString();
-            }
+            ForBusInfo.SetRowNo(DataGridView1);
         }
 
     }
