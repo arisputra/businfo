@@ -154,6 +154,12 @@ namespace Businfo
         private void frmStationPane_Load(object sender, EventArgs e)
         {
             RefreshGrid();
+            if (ForBusInfo.Login_name == "浏览")
+            {
+                ContextMenuStrip1.Items[1].Visible = false;
+                ContextMenuStrip1.Items[2].Visible = false;
+                ContextMenuStrip1.Items[5].Visible = false;
+            }
             //int nNum = 1;
             //foreach (DataGridViewRow eRow in DataGridView1.Rows)
             //{
@@ -338,5 +344,40 @@ Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missi
             ForBusInfo.SetRowNo(DataGridView1);
         }
 
+        private void 计算经过线路ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OleDbConnection mycon = new OleDbConnection(ForBusInfo.Connect_Sql);
+            mycon.Open();
+            OleDbDataAdapter da, da1;
+            if (ForBusInfo.Connect_Type == 1)
+                da = new OleDbDataAdapter("select OBJECTID,DayMass,DayEvacuate from sde.公交站点", mycon);
+            else
+                da = new OleDbDataAdapter("select OBJECTID,DayMass,DayEvacuate from 公交站点 ", mycon);
+            DataSet ds = new DataSet();
+            int nQueryCount = da.Fill(ds, "Station");
+            foreach (DataRow eDataRow in ds.Tables["Station"].Rows)
+            {
+                if (ForBusInfo.Connect_Type == 1)
+                    da1 = new OleDbDataAdapter(String.Format("select a.* from sde.公交站线 a inner join sde.RoadAndStation b on (a.OBJECTID = b.RoadID and b.StationID = {0})", eDataRow["OBJECTID"].ToString()), mycon);
+                else
+                    da1 = new OleDbDataAdapter(String.Format("select a.* from 公交站线 a inner join RoadAndStation b on (a.OBJECTID = b.RoadID and b.StationID = {0})", eDataRow["OBJECTID"].ToString()), mycon);
+                DataSet ds1 = new DataSet();
+                int nQueryCount1 = da1.Fill(ds1, "Road");
+                if (nQueryCount1 > 0)
+                {
+                    String strRoad = "";
+                    foreach (DataRow eDataRow1 in ds1.Tables["Road"].Rows)
+                    {
+                        strRoad = strRoad + eDataRow1["RoadName"].ToString() + "、";
+                    }
+                    da.UpdateCommand = new OleDbCommand();
+                    da.UpdateCommand.CommandText = String.Format("Update sde.公交站点 set sde.公交站点.DayEvacuate = '{0}',sde.公交站点.DayMass = '{1}' where sde.公交站点.OBJECTID = {2}", strRoad, nQueryCount1, eDataRow["OBJECTID"].ToString());
+                    da.UpdateCommand.Connection = mycon;
+                    da.UpdateCommand.ExecuteNonQuery();
+                }
+            }
+            mycon.Close();
+            MessageBox.Show("更新完成！\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
     }
 }

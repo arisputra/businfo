@@ -152,34 +152,32 @@ namespace Businfo.Globe
             string strStationSQL, strRoadSQL;
             if (Connect_Type == 1)
             {
-                  strStationSQL = @"SELECT  OBJECTID,StationNo,StationName,Direct,StationAlias,  MainSymbol, StationCharacter, GPSLongtitude, GPSLatitude, GPSHigh,
-                      RodMaterialFirst, RodStyleFirst, StationMaterial, StationStyle, Chair, StationType, BusShelter, Constructor, ConstructionTime, StationLand, 
-                      TrafficVolume, PictureFirst, PictureSecond, PictureThird, StationArea, ServiceArea, DayTrafficVolume, PassSum, PassRode, HourMass, HourEvacuate, 
-                      DayMass, DayEvacuate, RouteSum, MoveTime, RebuildTime, RemoveTime, StationLong, RodMaterialSecond, RodMaterialThird, RodStyleSecond, 
-                      RodStyleThird, DispatchCompanyFirst, DispatchRouteFirst, DispatchStationFirst, DispatchCompanySecond, DispatchRouteSecond, 
-                      DispatchStationSecond, DispatchCompanyThird, DispatchRouteThird, DispatchStationThird, Classify FROM sde.公交站点";//sde.公交站点";
+                strStationSQL = @"SELECT  OBJECTID,StationNo,StationName,Direct,DispatchStationThird,StationAlias,StationCharacter,GPSLongtitude,GPSLatitude,GPSHigh,MainSymbol,
+                      StationMaterial,DayMass, DayEvacuate, DispatchCompanyFirst, DispatchRouteFirst, DispatchStationFirst,DispatchStationSecond, DispatchCompanyThird, DispatchRouteThird,
+                      Constructor, ConstructionTime, StationLand, RodStyleFirst, HourMass,RodMaterialFirst,  RodStyleSecond,  HourEvacuate, RodMaterialSecond,DispatchCompanySecond,  BusShelter, DispatchRouteSecond, 
+                      MoveTime, StationStyle, Chair, StationType,TrafficVolume, PictureFirst, PictureSecond, PictureThird, StationArea, ServiceArea, DayTrafficVolume, PassSum, PassRode, 
+                       RouteSum, RebuildTime, RemoveTime, StationLong,RodMaterialThird,RodStyleThird,Classify FROM sde.公交站点";//sde.公交站点";
 
-             strRoadSQL = @"SELECT OBJECTID,RoadID,RoadName,RoadTravel, Company,  RoadType,FirstStartTime, FirstCloseTime, EndStartTime, EndCloseTim, TicketPrice1, 
-                      TicketPrice2, TicketPrice3, RoadNo, Length, AverageLoadFactor, BusNumber, 
+                strRoadSQL = @"SELECT OBJECTID,RoadID,RoadName,RoadTravel, Company,  RoadType,FirstStartTime, FirstCloseTime, EndStartTime, EndCloseTim, TicketPrice1, 
+                      TicketPrice2, TicketPrice3, Picture5, RoadNo, Length, AverageLoadFactor, BusNumber, 
                       Capacity, PassengerSum, PassengerWorkSum, AverageSpeed, NulineCoefficient, 
-                      NulineCoefficient2, Picture1, Picture2, Picture3, Picture4, Picture5, Unit, ServeArea, 
+                      NulineCoefficient2, Picture1, Picture2, Picture3, Picture4, Unit, ServeArea, 
                       AverageLength, HigeLoadFactor, RoadLoad, DirectImbalance, AlternatelyCoefficient, 
                       TimeCoefficient, DayCoefficient, HighHourSect, HighHourArea, HighHourMass, 
                       HighPassengerMass FROM sde.公交站线";//sde.公交站线";
             }
             else
             {
-                 strStationSQL = @"SELECT  OBJECTID,StationNo,StationName,Direct,StationAlias,  MainSymbol, StationCharacter, GPSLongtitude, GPSLatitude, GPSHigh,
-                      RodMaterialFirst, RodStyleFirst, StationMaterial, StationStyle, Chair, StationType, BusShelter, Constructor, ConstructionTime, StationLand, 
-                      TrafficVolume, PictureFirst, PictureSecond, PictureThird, StationArea, ServiceArea, DayTrafficVolume, PassSum, PassRode, HourMass, HourEvacuate, 
-                      DayMass, DayEvacuate, RouteSum, MoveTime, RebuildTime, RemoveTime, StationLong, RodMaterialSecond, RodMaterialThird, RodStyleSecond, 
-                      RodStyleThird, DispatchCompanyFirst, DispatchRouteFirst, DispatchStationFirst, DispatchCompanySecond, DispatchRouteSecond, 
-                      DispatchStationSecond, DispatchCompanyThird, DispatchRouteThird, DispatchStationThird, Classify FROM 公交站点";//sde.公交站点";
+                strStationSQL = @"SELECT  OBJECTID,StationNo,StationName,Direct,DispatchStationThird,StationAlias,StationCharacter,GPSLongtitude,GPSLatitude,GPSHigh,MainSymbol,
+                      StationMaterial,DayMass, DayEvacuate, DispatchCompanyFirst, DispatchRouteFirst, DispatchStationFirst,DispatchStationSecond, DispatchCompanyThird, DispatchRouteThird,
+                      Constructor, ConstructionTime, StationLand, RodStyleFirst, HourMass,RodMaterialFirst,  RodStyleSecond,  HourEvacuate, RodMaterialSecond,DispatchCompanySecond,  BusShelter, DispatchRouteSecond, 
+                      MoveTime, StationStyle, Chair, StationType,TrafficVolume, PictureFirst, PictureSecond, PictureThird, StationArea, ServiceArea, DayTrafficVolume, PassSum, PassRode, 
+                       RouteSum, RebuildTime, RemoveTime, StationLong,RodMaterialThird,RodStyleThird,Classify FROM 公交站点";//sde.公交站点";
 
-                 strRoadSQL = @"SELECT OBJECTID,RoadID,RoadName,RoadTravel, Company,  RoadType,FirstStartTime, FirstCloseTime, EndStartTime, EndCloseTim, TicketPrice1, 
-                      TicketPrice2, TicketPrice3, RoadNo, Length, AverageLoadFactor, BusNumber, 
+                strRoadSQL = @"SELECT OBJECTID,RoadID,RoadName,RoadTravel, Company,  RoadType,FirstStartTime, FirstCloseTime, EndStartTime, EndCloseTim, TicketPrice1, 
+                      TicketPrice2, TicketPrice3, Picture5, RoadNo, Length, AverageLoadFactor, BusNumber, 
                       Capacity, PassengerSum, PassengerWorkSum, AverageSpeed, NulineCoefficient, 
-                      NulineCoefficient2, Picture1, Picture2, Picture3, Picture4, Picture5, Unit, ServeArea, 
+                      NulineCoefficient2, Picture1, Picture2, Picture3, Picture4,  Unit, ServeArea, 
                       AverageLength, HigeLoadFactor, RoadLoad, DirectImbalance, AlternatelyCoefficient, 
                       TimeCoefficient, DayCoefficient, HighHourSect, HighHourArea, HighHourMass, 
                       HighPassengerMass FROM 公交站线";//sde.公交站线";
@@ -213,9 +211,9 @@ namespace Businfo.Globe
                            grid.Columns[4].Visible = true;
                            grid.Columns[4].HeaderText = "行向";
                            grid.Columns[4].Width = 55;
-                           grid.Columns[51].Visible = true;
-                           grid.Columns[51].HeaderText = "站点说明";
-                           grid.Columns[51].Width = 55;
+                           grid.Columns[5].Visible = true;
+                           grid.Columns[5].HeaderText = "站点说明";
+                           grid.Columns[5].Width = 55;
                        }
                        SetColSortMode(grid, DataGridViewColumnSortMode.NotSortable);
                        SetRowNo(grid);
@@ -265,6 +263,7 @@ namespace Businfo.Globe
                         }
                         grid.Columns[0].ReadOnly = false;
                     }
+                    SetGridHeard(grid, GridSetType.Station_FillByOBJECTID, strShow);
                     SetColSortMode(grid, DataGridViewColumnSortMode.NotSortable);
                     SetRowNo(grid);
                     break;
@@ -371,22 +370,14 @@ namespace Businfo.Globe
                     grid.Columns[0].Visible = true;
                     grid.Columns[0].ReadOnly = false;
                     grid.Columns[0].HeaderText = "";
-                    //grid.Columns[1].Visible = false;
-                    //grid.Columns[2].Visible = false;
 
                     if (strShow[0] == "")
                     {
-                        grid.Columns[3].Visible = true;
-                        grid.Columns[4].Visible = true;
-                        grid.Columns[5].Visible = true;
-                        grid.Columns[7].Visible = true;
-                        grid.Columns[8].Visible = true;
-                        grid.Columns[9].Visible = true;
-                        grid.Columns[10].Visible = true;
-                        grid.Columns[13].Visible = true;
-                        grid.Columns[14].Visible = true;
-                        grid.Columns[51].Visible = true;// "站点说明";
-                        grid.Columns[51].DisplayIndex = 4;
+                        for (int i = 3; i < 15; i++)
+                        {
+                            grid.Columns[i].Visible = true;
+                        }
+                      
                     }
                     else
                     {
@@ -394,78 +385,62 @@ namespace Businfo.Globe
                         grid.Columns[4].Visible = true;
                         grid.Columns[5].Visible = true;
                         grid.Columns[6].Visible = true;
-                        grid.Columns[11].Visible = true;
-                        grid.Columns[12].Visible = true;
-                        for (int i = 14; i < 53; i++)
+                        for (int i = 15; i < 53; i++)
                         {
                             grid.Columns[i].Visible = true;
                         }
                     }
                     grid.Columns[3].HeaderText = "站点名称";
-                    grid.Columns[51].DisplayIndex = 4;//改变顺序
                     grid.Columns[4].HeaderText = "行向";
-                    grid.Columns[5].HeaderText = "副站名";
-                    grid.Columns[5].Frozen = true;
-                    grid.Columns[43].DisplayIndex = 7;
-                    grid.Columns[44].DisplayIndex = 8;
-                    grid.Columns[45].DisplayIndex = 9;
-                    grid.Columns[48].DisplayIndex = 10;
-                    grid.Columns[49].DisplayIndex = 11;
-                    grid.Columns[50].DisplayIndex = 12;
-                    grid.Columns[12].DisplayIndex = 13;
-                    grid.Columns[11].DisplayIndex = 14;
-                    grid.Columns[41].DisplayIndex = 15;
-                    grid.Columns[39].DisplayIndex = 16;
-                    grid.Columns[46].DisplayIndex = 17;
-                    grid.Columns[17].DisplayIndex = 18;
-                    grid.Columns[47].DisplayIndex = 19;
-                    grid.Columns[35].DisplayIndex = 20;
-                    grid.Columns[6].HeaderText = "主要标识物";
+                    grid.Columns[5].HeaderText = "站点说明";//原来是调度站道
+                    grid.Columns[6].HeaderText = "副站名";
+                    grid.Columns[6].Frozen = true;
                     grid.Columns[7].HeaderText = "站点所在道路";
                     grid.Columns[8].HeaderText = "GPS经度";
                     grid.Columns[9].HeaderText = "GPS纬度";
                     grid.Columns[10].HeaderText = "GPS高度";
-                    grid.Columns[11].HeaderText = "站杆维护单位";//站杆材质
-                    grid.Columns[12].HeaderText = "站杆式样";
-                    grid.Columns[13].HeaderText = "邻近标识物";
-                    grid.Columns[14].HeaderText = "站牌规格";
-                    grid.Columns[15].HeaderText = "有无板凳";
-                    grid.Columns[16].HeaderText = "站点类型";
-                    grid.Columns[17].HeaderText = "候车亭样式";
-                    grid.Columns[18].HeaderText = "建设商";
-                    grid.Columns[19].HeaderText = "建设时间";
-                    grid.Columns[20].HeaderText = "站点用地";
-                    grid.Columns[21].HeaderText = "集散量高峰";
-                    grid.Columns[22].HeaderText = "图片一";
-                    grid.Columns[23].HeaderText = "图片二";
-                    grid.Columns[24].HeaderText = "图片三";
-                    grid.Columns[25].HeaderText = "站点面积";
-                    grid.Columns[26].HeaderText = "站服务面积";
-                    grid.Columns[27].HeaderText = "天集散量高峰";
-                    grid.Columns[28].HeaderText = "通过线路数";
-                    grid.Columns[29].HeaderText = "通道条数";
-                    grid.Columns[30].HeaderText = "小时集结量";
-                    grid.Columns[31].HeaderText = "小时疏散量";
-                    grid.Columns[32].HeaderText = "全天集结量";
-                    grid.Columns[33].HeaderText = "全天疏散量";
-                    grid.Columns[34].HeaderText = "线路数";
-                    grid.Columns[35].HeaderText = "候车亭建设时间";//原来是 迁移安装时间
-                    grid.Columns[36].HeaderText = "改建时间";
-                    grid.Columns[37].HeaderText = "拆除时间";
-                    grid.Columns[38].HeaderText = "候车亭长度";
-                    grid.Columns[39].HeaderText = "站杆维护单位2";//原来是 站杆材质2
-                    grid.Columns[40].HeaderText = "站杆材质3";
-                    grid.Columns[41].HeaderText = "站杆样式2";
-                    grid.Columns[42].HeaderText = "站杆样式3";
-                    grid.Columns[43].HeaderText = "线路牌材质";//原来是 调度公司1
-                    grid.Columns[44].HeaderText = "线路牌尺寸";//原来是 调度线路1
-                    grid.Columns[45].HeaderText = "线路牌制作单位";//原来是 调度站道1
-                    grid.Columns[46].HeaderText = "候车亭规模";//原来是 调度公司2
-                    grid.Columns[47].HeaderText = "候车亭维护单位";//原来是 调度线路2
-                    grid.Columns[48].HeaderText = "线路牌材质2";//原来是 调度站道2
-                    grid.Columns[49].HeaderText = "线路牌尺寸2";//原来是 调度公司3
-                    grid.Columns[50].HeaderText = "线路牌制作单位2";//原来是 调度线路3
-                    grid.Columns[51].HeaderText = "站点说明";//原来是 调度站道3
+                    grid.Columns[11].HeaderText = "主要标识物";//站杆材质
+                    grid.Columns[12].HeaderText = "主要标识物2";//站牌材质
+                    grid.Columns[13].HeaderText = "经过线路数";//全天集结量
+                    grid.Columns[14].HeaderText = "经过线路";//全天疏散量
+                    grid.Columns[15].HeaderText = "线路牌材质";//原来是调度公司
+                    grid.Columns[16].HeaderText = "线路牌尺寸";//原来是调度线路
+                    grid.Columns[17].HeaderText = "线路牌制作单位";//原来是调度站道
+                    grid.Columns[18].HeaderText = "线路牌材质2";//原来是调度站道
+                    grid.Columns[19].HeaderText = "线路牌尺寸2";//原来是调度公司
+                    grid.Columns[20].HeaderText = "线路牌制作单位2";//原来是调度线路
+                    grid.Columns[21].HeaderText = "线路牌材质3";//原来是"建设商";
+                    grid.Columns[22].HeaderText = "线路牌尺寸3";//原来是"建设时间";
+                    grid.Columns[23].HeaderText = "线路牌制作单位3";//原来"站点用地";
+                    grid.Columns[24].HeaderText = "站杆样式";
+                    grid.Columns[25].HeaderText = "站杆尺寸";//小时集结量
+                    grid.Columns[26].HeaderText = "站杆维护单位";//站杆材质
+                    grid.Columns[27].HeaderText = "站杆样式2";
+                    grid.Columns[28].HeaderText = "站杆尺寸2";//小时疏散量
+                    grid.Columns[29].HeaderText = "站杆维护单位2";//原来是 站杆材质2
+                    grid.Columns[30].HeaderText = "候车亭规模";//原来是 调度公司2
+                    grid.Columns[31].HeaderText = "候车亭样式";
+                    grid.Columns[32].HeaderText = "候车亭维护单位";//原来是 调度线路2
+                    grid.Columns[33].HeaderText = "候车亭建设时间";//原来是 迁移安装时间
+
+                    grid.Columns[34].HeaderText = "站牌规格";
+                    grid.Columns[35].HeaderText = "有无板凳";
+                    grid.Columns[36].HeaderText = "站点类型";
+                    grid.Columns[37].HeaderText = "集散量高峰";
+                    grid.Columns[38].HeaderText = "图片一";
+                    grid.Columns[39].HeaderText = "图片二";
+                    grid.Columns[40].HeaderText = "图片三";
+                    grid.Columns[41].HeaderText = "站点面积";
+                    grid.Columns[42].HeaderText = "站服务面积";
+                    grid.Columns[43].HeaderText = "天集散量高峰";
+                    grid.Columns[44].HeaderText = "通过线路数";
+                    grid.Columns[45].HeaderText = "通道条数";
+                    grid.Columns[46].HeaderText = "线路数";
+                    grid.Columns[47].HeaderText = "改建时间";
+                    grid.Columns[48].HeaderText = "拆除时间";
+                    grid.Columns[49].HeaderText = "候车亭长度";
+                    grid.Columns[50].HeaderText = "站杆材质3";
+                    grid.Columns[51].HeaderText = "站杆样式3";
                     grid.Columns[52].HeaderText = "站点类别";
                     break;
                 case GridSetType.Road_FillAll:
@@ -479,7 +454,6 @@ namespace Businfo.Globe
                     grid.Columns[0].HeaderText = "";
                     grid.Columns[1].Visible = false;
                     grid.Columns[2].Visible = false;
-
                     grid.Columns[3].HeaderText = "线路名称";
                     grid.Columns[4].HeaderText = "线路行程";
                     grid.Columns[4].Frozen = true;
@@ -492,22 +466,21 @@ namespace Businfo.Globe
                     grid.Columns[11].HeaderText = "票价1";
                     grid.Columns[12].HeaderText = "票价2";
                     grid.Columns[13].HeaderText = "票价3";
-                    grid.Columns[28].DisplayIndex = 14;
-                    grid.Columns[14].HeaderText = "线路编号";
-                    grid.Columns[15].HeaderText = "长度";
-                    grid.Columns[16].HeaderText = "平均满载率";
-                    grid.Columns[17].HeaderText = "运营车次";
-                    grid.Columns[18].HeaderText = "运力配备";
-                    grid.Columns[19].HeaderText = "客运量";
-                    grid.Columns[20].HeaderText = "客运工作量";
-                    grid.Columns[21].HeaderText = "平均车速";
-                    grid.Columns[22].HeaderText = "非直线系数";
-                    grid.Columns[23].HeaderText = "非直线系数2";
-                    grid.Columns[24].HeaderText = "图片1";
-                    grid.Columns[25].HeaderText = "图片2";
-                    grid.Columns[26].HeaderText = "图片3";
-                    grid.Columns[27].HeaderText = "图片4";
-                    grid.Columns[28].HeaderText = "票价4";//原来是 图片5
+                    grid.Columns[14].HeaderText = "票价4";//原来是 图片5
+                    grid.Columns[15].HeaderText = "线路编号";
+                    grid.Columns[16].HeaderText = "长度";
+                    grid.Columns[17].HeaderText = "平均满载率";
+                    grid.Columns[18].HeaderText = "运营车次";
+                    grid.Columns[19].HeaderText = "运力配备";
+                    grid.Columns[20].HeaderText = "客运量";
+                    grid.Columns[21].HeaderText = "客运工作量";
+                    grid.Columns[22].HeaderText = "平均车速";
+                    grid.Columns[23].HeaderText = "非直线系数";
+                    grid.Columns[24].HeaderText = "非直线系数2";
+                    grid.Columns[25].HeaderText = "图片1";
+                    grid.Columns[26].HeaderText = "图片2";
+                    grid.Columns[27].HeaderText = "图片3";
+                    grid.Columns[28].HeaderText = "图片4";
                     grid.Columns[29].HeaderText = "所属单位";
                     grid.Columns[30].HeaderText = "服务面积";
                     grid.Columns[31].HeaderText = "平均运距";
@@ -540,7 +513,7 @@ namespace Businfo.Globe
             int nNum = 1;
             foreach (DataGridViewRow eRow in grid.Rows)
             {
-                eRow.HeaderCell.Value = nNum++.ToString();
+                eRow.HeaderCell.Value = nNum++.ToString(); 
             }
         }
 

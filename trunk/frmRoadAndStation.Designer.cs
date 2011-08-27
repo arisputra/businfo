@@ -42,6 +42,7 @@
             this.button2 = new System.Windows.Forms.Button();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.button3 = new System.Windows.Forms.Button();
             this.GroupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -178,7 +179,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(224, 4);
+            this.button2.Location = new System.Drawing.Point(239, 4);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 10;
@@ -191,11 +192,22 @@
             this.openFileDialog1.FileName = "openFileDialog1";
             this.openFileDialog1.Multiselect = true;
             // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(158, 4);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.TabIndex = 11;
+            this.button3.Text = "button3";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
             // frmRoadAndStation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(416, 504);
+            this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.Lab_Name);
@@ -230,5 +242,6 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.Button button3;
     }
 }

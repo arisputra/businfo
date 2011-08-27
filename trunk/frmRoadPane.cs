@@ -67,6 +67,16 @@ namespace Businfo
                     contextMenuStrip1.Items.Find("显示站点ToolStripMenuItem", false)[0].Visible = true;
                     contextMenuStrip1.Items.Find("制作单ToolStripMenuItem", false)[0].Visible = true;
                     break;
+                case "浏览":
+                    contextMenuStrip1.Items.Find("定位到ToolStripMenuItem", false)[0].Visible = true;
+                    contextMenuStrip1.Items.Find("删除线路ToolStripMenuItem", false)[0].Visible = false;
+                    contextMenuStrip1.Items.Find("属性编辑ToolStripMenuItem", false)[0].Visible = false;
+                    contextMenuStrip1.Items.Find("备份线路ToolStripMenuItem", false)[0].Visible = false;
+                    contextMenuStrip1.Items.Find("生成反向线路ToolStripMenuItem", false)[0].Visible = false;
+                    contextMenuStrip1.Items.Find("关联站点ToolStripMenuItem", false)[0].Visible = false;
+                    contextMenuStrip1.Items.Find("显示站点ToolStripMenuItem", false)[0].Visible = true;
+                    contextMenuStrip1.Items.Find("制作单ToolStripMenuItem", false)[0].Visible = true;
+                    break;
             }
             //int nNum = 1;
             //foreach (DataGridViewRow eRow in DataGridView1.Rows)
@@ -256,17 +266,15 @@ namespace Businfo
                     if (MessageBox.Show("不能连续执行的！要注意！\n", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Information) == System.Windows.Forms.DialogResult.OK)
                     {
 
-                       //IPolyline pPLine1 = FFFF.ShapeCopy as IPolyline;
-                       //IGeometryCollection pGeometryCollection1 = (IGeometryCollection)pPLine1;
-                        
+                        //IPolyline pPLine1 = FFFF.ShapeCopy as IPolyline;
+                        //IGeometryCollection pGeometryCollection1 = (IGeometryCollection)pPLine1;
                         IGeometryCollection pGeometryCol = new PolylineClass();//用点来生成polyline，这样就可以自相交。
-                        IPath pPath = pGeometryCollection.get_Geometry(0) as IPath;//这是得到polyline path的方法。
                         IPointCollection pPtColl = new PolylineClass();
-                        //pPath.ReverseOrientation();
-                        //pPtColl.RemovePoints(10, 1);
-                        
                         //pPath.FromPoint = pPtColl.get_Point(6);
                         //pPath.ToPoint = pPtColl.get_Point(6);
+
+                        IPath pPath = pGeometryCollection.get_Geometry(0) as IPath;//这是得到polyline path的方法。
+                        //pPath.ReverseOrientation();
                         pGeometryCol.AddGeometry(pPath as IGeometry, ref Missing1, ref Missing1);
 
 
@@ -275,15 +283,24 @@ namespace Businfo
                         pGeometryCol.AddGeometry(pPath1 as IGeometry, ref Missing1, ref Missing1);
 
 
-                        IPath pPath2 = pGeometryCollection.get_Geometry(2) as IPath;
-                        //pPath2.ReverseOrientation();
+                        IPath pPath2 = pGeometryCollection.get_Geometry(1) as IPath;
+                        pPath2.ReverseOrientation();
                         pGeometryCol.AddGeometry(pPath2 as IGeometry, ref Missing1, ref Missing1);
 
 
                         //pGeometryCol.AddGeometry(pGeometryCollection.get_Geometry(0), ref Missing1, ref Missing1);
                         //pGeometryCol.AddGeometry(pGeometryCollection.get_Geometry(1), ref Missing1, ref Missing1);
+                        //ESRI.ArcGIS.Geometry.IPoint p = new PointClass();
+                        //object aa = Type.Missing;
+                        //p.PutCoords(523212.167, 390209.897);
+                        //pPtColl.AddPoint(p, ref aa, ref aa);
+                       
+                        //pPtColl.RemovePoints(260, 1);
+                        //ESRI.ArcGIS.Geometry.IPoint p1 = new PointClass();
+                        //p1.PutCoords(523206.248, 390211.263);
+                        //pPtColl.AddPoint(p1, ref aa, ref aa);
 
-                        pPtColl.AddPointCollection(pGeometryCol.get_Geometry(0) as IPointCollection);
+                        pPtColl.AddPointCollection(pGeometryCollection.get_Geometry(0) as IPointCollection);
                         pPtColl.AddPointCollection(pGeometryCol.get_Geometry(1) as IPointCollection);
                         pPtColl.AddPointCollection(pGeometryCol.get_Geometry(2) as IPointCollection);
                         //pPolyl = pGeometryCol as IPolyline;
