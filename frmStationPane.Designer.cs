@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.TextBox1 = new System.Windows.Forms.TextBox();
             this.Button1 = new System.Windows.Forms.Button();
             this.DataGridView1 = new System.Windows.Forms.DataGridView();
@@ -41,6 +41,7 @@
             this.全景浏览ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.站点表单ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.计算经过线路ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.DataGridView1)).BeginInit();
             this.ContextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -69,8 +70,8 @@
             this.DataGridView1.AllowUserToOrderColumns = true;
             this.DataGridView1.AllowUserToResizeColumns = false;
             this.DataGridView1.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
-            this.DataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            this.DataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
             this.DataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
@@ -103,42 +104,43 @@
             this.删除站点ToolStripMenuItem,
             this.编辑属性ToolStripMenuItem,
             this.全景浏览ToolStripMenuItem,
-            this.站点表单ToolStripMenuItem});
+            this.站点表单ToolStripMenuItem,
+            this.计算经过线路ToolStripMenuItem});
             this.ContextMenuStrip1.Name = "ContextMenuStrip1";
-            this.ContextMenuStrip1.Size = new System.Drawing.Size(125, 114);
+            this.ContextMenuStrip1.Size = new System.Drawing.Size(153, 158);
             // 
             // 定位到ToolStripMenuItem
             // 
             this.定位到ToolStripMenuItem.Name = "定位到ToolStripMenuItem";
-            this.定位到ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.定位到ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.定位到ToolStripMenuItem.Text = "定位到";
             this.定位到ToolStripMenuItem.Click += new System.EventHandler(this.定位到ToolStripMenuItem_Click);
             // 
             // 删除站点ToolStripMenuItem
             // 
             this.删除站点ToolStripMenuItem.Name = "删除站点ToolStripMenuItem";
-            this.删除站点ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.删除站点ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.删除站点ToolStripMenuItem.Text = "删除站点";
             this.删除站点ToolStripMenuItem.Click += new System.EventHandler(this.删除站点ToolStripMenuItem_Click);
             // 
             // 编辑属性ToolStripMenuItem
             // 
             this.编辑属性ToolStripMenuItem.Name = "编辑属性ToolStripMenuItem";
-            this.编辑属性ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.编辑属性ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.编辑属性ToolStripMenuItem.Text = "编辑属性";
             this.编辑属性ToolStripMenuItem.Click += new System.EventHandler(this.编辑属性ToolStripMenuItem_Click);
             // 
             // 全景浏览ToolStripMenuItem
             // 
             this.全景浏览ToolStripMenuItem.Name = "全景浏览ToolStripMenuItem";
-            this.全景浏览ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.全景浏览ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.全景浏览ToolStripMenuItem.Text = "全景浏览";
             this.全景浏览ToolStripMenuItem.Click += new System.EventHandler(this.全景浏览ToolStripMenuItem_Click);
             // 
             // 站点表单ToolStripMenuItem
             // 
             this.站点表单ToolStripMenuItem.Name = "站点表单ToolStripMenuItem";
-            this.站点表单ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.站点表单ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.站点表单ToolStripMenuItem.Text = "站点表单";
             this.站点表单ToolStripMenuItem.Click += new System.EventHandler(this.站点表单ToolStripMenuItem_Click);
             // 
@@ -152,6 +154,13 @@
             this.checkBox1.Text = "全选";
             this.checkBox1.UseVisualStyleBackColor = true;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
+            // 计算经过线路ToolStripMenuItem
+            // 
+            this.计算经过线路ToolStripMenuItem.Name = "计算经过线路ToolStripMenuItem";
+            this.计算经过线路ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.计算经过线路ToolStripMenuItem.Text = "计算经过线路";
+            this.计算经过线路ToolStripMenuItem.Click += new System.EventHandler(this.计算经过线路ToolStripMenuItem_Click);
             // 
             // frmStationPane
             // 
@@ -183,5 +192,6 @@
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.DataGridViewCheckBoxColumn CheckBox;
         private System.Windows.Forms.ToolStripMenuItem 站点表单ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 计算经过线路ToolStripMenuItem;
     }
 }

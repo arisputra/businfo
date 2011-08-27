@@ -32,16 +32,16 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.axLicenseControl1 = new ESRI.ArcGIS.Controls.AxLicenseControl();
             this.axMapControl1 = new ESRI.ArcGIS.Controls.AxMapControl();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.helpProvider2 = new System.Windows.Forms.HelpProvider();
             this.axCommandBars1 = new AxXtremeCommandBars.AxCommandBars();
             this.axDockingPane1 = new AxXtremeDockingPane.AxDockingPane();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.helpProvider2 = new System.Windows.Forms.HelpProvider();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.axLicenseControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axMapControl1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axCommandBars1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axDockingPane1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -80,15 +80,6 @@
             this.axMapControl1.OnMouseUp += new ESRI.ArcGIS.Controls.IMapControlEvents2_Ax_OnMouseUpEventHandler(this.axMapControl1_OnMouseUp);
             this.axMapControl1.OnAfterScreenDraw += new ESRI.ArcGIS.Controls.IMapControlEvents2_Ax_OnAfterScreenDrawEventHandler(this.axMapControl1_OnAfterScreenDraw);
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(1280, 86);
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
-            // 
             // axCommandBars1
             // 
             this.axCommandBars1.Anchor = System.Windows.Forms.AnchorStyles.None;
@@ -112,6 +103,15 @@
             this.axDockingPane1.Size = new System.Drawing.Size(24, 24);
             this.axDockingPane1.TabIndex = 17;
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(1280, 86);
+            this.pictureBox1.TabIndex = 0;
+            this.pictureBox1.TabStop = false;
+            // 
             // frmMainNew
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -130,9 +130,9 @@
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.axLicenseControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.axMapControl1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.axCommandBars1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.axDockingPane1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }

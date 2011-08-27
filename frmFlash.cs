@@ -21,7 +21,7 @@ namespace Businfo
         [STAThread]
         static void Main()
         {
-            ForBusInfo.AppIni(2);//初始化连接类型
+            ForBusInfo.AppIni(1);//初始化连接类型
             Application.Run(new frmFlash());
         }
 
@@ -40,7 +40,7 @@ namespace Businfo
                 frmmain.Show();
             }
         }
-
+        
         private void button1_Click(object sender, EventArgs e)
         {
             try
@@ -49,9 +49,9 @@ namespace Businfo
                 mycon.Open();
                 OleDbDataAdapter da;
                 if (ForBusInfo.Connect_Type == 1)
-                    da = ForBusInfo.CreateCustomerAdapter(mycon, string.Format("select * from sde.Login where Name = '{0}'", textBox1.Text), "", "");
+                    da = ForBusInfo.CreateCustomerAdapter(mycon,string.Format("select * from sde.Login where Name = '{0}'", textBox1.Text), "", "");
                 else
-                    da = ForBusInfo.CreateCustomerAdapter(mycon, string.Format("select * from Login where Name = '{0}'", textBox1.Text), "", "");
+                    da = ForBusInfo.CreateCustomerAdapter(mycon,string.Format("select * from Login where Name = '{0}'", textBox1.Text), "", "");
 
                 da.SelectCommand.ExecuteNonQuery();
                 DataSet ds = new DataSet();
