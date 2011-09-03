@@ -375,6 +375,13 @@ Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missi
                     da.UpdateCommand.Connection = mycon;
                     da.UpdateCommand.ExecuteNonQuery();
                 }
+                else
+                {
+                    da.UpdateCommand = new OleDbCommand();
+                    da.UpdateCommand.CommandText = String.Format("Update sde.公交站点 set sde.公交站点.DayEvacuate = '{0}',sde.公交站点.DayMass = '{1}' where sde.公交站点.OBJECTID = {2}", "", "", eDataRow["OBJECTID"].ToString());
+                    da.UpdateCommand.Connection = mycon;
+                    da.UpdateCommand.ExecuteNonQuery();
+                }
             }
             mycon.Close();
             MessageBox.Show("更新完成！\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);

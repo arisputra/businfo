@@ -271,9 +271,9 @@ Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missi
             OleDbConnection mycon = new OleDbConnection(ForBusInfo.Connect_Sql);
             mycon.Open();
             if (ForBusInfo.Connect_Type == 1)
-                da = new OleDbDataAdapter("select a.RoadName,a.OBJECTID,a.FirstStartTime,a.FirstCloseTime,a.EndStartTime,a.EndCloseTim from sde.公交站线 a Order by a.RoadName", mycon);
+                da = new OleDbDataAdapter("select a.RoadName,a.RoadTravel,a.OBJECTID,a.FirstStartTime,a.FirstCloseTime,a.EndStartTime,a.EndCloseTim from sde.公交站线 a Order by a.RoadName", mycon);
             else
-                da = new OleDbDataAdapter("select a.RoadName,a.OBJECTID,a.FirstStartTime,a.FirstCloseTime,a.EndStartTime,a.EndCloseTim from 公交站线 a Order by a.RoadName", mycon);
+                da = new OleDbDataAdapter("select a.RoadName,a.RoadTravel,a.OBJECTID,a.FirstStartTime,a.FirstCloseTime,a.EndStartTime,a.EndCloseTim from 公交站线 a Order by a.RoadName", mycon);
             DataSet ds = new DataSet();
             da.Fill(ds, "Road");
 
@@ -290,22 +290,29 @@ Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missi
                 int nQueryCount1 = da.Fill(ds1, "Station");
                 foreach (DataRow eStation in ds1.Tables["Station"].Rows)
                 {
-                    str = str + eStation["StationName"].ToString() + "  ";
-                    if (strStreet.IndexOf(eStation["StationCharacter"].ToString()) == -1)
-                        strStreet = strStreet + eStation["StationCharacter"].ToString() + "  ";
+                    str = str + eStation["StationName"].ToString() + "、";
+                    //if (strStreet.IndexOf(eStation["StationCharacter"].ToString()) == -1)
+                    //    strStreet = strStreet + eStation["StationCharacter"].ToString() + "  ";
                 }
 
                 range1 = worksheet.get_Range(string.Format("A{0}", i + 1), string.Format("A{0}", i + 1));
-                range1.Value2 = eRoad["RoadName"].ToString();
+                range1.Value2 = eRoad["RoadName"].ToString()+"路";
                 range1 = worksheet.get_Range(string.Format("B{0}", i + 1), string.Format("B{0}", i + 1));
                 if (str.Length>4)
-                range1.Value2 = str.Substring(0,str.IndexOf("  "));
+                    range1.Value2 = str.Substring(0, str.IndexOf("、")) + "——" + ds1.Tables["Station"].Rows[nQueryCount1 - 1]["StationName"].ToString();
                 range1 = worksheet.get_Range(string.Format("C{0}", i + 1), string.Format("C{0}", i + 1));
-                range1.Value2 = eRoad["FirstStartTime"].ToString() + "  " + eRoad["FirstCloseTime"].ToString() + "  " + eRoad["EndStartTime"].ToString() + "  " + eRoad["EndCloseTim"].ToString();
+                if (eRoad["RoadTravel"].ToString() == "去行")
+                    range1.Value2 = eRoad["FirstStartTime"].ToString() + "  " + eRoad["FirstCloseTime"].ToString();
+                else
+                    range1.Value2 = eRoad["EndStartTime"].ToString() + "  " + eRoad["EndCloseTim"].ToString();
                 range1 = worksheet.get_Range(string.Format("D{0}", i + 1), string.Format("D{0}", i + 1));
-                range1.Value2 = str;
-                range1 = worksheet.get_Range(string.Format("E{0}", i + 1), string.Format("E{0}", i + 1));
-                range1.Value2 = strStreet;
+                if (str.Length>3)
+                {
+                    range1.Value2 = str.Substring(0,str.Length-1);
+                }
+                
+                //range1 = worksheet.get_Range(string.Format("E{0}", i + 1), string.Format("E{0}", i + 1));
+                //range1.Value2 = strStreet;
             }
             mycon.Close();
             //workbooks.Close();

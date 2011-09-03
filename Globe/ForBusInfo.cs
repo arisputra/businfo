@@ -385,7 +385,7 @@ namespace Businfo.Globe
                         grid.Columns[4].Visible = true;
                         grid.Columns[5].Visible = true;
                         grid.Columns[6].Visible = true;
-                        for (int i = 15; i < 53; i++)
+                        for (int i = 13; i < 53; i++)
                         {
                             grid.Columns[i].Visible = true;
                         }
@@ -423,7 +423,7 @@ namespace Businfo.Globe
                     grid.Columns[32].HeaderText = "候车亭维护单位";//原来是 调度线路2
                     grid.Columns[33].HeaderText = "候车亭建设时间";//原来是 迁移安装时间
 
-                    grid.Columns[34].HeaderText = "站牌规格";
+                    grid.Columns[34].HeaderText = "站点类型";
                     grid.Columns[35].HeaderText = "有无板凳";
                     grid.Columns[36].HeaderText = "站点类型";
                     grid.Columns[37].HeaderText = "集散量高峰";
