@@ -421,6 +421,7 @@ namespace Businfo
                             strInPara = String.Format("{0}{1},", strInPara, eRow[0]);
                             nList.Add(eRow[0].ToString());
                         }
+                        frmPopup.m_ds = ds;
                         frmPopup.Show();
                         frmPopup.RefreshStationGrid(strInPara); //填充完以后Gridview的值才是要排序的
                         frmPopup.SetStationOrderCell(nList); //填写排序值，使用的站点编号字段
@@ -439,7 +440,7 @@ namespace Businfo
         {
             string strPath = DateTime.Now.ToLongTimeString();
             strPath = strPath.Replace(":", "-");
-            strPath = string.Format("D:\\制作单\\{0}", strPath);
+            strPath = string.Format("{0}\\制作单\\{1}", System.Windows.Forms.Application.StartupPath,strPath);
             System.IO.Directory.CreateDirectory(strPath);
 
             Excelapp app = new Excelapp();
@@ -539,7 +540,7 @@ Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missi
 
             if (bCheck)
             {
-                System.Diagnostics.Process.Start(strPath);
+                //System.Diagnostics.Process.Start(strPath);
             }
             else//右键直接选择出表，单一的一个。
             {
@@ -573,7 +574,7 @@ Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missi
                             {
                                 worksheet.PageSetup.PrintArea = string.Format("$A$1:$K${0}", j * 2 + 7);
                             }
-                            workbook.SaveAs("D:\\制作单\\" + pCurFeatureList[0].get_Value(pCurFeatureList[0].Fields.FindField("RoadName")), Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookNormal, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlNoChange, Type.Missing, Type.Missing, Type.Missing, Type.Missing, null);
+                            workbook.SaveAs(strPath + "\\" + pCurFeatureList[0].get_Value(pCurFeatureList[0].Fields.FindField("RoadName")), Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookNormal, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlNoChange, Type.Missing, Type.Missing, Type.Missing, Type.Missing, null);
                         }
 
                         mycon.Close();
@@ -585,6 +586,7 @@ Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missi
                     }
                 }
             }
+            System.Diagnostics.Process.Start(strPath);
             app.Quit();
         }
 
