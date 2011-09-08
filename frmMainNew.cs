@@ -890,7 +890,6 @@ namespace Businfo
                                 {
                                     m_FormPoint = m_mapPoint;
                                 }
-                                
                                 EngineFuntions.PanPoint(m_FormPoint);
                              }
                              break;

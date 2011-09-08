@@ -47,18 +47,18 @@ namespace Businfo
                 {
                     OleDbDataAdapter da;
                     if (ForBusInfo.Connect_Type == 1)
-                        da = ForBusInfo.CreateCustomerAdapter(mycon, String.Format("select * from  sde.BackRAndS where RoadID = {0}", pBusRoad.get_Value(pBusRoad.Fields.FindField("OBJECTID"))),
-                           "", String.Format("delete from  sde.BackRAndS where RoadID = {0}", pBusRoad.get_Value(pBusRoad.Fields.FindField("OBJECTID"))));
+                        da = ForBusInfo.CreateCustomerAdapter(mycon, String.Format("select * from  sde.RAndSBack where RoadID = {0}", pBusRoad.get_Value(pBusRoad.Fields.FindField("OBJECTID"))),
+                           "", String.Format("delete from  sde.RAndSBack where RoadID = {0}", pBusRoad.get_Value(pBusRoad.Fields.FindField("OBJECTID"))));
                     else
-                        da = ForBusInfo.CreateCustomerAdapter(mycon, String.Format("select * from  BackRAndS where RoadID = {0}", pBusRoad.get_Value(pBusRoad.Fields.FindField("OBJECTID"))),
-                       "", String.Format("delete from  BackRAndS where RoadID = {0}", pBusRoad.get_Value(pBusRoad.Fields.FindField("OBJECTID"))));
+                        da = ForBusInfo.CreateCustomerAdapter(mycon, String.Format("select * from  RAndSBack where RoadID = {0}", pBusRoad.get_Value(pBusRoad.Fields.FindField("OBJECTID"))),
+                       "", String.Format("delete from  RAndSBack where RoadID = {0}", pBusRoad.get_Value(pBusRoad.Fields.FindField("OBJECTID"))));
                     da.SelectCommand.ExecuteNonQuery();
                     DataSet ds = new DataSet();
                     int nQueryCount = da.Fill(ds);
                     foreach (DataRow eDataRow in ds.Tables[0].Rows)
                     {
-                        da.InsertCommand.CommandText = String.Format("insert into sde.RoadAndStation(RoadID,StationID,StationOrder,BufferLength) values({0},{1},{2},{3})"
-                       , pFeature.get_Value(pFeature.Fields.FindField("OBJECTID")), eDataRow[2], eDataRow[3], eDataRow[4]);
+                        da.InsertCommand.CommandText = String.Format("insert into sde.RoadAndStation(RoadID,StationID,StationOrder,BufferLength,Roadinfo ,StationInfo) values({0},{1},{2},{3},'{4}','{5}')"
+                       , pFeature.get_Value(pFeature.Fields.FindField("OBJECTID")), eDataRow["StationID"], eDataRow["StationOrder"], eDataRow["BufferLength"], eDataRow["Roadinfo"], eDataRow["StationInfo"]);
                         da.InsertCommand.ExecuteNonQuery();
                     }
                     da.DeleteCommand.ExecuteNonQuery();//删除备份站线关联站点数据
@@ -91,10 +91,10 @@ namespace Businfo
                     OleDbDataAdapter da;
                     if (ForBusInfo.Connect_Type == 1)
                         da = ForBusInfo.CreateCustomerAdapter(mycon, "",
-                           "", String.Format("delete from sde.BackRAndS where RoadID = {0}", pBackRoad.get_Value(pBackRoad.Fields.FindField("OBJECTID"))));
+                           "", String.Format("delete from sde.RAndSBack where RoadID = {0}", pBackRoad.get_Value(pBackRoad.Fields.FindField("OBJECTID"))));
                     else
                         da = ForBusInfo.CreateCustomerAdapter(mycon, "",
-                       "", String.Format("delete from BackRAndS where RoadID = {0}", pBackRoad.get_Value(pBackRoad.Fields.FindField("OBJECTID"))));
+                       "", String.Format("delete from RAndSBack where RoadID = {0}", pBackRoad.get_Value(pBackRoad.Fields.FindField("OBJECTID"))));
                     da.DeleteCommand.ExecuteNonQuery();//删除备份站线关联站点数据
                     ForBusInfo.Add_Log(ForBusInfo.Login_name, "删除备份站线", pBackRoad.get_Value(pBackRoad.Fields.FindField("RoadName")).ToString(), "");
                     mycon.Close();

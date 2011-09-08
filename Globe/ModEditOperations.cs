@@ -906,6 +906,40 @@ namespace Businfo.Globe
             EngineFuntions.m_AxMapControl.ActiveView.ScreenDisplay.Invalidate(null, true, (short)esriScreenCache.esriAllScreenCaches);
         }
 
+        public static void Zoom(IFeature pFeature)
+        {
+            IGeometry pGeometry = pFeature.ShapeCopy;
+           switch (pGeometry.GeometryType)
+           {
+               case esriGeometryType.esriGeometryPoint:
+                   IEnvelope pEnvelope;
+                   IDisplayTransformation pDisplayTransformation;
+                   pDisplayTransformation = EngineFuntions.m_AxMapControl.ActiveView.ScreenDisplay.DisplayTransformation;
+                   pEnvelope = pDisplayTransformation.VisibleBounds;
+                   pEnvelope.CenterAt(pGeometry as ESRI.ArcGIS.Geometry.IPoint);
+                   pDisplayTransformation.VisibleBounds = pEnvelope;
+                   EngineFuntions.m_AxMapControl.Map.MapScale = 2000;
+                   pDisplayTransformation.VisibleBounds = EngineFuntions.m_AxMapControl.ActiveView.Extent;
+                   EngineFuntions.m_AxMapControl.ActiveView.ScreenDisplay.Invalidate(null, true, (short)esriScreenCache.esriAllScreenCaches);
+                   System.Windows.Forms.Application.DoEvents();
+                   EngineFuntions.FlashShape(pGeometry);
+                   break;
+               case esriGeometryType.esriGeometryPolyline:
+                   pEnvelope = pFeature.Extent;
+                   pEnvelope.Expand(2, 2, true);
+                   EngineFuntions.m_AxMapControl.ActiveView.Extent = pEnvelope;
+                   EngineFuntions.m_AxMapControl.ActiveView.ScreenDisplay.Invalidate(null, true, (short)esriScreenCache.esriAllScreenCaches);
+                   System.Windows.Forms.Application.DoEvents();
+                   EngineFuntions.FlashShape(pGeometry);
+                   //EngineFuntions.MapRefresh();
+                   //EngineFuntions.m_AxMapControl.Map.ClearSelection();
+                   //EngineFuntions.m_AxMapControl.ActiveView.GraphicsContainer.DeleteAllElements();
+                   //EngineFuntions.m_AxMapControl.Map.SelectFeature(EngineFuntions.m_Layer_BusRoad, m_pCurFeature);
+                   //EngineFuntions.MapRefresh();
+                   break;
+           }
+        }
+
         public static bool GetLinkPoint(IPolyline pBeforeLine, IPolyline pAfterLine, ref IPoint PointLink)
         {
             IPoint PointBefore1, PointBefore2, PointAfter1, PointAfter2;

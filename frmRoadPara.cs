@@ -44,16 +44,16 @@ namespace Businfo
                 m_pFeature.set_Value(nIndex, textBox2.Text);
                 nIndex = fields.FindField("RoadTravel");
                 m_pFeature.set_Value(nIndex, comboBox1.Text);
-                double rNumber;
+                //double rNumber;
                 nIndex = fields.FindField("TicketPrice1");
-                if (double.TryParse(textBox4.Text, out rNumber))
-                    m_pFeature.set_Value(nIndex, rNumber);
+                //if (double.TryParse(textBox4.Text, out rNumber))
+                m_pFeature.set_Value(nIndex, textBox4.Text);
                 nIndex = fields.FindField("TicketPrice2");
-                if (double.TryParse(textBox5.Text, out  rNumber))
-                    m_pFeature.set_Value(nIndex, rNumber);
+                //if (double.TryParse(textBox5.Text, out  rNumber))
+                m_pFeature.set_Value(nIndex, textBox5.Text);
                 nIndex = fields.FindField("TicketPrice3");
-                if (double.TryParse(textBox6.Text, out  rNumber))
-                    m_pFeature.set_Value(nIndex, rNumber);
+                //if (double.TryParse(textBox6.Text, out  rNumber))
+                m_pFeature.set_Value(nIndex, textBox6.Text);
                 nIndex = fields.FindField("FirstStartTime");
                 m_pFeature.set_Value(nIndex, textBox7.Text);
                 nIndex = fields.FindField("FirstCloseTime");
