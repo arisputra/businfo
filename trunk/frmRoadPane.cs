@@ -122,7 +122,7 @@ namespace Businfo
                 m_nCurRowIndex = e.RowIndex;
                 DataGridView1.Rows[m_nCurRowIndex].Selected = true;
                 contextMenuStrip1.Show(MousePosition.X, MousePosition.Y);
-                m_pCurFeature = EngineFuntions.GetFeatureByFieldAndValue(EngineFuntions.m_Layer_BusRoad, "OBJECTID", DataGridView1.Rows[m_nCurRowIndex].Cells[1].Value.ToString());
+                m_pCurFeature = EngineFuntions.GetFeatureByFieldAndValue(EngineFuntions.m_Layer_BusRoad, "OBJECTID", DataGridView1.Rows[m_nCurRowIndex].Cells["OBJECTID"].Value.ToString());
             }
         }
 
@@ -207,8 +207,8 @@ namespace Businfo
                     else
                         da = ForBusInfo.CreateCustomerAdapter(mycon, "",
                        "", String.Format("delete from  RoadAndStation where RoadID = {0}", DataGridView1.Rows[m_nCurRowIndex].Cells[1].Value.ToString()));
-                    da.DeleteCommand.ExecuteNonQuery();
-                    m_pCurFeature.Delete();
+                    da.DeleteCommand.ExecuteNonQuery();//删除关联站点
+                    m_pCurFeature.Delete();//删除线路对象
                     ForBusInfo.Add_Log(ForBusInfo.Login_name, "删除线路", DataGridView1.Rows[m_nCurRowIndex].Cells[3].Value.ToString(), "");
                     DataGridView1.Rows.RemoveAt(m_nCurRowIndex);
                     mycon.Close();
@@ -692,7 +692,7 @@ Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missi
             range1 = worksheet.get_Range("A4", "A5");
             range1.Value2 = pCurFeature.get_Value(pCurFeature.Fields.FindField("RoadType"));
             range1 = worksheet.get_Range("B4", "C5");
-            range1.Value2 = string.Format("票价：{0:0.00} {1:0.00} {2:0.00} {3}", pCurFeature.get_Value(pCurFeature.Fields.FindField("TicketPrice1")), pCurFeature.get_Value(pCurFeature.Fields.FindField("TicketPrice2")), pCurFeature.get_Value(pCurFeature.Fields.FindField("TicketPrice3")), pCurFeature.get_Value(pCurFeature.Fields.FindField("Picture5")));
+            range1.Value2 = string.Format("票价：{0} {1} {2} {3}", pCurFeature.get_Value(pCurFeature.Fields.FindField("TicketPrice1")), pCurFeature.get_Value(pCurFeature.Fields.FindField("TicketPrice2")), pCurFeature.get_Value(pCurFeature.Fields.FindField("TicketPrice3")), pCurFeature.get_Value(pCurFeature.Fields.FindField("Picture5")));
             range1 = worksheet.get_Range("H4", "H4");//首站开班
             range1.Value2 = pCurFeature.get_Value(pCurFeature.Fields.FindField("FirstStartTime"));
             range1 = worksheet.get_Range("K4", "K4");//首站收班
@@ -711,13 +711,13 @@ Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missi
                 if (eRow.Cells[0].Value != null && (bool)eRow.Cells[0].Value == true)
                 {
                     bCheck = true;
-                    m_pCurFeature = EngineFuntions.GetOneSeartchFeature(EngineFuntions.m_Layer_BackRoad, string.Format("Roadname = '{0}' AND RoadTravel = '{1}'", eRow.Cells[4].Value.ToString(), eRow.Cells[6].Value.ToString()));
+                    m_pCurFeature = EngineFuntions.GetOneSeartchFeature(EngineFuntions.m_Layer_BackRoad, string.Format("Roadname = '{0}' AND RoadTravel = '{1}'", eRow.Cells["Roadname"].Value.ToString(), eRow.Cells["RoadTravel"].Value.ToString()));
                     if (m_pCurFeature != null)
                     {
                         MessageBox.Show("临时图层已经存在该线路\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         break;
                     }
-                    m_pCurFeature = EngineFuntions.GetOneSeartchFeature(EngineFuntions.m_Layer_BusRoad, "OBJECTID = " + eRow.Cells[1].Value.ToString());
+                    m_pCurFeature = EngineFuntions.GetOneSeartchFeature(EngineFuntions.m_Layer_BusRoad, "OBJECTID = " + eRow.Cells["OBJECTID"].Value.ToString());
                     IFeature pFeature = EngineFuntions.CopyFeature(EngineFuntions.m_Layer_BackRoad, m_pCurFeature);
                     OleDbConnection mycon = new OleDbConnection(ForBusInfo.Connect_Sql);
                     mycon.Open();
@@ -736,14 +736,14 @@ Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missi
                         foreach (DataRow eDataRow in ds.Tables[0].Rows)
                         {
                             if (ForBusInfo.Connect_Type == 1)
-                                da.InsertCommand.CommandText = String.Format("insert into sde.BackRAndS(RoadID,StationID,StationOrder,BufferLength) values({0},{1},{2},{3})"
-                               , pFeature.get_Value(pFeature.Fields.FindField("OBJECTID")), eDataRow[2], eDataRow[3], eDataRow[4]);
+                                da.InsertCommand.CommandText = String.Format("insert into sde.RAndSBack(RoadID,StationID,StationOrder,BufferLength,Roadinfo ,StationInfo) values({0},{1},{2},{3},'{4}','{5}')"
+                               , pFeature.get_Value(pFeature.Fields.FindField("OBJECTID")), eDataRow["StationID"], eDataRow["StationOrder"], eDataRow["BufferLength"], eDataRow["Roadinfo"], eDataRow["StationInfo"]);
                             else
-                                da.InsertCommand.CommandText = String.Format("insert into BackRAndS(RoadID,StationID,StationOrder,BufferLength) values({0},{1},{2},{3})"
-                               , pFeature.get_Value(pFeature.Fields.FindField("OBJECTID")), eDataRow[2], eDataRow[3], eDataRow[4]);
+                                da.InsertCommand.CommandText = String.Format("insert into RAndSBack(RoadID,StationID,StationOrder,BufferLength,Roadinfo ,StationInfo) values({0},{1},{2},{3},'{4}','{5}')"
+                               , pFeature.get_Value(pFeature.Fields.FindField("OBJECTID")), eDataRow["StationID"], eDataRow["StationOrder"], eDataRow["BufferLength"], eDataRow["Roadinfo"], eDataRow["StationInfo"]);
                             da.InsertCommand.ExecuteNonQuery();
                         }
-                        da.DeleteCommand.ExecuteNonQuery();//删除原始站线关联站点数据
+                        //da.DeleteCommand.ExecuteNonQuery();//删除原始站线关联站点数据
                         ForBusInfo.Add_Log(ForBusInfo.Login_name, "备份线路", m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("RoadName")).ToString(), "");
                         mycon.Close();
                         //m_pCurFeature.Delete();//删除原始站线
@@ -791,14 +791,14 @@ Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missi
                         foreach (DataRow eRow in ds.Tables[0].Rows)
                         {
                             if (ForBusInfo.Connect_Type == 1)
-                                da.InsertCommand.CommandText = String.Format("insert into sde.BackRAndS(RoadID,StationID,StationOrder,BufferLength) values({0},{1},{2},{3})"
-                                    , pFeature.get_Value(pFeature.Fields.FindField("OBJECTID")), eRow[2], eRow[3], eRow[4]);
+                                da.InsertCommand.CommandText = String.Format("insert into sde.RAndSBack(RoadID,StationID,StationOrder,BufferLength,Roadinfo ,StationInfo) values({0},{1},{2},{3},'{4}','{5}')"
+                               , pFeature.get_Value(pFeature.Fields.FindField("OBJECTID")), eRow["StationID"], eRow["StationOrder"], eRow["BufferLength"], eRow["Roadinfo"], eRow["StationInfo"]);
                             else
-                                da.InsertCommand.CommandText = String.Format("insert into BackRAndS(RoadID,StationID,StationOrder,BufferLength) values({0},{1},{2},{3})"
-                               , pFeature.get_Value(pFeature.Fields.FindField("OBJECTID")), eRow[2], eRow[3], eRow[4]);
+                                da.InsertCommand.CommandText = String.Format("insert into RAndSBack(RoadID,StationID,StationOrder,BufferLength,Roadinfo ,StationInfo) values({0},{1},{2},{3},'{4}','{5}')"
+                               , pFeature.get_Value(pFeature.Fields.FindField("OBJECTID")), eRow["StationID"], eRow["StationOrder"], eRow["BufferLength"], eRow["Roadinfo"], eRow["StationInfo"]);
                             da.InsertCommand.ExecuteNonQuery();
                         }
-                        da.DeleteCommand.ExecuteNonQuery();//删除原始站线关联站点数据
+                        //da.DeleteCommand.ExecuteNonQuery();//删除原始站线关联站点数据
                         ForBusInfo.Add_Log(ForBusInfo.Login_name, "备份站线", m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("RoadName")).ToString(), "");
                         mycon.Close();
                         //m_pCurFeature.Delete();//删除原始站线
@@ -827,13 +827,13 @@ Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missi
                     else
                         strDirect = "去行";
 
-                    m_pCurFeature = EngineFuntions.GetOneSeartchFeature(EngineFuntions.m_Layer_BusRoad, string.Format("Roadname = '{0}' AND RoadTravel = '{1}'", eRow.Cells[4].Value.ToString(), strDirect));
+                    m_pCurFeature = EngineFuntions.GetOneSeartchFeature(EngineFuntions.m_Layer_BusRoad, string.Format("Roadname = '{0}' AND RoadTravel = '{1}'", eRow.Cells["Roadname"].Value.ToString(), strDirect));
                     if (m_pCurFeature != null)
                     {
                         MessageBox.Show("线路图层已经存在反向线路\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         break;
                     }
-                    m_pCurFeature = EngineFuntions.GetOneSeartchFeature(EngineFuntions.m_Layer_BusRoad, string.Format("Roadname = '{0}' AND RoadTravel = '{1}'", eRow.Cells[4].Value.ToString(), eRow.Cells[6].Value.ToString()));
+                    m_pCurFeature = EngineFuntions.GetOneSeartchFeature(EngineFuntions.m_Layer_BusRoad, string.Format("Roadname = '{0}' AND RoadTravel = '{1}'", eRow.Cells["Roadname"].Value.ToString(), eRow.Cells["RoadTravel"].Value.ToString()));
                     IPolyline pPLine = m_pCurFeature.ShapeCopy as IPolyline;
                     pPLine.ReverseOrientation();
                     m_pCurFeature.Shape = pPLine;
@@ -869,7 +869,6 @@ Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missi
             RefreshGrid();
             EngineFuntions.PartialRefresh(EngineFuntions.m_Layer_BackRoad);
         }
-
 
     }
 }
