@@ -111,6 +111,10 @@ namespace Businfo
             axMapControl1.Map.Name = "查询";
             //axMapControl1.Extent = axMapControl1.FullExtent;
 
+            axMapControl1.KeyIntercept = (int)esriKeyIntercept.esriKeyInterceptArrowKeys;
+            axMapControl1.AutoKeyboardScrolling = true;
+            axMapControl1.AutoMouseWheel = true;
+
             List<IFeatureLayer> colLayers;
             colLayers = EngineFuntions.GetAllValidFeatureLayers(axMapControl1.Map);
             //设置所有图层不能选择
@@ -231,7 +235,7 @@ namespace Businfo
                     m_ToolStatus = ForBusInfo.Map3D_ZoomIn;
                     if(axMapControl1.Visible == true)
                     {
-                        ICommand pCommand; 
+                        ICommand pCommand;
                         pCommand = new ControlsMapZoomInTool();
                         pCommand.OnCreate(axMapControl1.Object);
                         axMapControl1.CurrentTool = (ITool)pCommand;
@@ -292,7 +296,14 @@ namespace Businfo
                 case ForBusInfo.Map3D_Select ://拉框选择
                     m_ToolStatus = ForBusInfo.Map3D_Select;
                     axMapControl1.MousePointer = esriControlsMousePointer.esriPointerPencil;
-                    
+                    //if (axMapControl1.Visible == true)
+                    //{
+                    //    ICommand pCommand;
+                    //    pCommand = new ESRI.ArcGIS.Controls.ControlsNewPolygonToolClass();
+                    //    pCommand.OnCreate(axMapControl1.Object);
+                    //    axMapControl1.CurrentTool = pCommand as ITool;
+                    //}
+                   
                     break;
 
                 case ForBusInfo.Map3D_Full:
@@ -594,28 +605,28 @@ namespace Businfo
                      case ForBusInfo.Map3D_Select:
                          if (axMapControl1.Visible == true)
                          {
-                            IGeometry pGeo;
-                            pGeo = axMapControl1.TrackPolygon();
-                            List<IFeature> pSelFea = EngineFuntions.GetSeartchFeatures(EngineFuntions.m_Layer_BusStation,pGeo);
-                            if (pSelFea.Count > 0)
-                            {
-                               
-                                frmStationAllInfo frmPopup = new frmStationAllInfo();
-                                frmPopup.m_featureCollection = pSelFea;
-                                frmPopup.SetButtonVisable();
-                                frmPopup.ShowDialog();
-                                
-                            }
-                            pSelFea.Clear();
-                            pSelFea = EngineFuntions.GetSeartchFeatures(EngineFuntions.m_Layer_BusRoad, pGeo);
-                            if (pSelFea.Count > 0)
-                            {
-                                frmRoadAllInfo frmPopup = new frmRoadAllInfo();
-                                frmPopup.m_featureCollection = pSelFea;
-                                frmPopup.SetButtonVisable();
-                                frmPopup.ShowDialog();
+                             IGeometry pGeo;
+                             pGeo = axMapControl1.TrackPolygon();
+                             List<IFeature> pSelFea = EngineFuntions.GetSeartchFeatures(EngineFuntions.m_Layer_BusStation, pGeo);
+                             if (pSelFea.Count > 0)
+                             {
 
-                            }
+                                 frmStationAllInfo frmPopup = new frmStationAllInfo();
+                                 frmPopup.m_featureCollection = pSelFea;
+                                 frmPopup.SetButtonVisable();
+                                 frmPopup.ShowDialog();
+
+                             }
+                             pSelFea.Clear();
+                             pSelFea = EngineFuntions.GetSeartchFeatures(EngineFuntions.m_Layer_BusRoad, pGeo);
+                             if (pSelFea.Count > 0)
+                             {
+                                 frmRoadAllInfo frmPopup = new frmRoadAllInfo();
+                                 frmPopup.m_featureCollection = pSelFea;
+                                 frmPopup.SetButtonVisable();
+                                 frmPopup.ShowDialog();
+
+                             }
                          }
                          break;
                      case ForBusInfo.Bus_Add:
