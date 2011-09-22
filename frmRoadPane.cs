@@ -508,11 +508,11 @@ Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missi
                             }
                             if (i > j)//设置打印区域
                             {
-                                worksheet.PageSetup.PrintArea = string.Format("$A$1:$K${0}", i * 2 + 7);
+                                worksheet.PageSetup.PrintArea = string.Format("$A$1:$K${0}", i * 3 + 7);
                             }
                             else
                             {
-                                worksheet.PageSetup.PrintArea = string.Format("$A$1:$K${0}", j * 2 + 7);
+                                worksheet.PageSetup.PrintArea = string.Format("$A$1:$K${0}", j * 3 + 7);
                             }
                             // string vFileName = "D:\\制作单\\" + pCurFeatureList[0].get_Value(pCurFeatureList[0].Fields.FindField("RoadName")) + ".xls";
 
@@ -568,11 +568,11 @@ Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missi
                             }
                             if (i > j)
                             {
-                                worksheet.PageSetup.PrintArea = string.Format("$A$1:$K${0}", i * 2 + 7);
+                                worksheet.PageSetup.PrintArea = string.Format("$A$1:$K${0}", i * 3 + 7);
                             }
                             else
                             {
-                                worksheet.PageSetup.PrintArea = string.Format("$A$1:$K${0}", j * 2 + 7);
+                                worksheet.PageSetup.PrintArea = string.Format("$A$1:$K${0}", j * 3 + 7);
                             }
                             workbook.SaveAs(strPath + "\\" + pCurFeatureList[0].get_Value(pCurFeatureList[0].Fields.FindField("RoadName")), Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookNormal, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlNoChange, Type.Missing, Type.Missing, Type.Missing, Type.Missing, null);
                         }
@@ -608,25 +608,31 @@ Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missi
                 //range1.Value2 = ds.Tables[0].Rows[ds.Tables[0].Rows.Count - 1][2];
                 foreach (DataRow eTableRow in ds.Tables[0].Rows)
                 {
-                    range1 = worksheet.get_Range(string.Format("B{0}", 8 + (2 * i)), string.Format("B{0}", 8 + (2 * i)));
+                    range1 = worksheet.get_Range(string.Format("B{0}", 8 + (3 * i)), string.Format("B{0}", 9 + (3 * i)));
                     range1.Value2 = eTableRow["StationName"];
-                    range1 = worksheet.get_Range(string.Format("B{0}", 9 + (2 * i)), string.Format("B{0}", 9 + (2 * i)));
+                    range1 = worksheet.get_Range(string.Format("B{0}", 10 + (3 * i)), string.Format("B{0}", 10 + (3 * i)));
                     range1.Value2 = eTableRow["DispatchStationThird"];//站点说明
-                    range1 = worksheet.get_Range(string.Format("C{0}", 8 + (2 * i)), string.Format("C{0}", 8 + (2 * i)));
+                    range1 = worksheet.get_Range(string.Format("C{0}", 8 + (3 * i)), string.Format("C{0}", 8 + (3 * i)));
                     range1.Value2 = eTableRow["DispatchCompanyFirst"];//线路牌材质
-                    range1 = worksheet.get_Range(string.Format("D{0}", 8 + (2 * i)), string.Format("D{0}", 8 + (2 * i)));
+                    range1 = worksheet.get_Range(string.Format("D{0}", 8 + (3 * i)), string.Format("D{0}", 8 + (3 * i)));
                     range1.Value2 = eTableRow["DispatchRouteFirst"];// 线路牌尺寸
-                    range1 = worksheet.get_Range(string.Format("E{0}", 8 + (2 * i)), string.Format("E{0}", 8 + (2 * i)));
+                    range1 = worksheet.get_Range(string.Format("E{0}", 8 + (3 * i)), string.Format("E{0}", 8 + (3 * i)));
                     range1.Value2 = eTableRow["DispatchStationFirst"];//线路牌制作单位
-                    range1 = worksheet.get_Range(string.Format("C{0}", 9 + (2 * i)), string.Format("C{0}", 9 + (2 * i)));
+                    range1 = worksheet.get_Range(string.Format("C{0}", 9 + (3 * i)), string.Format("C{0}", 9 + (3 * i)));
                     range1.Value2 = eTableRow["DispatchStationSecond"];//线路牌材质2
-                    range1 = worksheet.get_Range(string.Format("D{0}", 9 + (2 * i)), string.Format("D{0}", 9 + (2 * i)));
+                    range1 = worksheet.get_Range(string.Format("D{0}", 9 + (3 * i)), string.Format("D{0}", 9 + (3 * i)));
                     range1.Value2 = eTableRow["DispatchCompanyThird"];//线路牌尺寸2
-                    range1 = worksheet.get_Range(string.Format("E{0}", 9 + (2 * i)), string.Format("E{0}", 9 + (2 * i)));
+                    range1 = worksheet.get_Range(string.Format("E{0}", 9 + (3 * i)), string.Format("E{0}", 9 + (3 * i)));
                     range1.Value2 = eTableRow["DispatchRouteThird"];//线路牌制作单位2
-                    range1 = worksheet.get_Range(string.Format("F{0}", 8 + (2 * i)), string.Format("F{0}", 8 + (2 * i)));
+                    range1 = worksheet.get_Range(string.Format("C{0}", 10 + (3 * i)), string.Format("C{0}", 10 + (3 * i)));
+                    range1.Value2 = eTableRow["Constructor"];//线路牌材质3
+                    range1 = worksheet.get_Range(string.Format("D{0}", 10 + (3 * i)), string.Format("D{0}", 10 + (3 * i)));
+                    range1.Value2 = eTableRow["ConstructionTime"];//线路牌尺寸3
+                    range1 = worksheet.get_Range(string.Format("E{0}", 10 + (3 * i)), string.Format("E{0}", 10 + (3 * i)));
+                    range1.Value2 = eTableRow["StationLand"];//线路牌制作单位3
+                    range1 = worksheet.get_Range(string.Format("F{0}", 8 + (3 * i)), string.Format("F{0}", 9 + (3 * i)));
                     range1.Value2 = eTableRow["StationCharacter"];//站点所在道路
-                    range1 = worksheet.get_Range(string.Format("F{0}", 9 + (2 * i)), string.Format("F{0}", 9 + (2 * i++)));
+                    range1 = worksheet.get_Range(string.Format("F{0}", 10 + (3 * i)), string.Format("F{0}", 10 + (3 * i++)));
                     range1.Value2 = eTableRow["StationAlias"];//副站名
                 }
 
@@ -652,25 +658,31 @@ Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missi
                 //range1.Value2 = ds.Tables[0].Rows[ds.Tables[0].Rows.Count - 1][2];
                 foreach (DataRow eTableRow in ds.Tables[0].Rows)
                 {
-                    range1 = worksheet.get_Range(string.Format("G{0}", 8 + (2 * i)), string.Format("G{0}", 8 + (2 * i)));
+                    range1 = worksheet.get_Range(string.Format("G{0}", 8 + (3 * i)), string.Format("G{0}", 9 + (3 * i)));
                     range1.Value2 = eTableRow["StationName"];
-                    range1 = worksheet.get_Range(string.Format("G{0}", 9 + (2 * i)), string.Format("G{0}", 9 + (2 * i)));
+                    range1 = worksheet.get_Range(string.Format("G{0}", 10 + (3 * i)), string.Format("G{0}", 10 + (3 * i)));
                     range1.Value2 = eTableRow["DispatchStationThird"];//站点说明
-                    range1 = worksheet.get_Range(string.Format("H{0}", 8 + (2 * i)), string.Format("H{0}", 8 + (2 * i)));
+                    range1 = worksheet.get_Range(string.Format("H{0}", 8 + (3 * i)), string.Format("H{0}", 8 + (3 * i)));
                     range1.Value2 = eTableRow["DispatchCompanyFirst"];//线路牌材质
-                    range1 = worksheet.get_Range(string.Format("I{0}", 8 + (2 * i)), string.Format("I{0}", 8 + (2 * i)));
+                    range1 = worksheet.get_Range(string.Format("I{0}", 8 + (3 * i)), string.Format("I{0}", 8 + (3 * i)));
                     range1.Value2 = eTableRow["DispatchRouteFirst"];// 线路牌尺寸
-                    range1 = worksheet.get_Range(string.Format("J{0}", 8 + (2 * i)), string.Format("J{0}", 8 + (2 * i)));
+                    range1 = worksheet.get_Range(string.Format("J{0}", 8 + (3 * i)), string.Format("J{0}", 8 + (3 * i)));
                     range1.Value2 = eTableRow["DispatchStationFirst"];//线路牌制作单位
-                    range1 = worksheet.get_Range(string.Format("H{0}", 9 + (2 * i)), string.Format("H{0}", 9 + (2 * i)));
+                    range1 = worksheet.get_Range(string.Format("H{0}", 9 + (3 * i)), string.Format("H{0}", 9 + (3 * i)));
                     range1.Value2 = eTableRow["DispatchStationSecond"];//线路牌材质2
-                    range1 = worksheet.get_Range(string.Format("I{0}", 9 + (2 * i)), string.Format("I{0}", 9 + (2 * i)));
+                    range1 = worksheet.get_Range(string.Format("I{0}", 9 + (3 * i)), string.Format("I{0}", 9 + (3 * i)));
                     range1.Value2 = eTableRow["DispatchCompanyThird"];//线路牌尺寸2
-                    range1 = worksheet.get_Range(string.Format("J{0}", 9 + (2 * i)), string.Format("J{0}", 9 + (2 * i)));
+                    range1 = worksheet.get_Range(string.Format("J{0}", 9 + (3 * i)), string.Format("J{0}", 9 + (3 * i)));
                     range1.Value2 = eTableRow["DispatchRouteThird"];//线路牌制作单位2
-                    range1 = worksheet.get_Range(string.Format("K{0}", 8 + (2 * i)), string.Format("K{0}", 8 + (2 * i)));
+                    range1 = worksheet.get_Range(string.Format("H{0}", 10 + (3 * i)), string.Format("H{0}", 10 + (3 * i)));
+                    range1.Value2 = eTableRow["Constructor"];//线路牌材质3
+                    range1 = worksheet.get_Range(string.Format("I{0}", 10 + (3 * i)), string.Format("I{0}", 10 + (3 * i)));
+                    range1.Value2 = eTableRow["ConstructionTime"];//线路牌尺寸3
+                    range1 = worksheet.get_Range(string.Format("J{0}", 10 + (3 * i)), string.Format("J{0}", 10 + (3 * i)));
+                    range1.Value2 = eTableRow["StationLand"];//线路牌制作单位3
+                    range1 = worksheet.get_Range(string.Format("K{0}", 8 + (3 * i)), string.Format("K{0}", 9 + (3 * i)));
                     range1.Value2 = eTableRow["StationCharacter"];//站点所在道路
-                    range1 = worksheet.get_Range(string.Format("k{0}", 9 + (2 * i)), string.Format("K{0}", 9 + (2 * i++)));
+                    range1 = worksheet.get_Range(string.Format("k{0}", 10 + (3 * i)), string.Format("K{0}", 10 + (3 * i++)));
                     range1.Value2 = eTableRow["StationAlias"];//副站名
                 }
 
