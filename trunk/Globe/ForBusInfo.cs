@@ -695,7 +695,7 @@ namespace Businfo.Globe
             string strType = Application.StartupPath;//GetProfileString("Businfo", "DataPos", Application.StartupPath + "\\Businfo.ini");
             if (Connect_Type == 1)
             {
-                Connect_Sql = "Provider=sqloledb;Data Source = 192.168.133.182;Initial Catalog=sde;User Id = sa;Password = 123";
+                Connect_Sql = "Provider=sqloledb;Data Source = 192.168.1.182;Initial Catalog=sde;User Id = sa;Password = 123";
                 //Connect_Sql = "Provider=sqloledb;Data Source = 172.16.34.120;Initial Catalog=sde;User Id = sa;Password = sa";
                 Mxd_Name = strType + "\\data\\DataSDE.mxd";
                     
