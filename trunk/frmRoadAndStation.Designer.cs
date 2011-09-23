@@ -216,7 +216,7 @@
             this.MaximizeBox = false;
             this.Name = "frmRoadAndStation";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "关联站点";
+            this.Text = "废弃-关联站点";
             this.Load += new System.EventHandler(this.frmRoadAndStation_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmRoadAndStation_FormClosing);
             this.GroupBox1.ResumeLayout(false);
