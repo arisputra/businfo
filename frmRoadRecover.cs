@@ -111,5 +111,38 @@ namespace Businfo
                 checkedListBox1.Items.Remove(checkedListBox1.CheckedItems[i - 1]);
             }
         }
+
+        private void checkedListBox1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)//判断是否右键点击
+            {
+                Point p = e.Location;//获取点击的位置
+                int index = checkedListBox1.IndexFromPoint(p);//根据位置获取右键点击项的索引
+                checkedListBox1.SelectedIndex = index;//设置该索引值对应的项为选定状态
+                if (index > -1)
+                {
+                    BusStation pBusStation = checkedListBox1.Items[index] as BusStation;
+                    OleDbConnection mycon = new OleDbConnection(ForBusInfo.Connect_Sql);
+                    mycon.Open();
+                    OleDbDataAdapter da;
+                    if (ForBusInfo.Connect_Type == 1)
+                        da = new OleDbDataAdapter(String.Format("select a.* from sde.公交站点 a inner join sde.RAndSBack b on (a.OBJECTID = b.StationID and b.RoadID = {0}) Order by b.StationOrder", pBusStation.ID), mycon);
+                    else
+                        da = new OleDbDataAdapter(String.Format("select a.* from 公交站点 a inner join RAndSBack b on (a.OBJECTID = b.StationID and b.RoadID = {0}) Order by b.StationOrder", pBusStation.ID), mycon);
+                    DataSet ds = new DataSet();
+                    int nQueryCount = da.Fill(ds, "Station");
+                    if (nQueryCount > 0)
+                    {
+                        dataGridView1.DataSource = ds;
+                        dataGridView1.DataMember = "Station";
+                        ForBusInfo.SetGridHeard(dataGridView1, ForBusInfo.GridSetType.Station_FillByOBJECTID, new string[] { "1" });
+                        ForBusInfo.SetColSortMode(dataGridView1, DataGridViewColumnSortMode.NotSortable);
+                        ForBusInfo.SetRowNo(dataGridView1);
+                    }
+                    mycon.Close();
+                }
+            }
+
+        }
     }
 }
