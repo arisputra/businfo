@@ -91,7 +91,7 @@ namespace Businfo
             dataGridView1.Columns[0].ReadOnly = false;
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void button3_Click(object sender, EventArgs e)//记得更改SetRoadTableTitle里面的清除非固定的内容
         {
             string strPath = DateTime.Now.ToLongTimeString();
             strPath = strPath.Replace(":", "-");
@@ -277,7 +277,7 @@ Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missi
         private void SetRoadTableTitle(Excelapp app, _Worksheet worksheet, IFeature pCurFeature, bool bVisable)
         {
             app.Visible = bVisable;
-            Range range1 = worksheet.get_Range("B8", "K127");
+            Range range1 = worksheet.get_Range("B8", "K157");
             range1.Cells.ClearContents();//清除非固定的内容
             range1 = worksheet.get_Range("A1", "I3");
             if (range1 == null)
