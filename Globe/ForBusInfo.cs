@@ -373,7 +373,8 @@ namespace Businfo.Globe
 
                     if (strShow[0] == "")
                     {
-                        for (int i = 3; i < 15; i++)
+                        for (int i = 3; i < 53; i++)//临时全部放开
+                        //for (int i = 3; i < 15; i++)
                         {
                             grid.Columns[i].Visible = true;
                         }
@@ -385,7 +386,7 @@ namespace Businfo.Globe
                         grid.Columns[4].Visible = true;
                         grid.Columns[5].Visible = true;
                         grid.Columns[6].Visible = true;
-                        for (int i = 13; i < 53; i++)
+                        for (int i = 15; i < 53; i++)
                         {
                             grid.Columns[i].Visible = true;
                         }
@@ -695,7 +696,7 @@ namespace Businfo.Globe
             string strType = Application.StartupPath;//GetProfileString("Businfo", "DataPos", Application.StartupPath + "\\Businfo.ini");
             if (Connect_Type == 1)
             {
-                Connect_Sql = "Provider=sqloledb;Data Source = 192.168.1.182;Initial Catalog=sde;User Id = sa;Password = 123";
+                Connect_Sql = "Provider=sqloledb;Data Source = 192.168.133.182;Initial Catalog=sde;User Id = sa;Password = 123";
                 //Connect_Sql = "Provider=sqloledb;Data Source = 172.16.34.120;Initial Catalog=sde;User Id = sa;Password = sa";
                 Mxd_Name = strType + "\\data\\DataSDE.mxd";
                     

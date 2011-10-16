@@ -289,14 +289,28 @@ Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missi
             range1.Value2 = pCurFeature.get_Value(pCurFeature.Fields.FindField("RoadType"));
             range1 = worksheet.get_Range("B4", "C5");
             range1.Value2 = string.Format("票价：{0} {1} {2} {3}", pCurFeature.get_Value(pCurFeature.Fields.FindField("TicketPrice1")), pCurFeature.get_Value(pCurFeature.Fields.FindField("TicketPrice2")), pCurFeature.get_Value(pCurFeature.Fields.FindField("TicketPrice3")), pCurFeature.get_Value(pCurFeature.Fields.FindField("Picture5")));
-            range1 = worksheet.get_Range("H4", "H4");//首站开班
-            range1.Value2 = pCurFeature.get_Value(pCurFeature.Fields.FindField("FirstStartTime"));
-            range1 = worksheet.get_Range("K4", "K4");//首站收班
-            range1.Value2 = pCurFeature.get_Value(pCurFeature.Fields.FindField("FirstCloseTime"));
-            range1 = worksheet.get_Range("H5", "H5");//末站开班
-            range1.Value2 = pCurFeature.get_Value(pCurFeature.Fields.FindField("EndStartTime"));
-            range1 = worksheet.get_Range("K5", "K5");//末站收班
-            range1.Value2 = pCurFeature.get_Value(pCurFeature.Fields.FindField("EndCloseTim"));
+            if (pCurFeature.get_Value(pCurFeature.Fields.FindField("RoadTravel")).ToString() == "去行")
+            {
+                range1 = worksheet.get_Range("H4", "H4");//首站开班
+                range1.Value2 = pCurFeature.get_Value(pCurFeature.Fields.FindField("FirstStartTime"));
+                range1 = worksheet.get_Range("K4", "K4");//首站收班
+                range1.Value2 = pCurFeature.get_Value(pCurFeature.Fields.FindField("FirstCloseTime"));
+                range1 = worksheet.get_Range("H5", "H5");//末站开班
+                range1.Value2 = pCurFeature.get_Value(pCurFeature.Fields.FindField("EndStartTime"));
+                range1 = worksheet.get_Range("K5", "K5");//末站收班
+                range1.Value2 = pCurFeature.get_Value(pCurFeature.Fields.FindField("EndCloseTim"));
+            }
+            else
+            {
+                range1 = worksheet.get_Range("H4", "H4");//首站开班
+                range1.Value2 = pCurFeature.get_Value(pCurFeature.Fields.FindField("EndStartTime"));
+                range1 = worksheet.get_Range("K4", "K4");//首站收班
+                range1.Value2 = pCurFeature.get_Value(pCurFeature.Fields.FindField("EndCloseTim"));
+                range1 = worksheet.get_Range("H5", "H5");//末站开班
+                range1.Value2 = pCurFeature.get_Value(pCurFeature.Fields.FindField("FirstStartTime"));
+                range1 = worksheet.get_Range("K5", "K5");//末站收班
+                range1.Value2 = pCurFeature.get_Value(pCurFeature.Fields.FindField("FirstCloseTime"));
+            }
         }
     }
 }
