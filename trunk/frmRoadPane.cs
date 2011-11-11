@@ -252,11 +252,10 @@ namespace Businfo
 
         private void 关联站点ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
             if (m_pCurFeature != null)
             {
                 //IFeature FFFF = EngineFuntions.GetFeatureByFieldAndValue(EngineFuntions.m_Layer_BusRoad, "OBJECTID","1809");
-                /*//////////////////////////////////手动 改变path///////////////////////////////////////
+                /*/////////////////////////////////手动 改变path///////////////////////////////////////
                 IPolyline pPolyl = null;
                 IPolyline pPLine = m_pCurFeature.ShapeCopy as IPolyline;
                 object Missing1 = Type.Missing;
@@ -273,18 +272,18 @@ namespace Businfo
                         //pPath.FromPoint = pPtColl.get_Point(6);
                         //pPath.ToPoint = pPtColl.get_Point(6);
 
-                        IPath pPath = pGeometryCollection.get_Geometry(0) as IPath;//这是得到polyline path的方法。
-                        //pPath.ReverseOrientation();
+                        IPath pPath = pGeometryCollection.get_Geometry(1) as IPath;//这是得到polyline path的方法。
+                        pPath.ReverseOrientation();
                         pGeometryCol.AddGeometry(pPath as IGeometry, ref Missing1, ref Missing1);
 
 
-                        IPath pPath1 = pGeometryCollection.get_Geometry(1) as IPath;
+                        IPath pPath1 = pGeometryCollection.get_Geometry(0) as IPath;
                         pPath1.ReverseOrientation();
                         pGeometryCol.AddGeometry(pPath1 as IGeometry, ref Missing1, ref Missing1);
 
 
-                        IPath pPath2 = pGeometryCollection.get_Geometry(1) as IPath;
-                        pPath2.ReverseOrientation();
+                        IPath pPath2 = pGeometryCollection.get_Geometry(2) as IPath;
+                        //pPath2.ReverseOrientation();
                         pGeometryCol.AddGeometry(pPath2 as IGeometry, ref Missing1, ref Missing1);
 
 
@@ -300,7 +299,7 @@ namespace Businfo
                         //p1.PutCoords(523206.248, 390211.263);
                         //pPtColl.AddPoint(p1, ref aa, ref aa);
 
-                        pPtColl.AddPointCollection(pGeometryCollection.get_Geometry(0) as IPointCollection);
+                        pPtColl.AddPointCollection(pGeometryCol.get_Geometry(0) as IPointCollection);
                         pPtColl.AddPointCollection(pGeometryCol.get_Geometry(1) as IPointCollection);
                         pPtColl.AddPointCollection(pGeometryCol.get_Geometry(2) as IPointCollection);
                         //pPolyl = pGeometryCol as IPolyline;
