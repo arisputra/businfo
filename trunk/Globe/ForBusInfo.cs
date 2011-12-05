@@ -419,8 +419,8 @@ namespace Businfo.Globe
                     grid.Columns[27].HeaderText = "站杆样式2";
                     grid.Columns[28].HeaderText = "站杆尺寸2";//小时疏散量
                     grid.Columns[29].HeaderText = "站杆维护单位2";//原来是 站杆材质2
-                    grid.Columns[30].HeaderText = "候车亭规模";//原来是 调度公司2
-                    grid.Columns[31].HeaderText = "候车亭样式";
+                    grid.Columns[30].HeaderText = "候车亭大板数";//原来是 调度公司2
+                    grid.Columns[31].HeaderText = "候车亭小板数";
                     grid.Columns[32].HeaderText = "候车亭维护单位";//原来是 调度线路2
                     grid.Columns[33].HeaderText = "候车亭建设时间";//原来是 迁移安装时间
 
