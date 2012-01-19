@@ -277,13 +277,13 @@ namespace Businfo
                         pGeometryCol.AddGeometry(pPath as IGeometry, ref Missing1, ref Missing1);
 
 
-                        IPath pPath1 = pGeometryCollection.get_Geometry(0) as IPath;
-                        pPath1.ReverseOrientation();
+                        IPath pPath1 = pGeometryCollection.get_Geometry(2) as IPath;
+                        //pPath1.ReverseOrientation();
                         pGeometryCol.AddGeometry(pPath1 as IGeometry, ref Missing1, ref Missing1);
 
 
-                        IPath pPath2 = pGeometryCollection.get_Geometry(2) as IPath;
-                        //pPath2.ReverseOrientation();
+                        IPath pPath2 = pGeometryCollection.get_Geometry(0) as IPath;
+                        pPath2.ReverseOrientation();
                         pGeometryCol.AddGeometry(pPath2 as IGeometry, ref Missing1, ref Missing1);
 
 
