@@ -301,10 +301,8 @@ Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missi
                 if (str.Length>4)
                     range1.Value2 = str.Substring(0, str.IndexOf("¡¢")) + "¡ª¡ª" + ds1.Tables["Station"].Rows[nQueryCount1 - 1]["StationName"].ToString();
                 range1 = worksheet.get_Range(string.Format("C{0}", i + 1), string.Format("C{0}", i + 1));
-                if (eRoad["RoadTravel"].ToString() == "È¥ÐÐ")
-                    range1.Value2 = eRoad["FirstStartTime"].ToString() + "  " + eRoad["FirstCloseTime"].ToString();
-                else
-                    range1.Value2 = eRoad["EndStartTime"].ToString() + "  " + eRoad["EndCloseTim"].ToString();
+             
+                range1.Value2 = eRoad["FirstStartTime"].ToString() + "  " + eRoad["FirstCloseTime"].ToString();
                 range1 = worksheet.get_Range(string.Format("D{0}", i + 1), string.Format("D{0}", i + 1));
                 if (str.Length>3)
                 {
