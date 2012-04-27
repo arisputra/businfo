@@ -455,6 +455,71 @@ namespace Businfo
                     axMapControl1.MousePointer = esriControlsMousePointer.esriPointerPencil;
                     //axDockingPane1.FindPane(ForBusInfo.Pan_Station).Select();
                     break;
+                case ForBusInfo.Table_RoadInfoEx://一览表导出
+                    m_ToolStatus = ForBusInfo.Table_RoadInfoEx;
+                    Microsoft.Office.Interop.Excel.Application app = new Microsoft.Office.Interop.Excel.Application();
+                    if (app == null)
+                    {
+                        MessageBox.Show("创建Excel服务失败!\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    app.Visible = true;//不打开excel
+                    app.DisplayAlerts = false;
+                    Workbooks workbooks = app.Workbooks;
+                    _Workbook workbook = workbooks.Open(Winapp.StartupPath + "\\data\\一览表.xls", Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+        Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+                    Sheets sheets = workbook.Worksheets;
+                    _Worksheet worksheet = (_Worksheet)sheets.get_Item(1);
+                    Range range1;
+
+                    List<string> pRoadNames = new List<string>();
+                    OleDbDataAdapter da;
+                    OleDbConnection mycon = new OleDbConnection(ForBusInfo.Connect_Sql);
+                    mycon.Open();
+                    if (ForBusInfo.Connect_Type == 1)
+                        da = new OleDbDataAdapter("select a.RoadName,a.RoadTravel,a.OBJECTID,a.FirstStartTime,a.FirstCloseTime,a.EndStartTime,a.EndCloseTim from sde.公交站线 a Order by a.RoadName", mycon);
+                    else
+                        da = new OleDbDataAdapter("select a.RoadName,a.RoadTravel,a.OBJECTID,a.FirstStartTime,a.FirstCloseTime,a.EndStartTime,a.EndCloseTim from 公交站线 a Order by a.RoadName", mycon);
+                    DataSet ds = new DataSet();
+                    da.Fill(ds, "Road");
+
+                    for (int i = 0; i < ds.Tables["Road"].Rows.Count; i++)
+                    {
+                        DataRow eRoad = ds.Tables["Road"].Rows[i];
+                        string str = "";
+                        string strStreet = "";
+                        if (ForBusInfo.Connect_Type == 1)
+                            da = new OleDbDataAdapter(String.Format("select a.StationName,a.StationCharacter from sde.公交站点 a inner join sde.RoadAndStation b on (a.OBJECTID = b.StationID and b.RoadID = {0}) Order by b.StationOrder", eRoad["OBJECTID"]), mycon);
+                        else
+                            da = new OleDbDataAdapter(String.Format("select a.StationName,a.StationCharacter from 公交站点 a inner join RoadAndStation b on (a.OBJECTID = b.StationID and b.RoadID = {0}) Order by b.StationOrder", eRoad["OBJECTID"]), mycon);
+                        DataSet ds1 = new DataSet();
+                        int nQueryCount1 = da.Fill(ds1, "Station");
+                        foreach (DataRow eStation in ds1.Tables["Station"].Rows)
+                        {
+                            str = str + eStation["StationName"].ToString() + "、";
+                            //if (strStreet.IndexOf(eStation["StationCharacter"].ToString()) == -1)
+                            //    strStreet = strStreet + eStation["StationCharacter"].ToString() + "  ";
+                        }
+
+                        range1 = worksheet.get_Range(string.Format("A{0}", i + 1), string.Format("A{0}", i + 1));
+                        range1.Value2 = eRoad["RoadName"].ToString() + "路";
+                        range1 = worksheet.get_Range(string.Format("B{0}", i + 1), string.Format("B{0}", i + 1));
+                        if (str.Length > 4)
+                            range1.Value2 = str.Substring(0, str.IndexOf("、")) + "——" + ds1.Tables["Station"].Rows[nQueryCount1 - 1]["StationName"].ToString();
+                        range1 = worksheet.get_Range(string.Format("C{0}", i + 1), string.Format("C{0}", i + 1));
+
+                        range1.Value2 = eRoad["FirstStartTime"].ToString() + "  " + eRoad["FirstCloseTime"].ToString();
+                        range1 = worksheet.get_Range(string.Format("D{0}", i + 1), string.Format("D{0}", i + 1));
+                        if (str.Length > 3)
+                        {
+                            range1.Value2 = str.Substring(0, str.Length - 1);
+                        }
+
+                        //range1 = worksheet.get_Range(string.Format("E{0}", i + 1), string.Format("E{0}", i + 1));
+                        //range1.Value2 = strStreet;
+                    }
+                    mycon.Close();
+                    //app.Quit();
+                    break;
                 case ForBusInfo.Road_Pause://保存临时的线路
                     m_ToolStatus = ForBusInfo.Road_Pause;
                     m_CurFeature = null;
@@ -965,6 +1030,10 @@ namespace Businfo
                              axMapControl1.MousePointer = esriControlsMousePointer.esriPointerDefault;
                              break;
 
+                         }
+                     case ForBusInfo.Table_RoadInfoEx://一览表导出
+                         {
+                             break;
                          }
                      default :
            	                break;

@@ -123,7 +123,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmMainNew";
             this.helpProvider2.SetShowHelp(this, true);
-            this.Text = "公交业务管理信息系统";
+            this.Text = "武汉市公交业务管理信息系统";
             this.Load += new System.EventHandler(this.frmMainNew_Load);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmMainNew_FormClosed);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMainNew_FormClosing);

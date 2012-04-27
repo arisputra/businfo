@@ -186,7 +186,6 @@ namespace Businfo
             //this.公交站点TableAdapter.Fill(this.stationDataSet.公交站点);
         }
 
-    
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             if (checkBox1.Checked)

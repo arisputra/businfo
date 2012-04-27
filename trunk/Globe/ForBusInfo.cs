@@ -51,7 +51,7 @@ namespace Businfo.Globe
         public const int Road_Pause = 1070;//保存临时的线路
         public const int Road_Resume = 1071;//继续临时线路进行编辑
         public const int Table_StationTable = 1069;//路单导出
-
+        public const int Table_RoadInfoEx = 1073;//一览表导出
         public const int Map3D_ZoomIn = 10211; //放大
         public const int Map3D_ZoomOut = 10212; //缩小
         public const int Map3D_Full = 10213; //全图
@@ -373,8 +373,8 @@ namespace Businfo.Globe
 
                     if (strShow[0] == "")
                     {
-                        for (int i = 3; i < 53; i++)//临时全部放开
-                        //for (int i = 3; i < 15; i++)
+                        //for (int i = 3; i < 53; i++)//临时全部放开
+                        for (int i = 3; i < 15; i++)
                         {
                             grid.Columns[i].Visible = true;
                         }
