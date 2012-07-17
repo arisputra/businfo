@@ -707,10 +707,63 @@ namespace Businfo.Globe
                 Mxd_Name = strType + "\\data\\Data.mxd";
             }
         }
+
+        ///   <summary>     
+        ///   复制文件夹     
+        ///   </summary>     
+        ///   <param   name="sourceDirName">源文件夹</param>     
+        ///   <param   name="destDirName">目标文件夹</param>     
+        ///   <param   name="statusWinForm">状态窗口</param>     
+        //复制文件夹     
+        public static void CopyDirectory(string sourceDirName, string destDirName)
+        {
+
+            if (!Directory.Exists(destDirName))
+            {
+                Directory.CreateDirectory(destDirName);
+                File.SetAttributes(destDirName, File.GetAttributes(sourceDirName));
+                //File.SetAttributes(destDirName,FileAttributes.Normal);     
+            }
+
+            if (destDirName[destDirName.Length - 1] != System.IO.Path.DirectorySeparatorChar)
+                destDirName = destDirName + System.IO.Path.DirectorySeparatorChar;
+
+            string[] files = Directory.GetFiles(sourceDirName);
+            foreach (string file in files)
+            {
+                File.Copy(file, destDirName + System.IO.Path.GetFileName(file), true);
+                File.SetAttributes(destDirName + System.IO.Path.GetFileName(file), FileAttributes.Normal);
+                //total++;    
+                //statusWinForm.progressBar1.Value   =   total;    
+                //if(FileNumber   ==   0)    
+                //{    
+                //    statusWinForm.lblStatus.Text   =   "已完成   100%";                        
+                //}    
+                //else    
+                //{    
+                //    statusWinForm.lblStatus.Text   =   "已完成   "   +   (Math.Round((double)(100*total/FileNumber),0)).ToString()   +   "%";    
+                //}    
+                //statusWinForm.lblSourceFile.Text   =   file;    
+                //statusWinForm.lblFileName.Text   =   destDirName   +   Path.GetFileName(file);    
+                //statusWinForm.lblStatus.Refresh();    
+                //statusWinForm.lblFileName.Refresh();    
+                //statusWinForm.lblSourceFile.Refresh();    
+
+            }
+
+
+            string[] dirs = Directory.GetDirectories(sourceDirName);
+            foreach (string dir in dirs)
+            {
+                //statusWinForm.Refresh();    
+                //statusWinForm.Focus();    
+                //statusWinForm.Activate();
+                CopyDirectory(dir, destDirName + System.IO.Path.GetFileName(dir));
+            }
+        }
     }
 
     public class BusStation : IComparable<BusStation>
-
     {
         public int ID;
         public string StationName, Direct,StationExplain;//原来是 调度站道3，现在是站点说明

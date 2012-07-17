@@ -740,7 +740,6 @@ namespace Businfo
                                      System.Threading.Thread.Sleep(1000);
                                      m_frmStationPane.RefreshGrid();
                                      ForBusInfo.Add_Log(ForBusInfo.Login_name, "É¾³ýÕ¾µã", strName, "");
-
                                  }
                              }
                          }

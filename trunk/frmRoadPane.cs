@@ -272,16 +272,16 @@ namespace Businfo
                         //pPath.FromPoint = pPtColl.get_Point(6);
                         //pPath.ToPoint = pPtColl.get_Point(6);
 
-                        IPath pPath = pGeometryCollection.get_Geometry(1) as IPath;//这是得到polyline path的方法。
+                        IPath pPath = pGeometryCollection.get_Geometry(2) as IPath;//这是得到polyline path的方法。
                         pPath.ReverseOrientation();
                         pGeometryCol.AddGeometry(pPath as IGeometry, ref Missing1, ref Missing1);
 
                         IPath pPath1 = pGeometryCollection.get_Geometry(0) as IPath;
-                        pPath1.ReverseOrientation();
+                        //pPath1.ReverseOrientation();
                         pGeometryCol.AddGeometry(pPath1 as IGeometry, ref Missing1, ref Missing1);
 
 
-                        IPath pPath2 = pGeometryCollection.get_Geometry(2) as IPath;
+                        IPath pPath2 = pGeometryCollection.get_Geometry(1) as IPath;
                         //pPath2.ReverseOrientation();
                         pGeometryCol.AddGeometry(pPath2 as IGeometry, ref Missing1, ref Missing1);
 
