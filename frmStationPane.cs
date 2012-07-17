@@ -13,12 +13,14 @@ using ESRI.ArcGIS.Carto;
 using Microsoft.Office.Interop.Excel;
 using System.Data.OleDb;
 using System.IO;
+using Businfo;
 
 
 namespace Businfo
 {
     public partial class frmStationPane : UserControl
     {
+        public frmLoading m_Popfrm = null;
         public Int32 m_nCurRowIndex;
         public IFeature m_pCurFeature;
         public List<IFeature> m_featureCollection = new List<IFeature>();  //得到所有选中的feature
@@ -146,7 +148,7 @@ namespace Businfo
             if (m_pCurFeature != null)
             {
                 frmPano frmPopup = new frmPano();
-                frmPopup.m_strURL = "E:\\Code For Working\\BusInfo\\bin\\Debug\\Data\\A01\\pano1.html";
+                frmPopup.m_strURL = m_pCurFeature.get_Value(m_pCurFeature.Fields.FindField("PictureFirst")).ToString();
                 frmPopup.Show();
             }
         }
@@ -384,6 +386,69 @@ Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missi
             }
             mycon.Close();
             MessageBox.Show("更新完成！\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void 关联ToolStripMenuItem_Click(object sender, EventArgs e)//全景
+        {
+            if (m_pCurFeature != null)
+            {
+                if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    string strStationName = DataGridView1.Rows[m_nCurRowIndex].Cells["StationName"].Value.ToString();
+                    if (MessageBox.Show(string.Format("确认导入全景数据：{0}!", strStationName), "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Information) == DialogResult.OK)
+                    {
+                        if (m_Popfrm == null)
+                        {
+                            m_Popfrm = new frmLoading();
+                            m_Popfrm.m_nType = 2;
+                            m_Popfrm.Show();
+                            backgroundWorker1.RunWorkerAsync(strStationName);
+
+                        }
+                      
+                    }
+                }
+            }
+        }
+
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+            //写入全景图片1地址
+            string strFolder = DataGridView1.Rows[m_nCurRowIndex].Cells["OBJECTID"].Value.ToString();
+            string strRemoteDir = folderBrowserDialog1.SelectedPath;
+            string[] files = Directory.GetFiles(strRemoteDir, "*.html");
+            int nLen = 0;
+            nLen = files.GetLength(0);
+            if (2 == nLen)
+            {
+                if (System.IO.Path.GetFileName(files[0]) == "index.html")
+                {
+
+                    System.IO.File.Move(files[1], System.IO.Path.GetDirectoryName(files[1]) + "\\pano.html"); 
+                }
+                else
+                {
+                    System.IO.File.Move(files[0], System.IO.Path.GetDirectoryName(files[0]) + "\\pano.html");
+                }
+                ForBusInfo.CopyDirectory(strRemoteDir, string.Format("Y:\\{0}", strFolder));
+                m_pCurFeature.set_Value(m_pCurFeature.Fields.FindField("PictureFirst"), string.Format("http://192.168.210.211/pano/{0}/pano.html", strFolder));
+                m_pCurFeature.Store();
+                ForBusInfo.Add_Log(ForBusInfo.Login_name, "导入全景数据", (string)e.Argument, "");
+
+            }
+            else
+            {
+                MessageBox.Show("文件夹包含内容不正确！\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            
+        }
+
+        private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            m_Popfrm.Close();
+            m_Popfrm = null;
+            System.Windows.Forms.Application.DoEvents();
+            MessageBox.Show("全景数据上传完毕！\n", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }
